@@ -25,14 +25,58 @@ wait_times = []
 
 # I didn't choose any of the time-inputs, so don't look at me
 
+class VehiculeType:
+    def __init__(self, wait_time, size):
+        self.wait_time = wait_time
+        self.size = size
+
+class Vehicule:
+    def __init__(self, type, graph, start, end):
+        self.path = graph.make_path(start, end)
+        self.current_position = 0
+        self.type = type
+
+    def has_left(self):
+        return self.current_position == len(self.path)
+
+    def advance(self):
+        self.current_position += 1
+        return (
+            self.path[self.current_position - 1],
+            None if self.has_left() else self.path[self.current_position]
+        )
+
+class DummyNode:
+    def __init__(self, id, capacity):
+        self.id = id
+        self.capacity = capacity
+
+    def define_store(self, store):
+        self.store = store
+
+
+class DummyGraph:
+    def __init__(self):
+        self.nodes = [DummyNode(0, 2), DummyNode(1, 2), DummyNode(2, 1), DummyNode(3, 1)]
+        self.connections = [[2], [2], [3]]
+        pass
+
+    def link_resources(self, parking_lot, env):
+        for node in nodes:
+            node.define_store(simpy.Store(env, node.capacity))
+
+    def make_path(self, start, end):
+        if start == 0 or start == 1:
+            return [self.nodes[start].store, self.nodes[2].store, self.nodes[3].store]
+        elif start == 2:
+            return [self.nodes[2].store, self[3].store]
+        else:
+            return [self[3].store]
+
 class ParkingLot(object):
 
-    def __init__(self, env, num_roads, num_gates):
+    def __init__(self, env):
         self.env = env
-        # Idek if we need it, but I think eventually just one parking-spot because we are looking at one car ?
-        self.parkingspot = simpy.Resource(env, 1)
-        self.road = simpy.Resource(env, num_roads)
-        self.gate = simpy.Resource(env, num_gates)
 
     # what can the cars do
 
@@ -43,41 +87,29 @@ class ParkingLot(object):
 
     # the car moves through roads, towards the check in gates:
     # every car is going to have multiple calls to this function, based on where it was parked and the connections between the roads
-    def change_road(self, car):
-        yield self.env.timeout(random.randint(1, 3))
+    def change_road(self, car, road):
+        yield self.env.timeout(get_total_wait_time(road))
 
     # cars arriving to the final queue/gate/goal:
     # after moving in the parking lot they reach the check-in gates, and then leave the system (get on board)
     def check_in(self, car):
         yield self.env.timeout(3 / 60)
 
+    def get_total_wait_time(road):
+        return reduce(lambda x, y: x.wait_time + y, road.items)
+
+
 # what actually happens to a car inside the parkinglot
 def car_through_the_pl(env, car, parkinglot):
-    
+
     # car arrives at the parkinglot
     arrival_time = env.now
 
-    # car finds a parkingslot to park
-    with parkinglot.parkingspot.request() as request:
-        yield request
-        print("vehicle parked: %d", env.now)
-        yield env.process(parkinglot.park(car))
-    
-    # car starts exiting from its parking slot ("cost-free action")
-    # and moving in the necessary directions
-    # I would suggest obtaining from the graph the shortest path to the check-in gates,
-    # fix that, and just follow those steps as the roads to go through
-    with parkinglot.road.request() as request:
-        yield request
-        print("vehicle went through road X: %d", env.now)
-        yield env.process(parkinglot.change_road(car))
-
-    # car in the last queue of the system: 
-    # waiting to be served at check-in gate
-    with parkinglot.gate.request() as request:
-        yield request
-        print("vehicle checking in: %d", env.now)
-        yield env.process(parkinglot.check_in(car))
+    while(not car.has_left()):
+        previous_road, next_road = car.advance()
+        put_request = next_road.put(car.type)
+        release_request = previous_road.get()
+        yield parkinglot.change_road(car)
 
     # Car is boarded : "thread" is finished
     wait_times.append(env.now - arrival_time)
@@ -87,12 +119,13 @@ def run_parkinglot(env, num_roads, num_gates):
 
     # I think here the input parameters should be something derived from the graph
     parkinglot = ParkingLot(env, num_roads, num_gates)
-    car = 0;
+    graph = DummyGraph()
+    car = Vehicule(VehiculeType(1, 1), graph, 0, 3)
     # we can use the avg_num_of_cars we expect
     while True:
        yield env.timeout(0.20)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
 
-       car += 1
+       car = Vehicule(VehiculeType(1, 1), graph, 0, 3)
        env.process(car_through_the_pl(env, car, parkinglot))
 
 
@@ -141,7 +174,7 @@ def input():
   perc_online_tickets = 0.60
 
   # Time stuff:
-  # how long is the simulation? 
+  # how long is the simulation?
   # opening time-closing time of the check-in gates
   # closing time of the entrace gates
   # 'how long' the roads are (time value)?
@@ -150,9 +183,9 @@ def input():
 def main():
     # Setup
     random.seed(42)
-    
+
     # Get inputs from the graph
-    num_roads, num_gates = get_user_input()
+    #num_roads, num_gates = get_user_input()
 
     # Run the simulation
     env = simpy.Environment()
