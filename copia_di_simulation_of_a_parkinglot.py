@@ -27,9 +27,32 @@ wait_times = []
 # I didn't choose any of the time-inputs, so don't look at me
 
 class VehicleType:
-    def __init__(self, wait_time, size):
-        self.wait_time = wait_time
+    def __init__(self, free_travel_time, size):
+        self.free_travel_time = free_travel_time
         self.size = size
+
+class VehicleToken:
+    def __init__(self, vehicle_type, free_travel_time, creation_time):
+        self.vehicle_type = vehicle_type
+        self.free_travel_time = free_travel_time
+        self.creation_time = creation_time
+        self.total_travel_time = None
+        self.activation_time = None
+
+    def activate(self, activation_time, queue_wait_time):
+        self.activation_time = activation_time
+        self.total_travel_time = self.free_travel_time + queue_wait_time
+        self.outside_queue_wait_time = self.activation_time - self.creation_time
+        self.total_wait_time = self.outside_queue_wait_time + self.total_travel_time
+        return self
+
+    def time_left(self, current_time):
+        if self.activation_time is None:
+            raise ValueError("cannot compute time left if token has not been activated")
+        return (self.activation_time + self.total_travel_time) - current_time
+
+    def time_since_creation(self, current_time):
+        return current_time - self.creation_time
 
 class Vehicle:
     def __init__(self, id, type, graph, start, end):
@@ -56,6 +79,9 @@ class DummyNode:
     def define_store(self, store):
         self.store = store
 
+    def is_parking_spot(self):
+        return self.id == 1
+
 
 class DummyGraph:
     def __init__(self):
@@ -68,37 +94,204 @@ class DummyGraph:
             node.define_store(simpy.Store(env, node.capacity))
 
     def make_path(self, start, end):
-        if start == 0 or start == 1:
-            return [self.nodes[start], self.nodes[2], self.nodes[3]]
-        elif start == 2:
-            return [self.nodes[2], self[3]]
+        if start == 0:
+            return [self.nodes[0], self.nodes[2], self.nodes[3]]
         else:
-            return [self[3]]
+            return [self.nodes[0], self.nodes[2], self.nodes[1], self.nodes[2], self.nodes[3]]
+
+
+class Metrics:
+    def __init__(self, initial_time):
+        self.outside_queue_wait_times = {}
+        self.travel_times = {}
+        self.total_wait_times = {}
+
+        self.road_counts = {}
+        self.road_capacities = {}
+        self.initial_time = initial_time
+        self.zero_intervals = {}
+        self.full_intervals = {}
+
+        self.roads = {}
+        pass
+
+    def print_all(self):
+        print(f"outside_queue_wait_times = {self.outside_queue_wait_times}")
+        print(f"travel_times = {self.travel_times}")
+        print(f"total_wait_times = {self.total_wait_times}")
+        print(f"zero_intervals = {self.zero_intervals}")
+        print(f"full_intervals = {self.full_intervals}")
+
+    def add_time_key_if_unknown(self, car_id, road_id=None):
+        if car_id not in self.outside_queue_wait_times.keys():
+            self.outside_queue_wait_times[car_id] = {}
+
+        if road_id is not None and road_id not in self.outside_queue_wait_times[car_id].keys():
+            self.outside_queue_wait_times[car_id][road_id] = 0
+
+        if car_id not in self.total_wait_times.keys():
+            self.total_wait_times[car_id] = 0
+
+        if car_id not in self.travel_times.keys():
+            self.travel_times[car_id] = {}
+
+        if road_id is not None and road_id not in self.travel_times[car_id].keys():
+            self.travel_times[car_id][road_id] = 0
+
+    def add_outside_queue_wait_time(self, car_id, road_id, wait_time):
+        if road_id is None:
+            road_id = "ENTRY"
+
+        self.add_time_key_if_unknown(car_id, road_id)
+        
+        self.outside_queue_wait_times[car_id][road_id] += wait_time
+        self.total_wait_times[car_id] += wait_time
+
+    def add_travel_time(self, car_id, road_id, travel_time):
+        self.add_time_key_if_unknown(car_id, road_id)
+
+        self.travel_times[car_id][road_id] += travel_time
+        self.total_wait_times[car_id] += travel_time
+
+    def set_initial_values(self, road, initial_count):
+        self.roads[road.id] = road
+        self.road_counts[road.id] = (
+            initial_count, 
+            self.initial_time if initial_count == 0 else None,
+            self.initial_time if initial_count == road.capacity else None
+        )
+
+    def add_zero_interval(self, road_id, zero_time):
+        if road_id not in self.zero_intervals.keys():
+            self.zero_intervals[road_id] = []
+        if zero_time != 0:
+            self.zero_intervals[road_id].append(zero_time)
+
+    def add_full_interval(self, road_id, full_time):
+        if road_id not in self.full_intervals.keys():
+            self.full_intervals[road_id] = []
+        if full_time != 0:
+            self.full_intervals[road_id].append(full_time)
+
+    def acknowledge_count_change(self, road, current_time):    
+        previous_count, last_zero, last_full = self.road_counts[road.id]
+        new_count = len(road.store.items)
+        #print(f"ack road {road.id} from {previous_count}, {last_zero}, {last_full} to {new_count} at {current_time}")
+        
+        if previous_count == 0 and new_count != 0:
+            self.add_zero_interval(road.id, current_time - last_zero)
+            last_zero = None
+        elif previous_count != 0 and new_count == 0:
+            last_zero = current_time
+
+        capacity = road.capacity
+        if previous_count == capacity and new_count != capacity:
+            self.add_full_interval(road.id, current_time - last_full)
+            last_full = None
+        elif previous_count != capacity and new_count == capacity:
+            last_full = current_time
+
+        self.road_counts[road.id] = new_count, last_zero, last_full
+
+    def finalize_count_changes(self, current_time):
+        for road_id in self.roads.keys():
+            previous_count, last_zero, last_full = self.road_counts[road_id]
+            if previous_count == self.roads[road_id].capacity:
+                self.add_full_interval(road_id, current_time - last_full)
+
+            if previous_count == 0:
+                self.add_zero_interval(road_id, current_time - last_zero)
+
+class Config:
+    def __init__(self, initial_time, gate_opening_time):
+        self.initial_time = initial_time
+        self.gate_opening_time = gate_opening_time   
+
 
 class ParkingLot(object):
 
-    def __init__(self, env):
+    def __init__(self, env, metrics, config):
         self.env = env
+        self.metrics = metrics
+        self.config = config
 
     # what can the cars do
 
     # once the car comes in the entrance gate, the goal is to park it:
     # find a parking slot available (we should think of the type of vehicle/parking space)
-    def park(self, car):
-        yield self.env.timeout(random.randint(1, 3))
+    def park(self, car, previous_road, parking_spot):
+        token = VehicleToken(car.type, 0, self.env.now) # vehicles do not take any time "travelling" through parking spots
+        print(f"[{self.env.now}] car {car.id} is ready to park at spot {parking_spot.id}")
+
+        put_request = yield parking_spot.store.put(token)
+        get_request = previous_road.store.get()
+        print(f"[{self.env.now}] car {car.id} has left road {previous_road.id} and parked at spot {parking_spot.id}")
+        self.metrics.acknowledge_count_change(previous_road, self.env.now)
+        self.metrics.acknowledge_count_change(parking_spot, self.env.now)
+
+        parking_wait_time = self.config.gate_opening_time - self.env.now
+        token.activate(self.env.now, parking_wait_time)
+        self.metrics.add_outside_queue_wait_time(car.id, previous_road.id, token.outside_queue_wait_time)
+
+        print(f"[{self.env.now}] car {car.id} will spend {token.total_travel_time} on spot {parking_spot.id}")
+        yield self.env.timeout(token.total_travel_time)
+        self.metrics.add_travel_time(car.id, parking_spot.id, token.total_travel_time)
 
     # the car moves through roads, towards the check in gates:
     # every car is going to have multiple calls to this function, based on where it was parked and the connections between the roads
-    def change_road(self, car, road):
-        yield self.env.timeout(car.type.wait_time + self.get_total_wait_time(road))
+    def change_road(self, car, previous_road, next_road):
+        token = VehicleToken(car.type, car.type.free_travel_time, self.env.now)
+        print(f"[{self.env.now}] car {car.id} is ready to enter road {next_road.id}")
+
+        put_request = yield next_road.store.put(token)
+        get_request = previous_road.store.get()
+        print(f"[{self.env.now}] car {car.id} has left road/spot {previous_road.id} and entered road {next_road.id}")
+        self.metrics.acknowledge_count_change(previous_road, self.env.now)
+        self.metrics.acknowledge_count_change(next_road, self.env.now)
+
+        #we have now entered the road
+        queue_wait_time = self.get_queue_wait_time(car, next_road)
+        token.activate(self.env.now, queue_wait_time)
+        self.metrics.add_outside_queue_wait_time(car.id, previous_road.id, token.outside_queue_wait_time)
+
+        print(f"[{self.env.now}] car {car.id} will spend {token.total_travel_time} on road {next_road.id}")
+        yield self.env.timeout(token.total_travel_time)
+        self.metrics.add_travel_time(car.id, next_road.id, token.total_travel_time)
+
+    def enter_road(self, car, road):
+        token = VehicleToken(car.type, car.type.free_travel_time, self.env.now)
+        print(f"[{self.env.now}] car {car.id} is ready to enter road {road.id}")
+
+        put_request = yield road.store.put(token)
+        print(f"[{self.env.now}] car {car.id} has entered road {road.id}")
+
+        queue_wait_time = self.get_queue_wait_time(car, road)
+        token.activate(self.env.now, queue_wait_time)
+        self.metrics.add_outside_queue_wait_time(car.id, None, token.outside_queue_wait_time)
+        self.metrics.acknowledge_count_change(road, self.env.now)
+
+        print(f"[{self.env.now}] car {car.id} will spend {token.total_travel_time} on road {road.id}")
+        yield self.env.timeout(token.total_travel_time)
+        self.metrics.add_travel_time(car.id, road.id, token.total_travel_time)
+
 
     # cars arriving to the final queue/gate/goal:
     # after moving in the parking lot they reach the check-in gates, and then leave the system (get on board)
-    def check_in(self, car):
-        yield self.env.timeout(3 / 60)
+    def leave_gate(self, car, gate):
+        get_request = gate.store.get()
+        self.metrics.acknowledge_count_change(gate, self.env.now)
+        print(f"[{self.env.now}] car {car.id} has left road/gate {gate.id}")
+        yield self.env.timeout(0) #leaving the gate is free (since we have already used timeout when we entered the gate)
 
-    def get_total_wait_time(self, road):
-        return reduce(lambda x, y: y.wait_time + x, road.store.items, 0)
+    def get_queue_wait_time(self, car, road):
+        if len(road.store.items) == 0:
+            raise ValueError("cannot compute queue wait time on empty road")
+        
+        if len(road.store.items) == 1:
+            return 0
+
+        nearest_token = road.store.items[-2]
+        return nearest_token.time_left(self.env.now)
 
 
 # what actually happens to a car inside the parkinglot
@@ -109,35 +302,49 @@ def car_through_the_pl(env, car, parkinglot):
 
     while(not car.has_left()):
         previous_road, next_road = car.advance()
-        
-        if next_road is not None:
-            put_request = yield next_road.store.put(car.type)
-            yield env.process(parkinglot.change_road(car, next_road))
-            print(f"car {car.id} has entered road {next_road.id} at {env.now}")
 
-        if previous_road is not None:
-            print(f"car {car.id} has left road {previous_road.id} at {env.now}")
-            release_request = previous_road.store.get()
-        
+        #leaving gate
+        if next_road is None:
+            yield env.process(parkinglot.leave_gate(car, previous_road))
+            continue
+
+        #entry
+        if previous_road is None:
+            yield env.process(parkinglot.enter_road(car, next_road))
+            continue
+
+        #entering parking spot
+        if next_road.is_parking_spot():
+            yield env.process(parkinglot.park(car, previous_road, next_road))
+            continue
+
+        #moving to a road (base case)
+        yield env.process(parkinglot.change_road(car, previous_road, next_road))
 
     # Car is boarded : "thread" is finished
     wait_times.append(env.now - arrival_time)
 
 
-def run_parkinglot(env):
+def run_parkinglot(env, metrics):
 
     # I think here the input parameters should be something derived from the graph
-    parkinglot = ParkingLot(env)
+    config = Config(env.now, 10)
+    parkinglot = ParkingLot(env, metrics, config)
     graph = DummyGraph()
     graph.link_resources(parkinglot, env)
+    for node in graph.nodes:
+        metrics.set_initial_values(node, 0)
     car_id = 0
-    car = Vehicle(car_id, VehicleType(1, 1), graph, 0, 3)
+    car = Vehicle(car_id, VehicleType(1 + car_id % 2, 1), graph, 0, 3)
+
+    car_arrival_stop_time = env.now + 1.2
+
     # we can use the avg_num_of_cars we expect
-    while True:
+    while env.now < car_arrival_stop_time:
         yield env.timeout(0.2)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
 
         car_id += 1
-        car = Vehicle(car_id, VehicleType(1, 1), graph, 0, 3)
+        car = Vehicle(car_id, VehicleType(1 + car_id % 2, 1), graph, 0 if car_id != 3 else 1, 3)
         env.process(car_through_the_pl(env, car, parkinglot))
 
 
@@ -201,10 +408,14 @@ def main():
 
     # Run the simulation
     env = simpy.Environment()
-    env.process(run_parkinglot(env))
+    metrics = Metrics(env.now)
+    env.process(run_parkinglot(env, metrics))
     # it decides here when to stop the simulation, I think we can either leave this decision to the avg num of cars we expect (so the run_parkinglot())
     # or to the main, speaking in terms of time, meaning for ex when the check-in gates close.
     env.run(until=30)
+
+    metrics.finalize_count_changes(env.now)
+    metrics.print_all()
 
     # View the results
     mins, secs = get_average_wait_time(wait_times)
