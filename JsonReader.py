@@ -5,13 +5,17 @@ import json
 class QueueInterface :
 
     def __init__(self, lengthQueue):
-        self.lengthQueue = lengthQueue
+        self.store = None
+        self.capacity = lengthQueue
         self.queue = deque()
+
+    def define_store(self, store):
+        self.store = store
 
 class Gate (QueueInterface):
 
     def __init__(self, type):
-        super().__init__(0)
+        super().__init__(1)
         self.type = type
 
 class Road (QueueInterface):
@@ -25,7 +29,7 @@ class Road (QueueInterface):
 class ParkingSlot (QueueInterface):
 
     def __init__(self, type, goesTo ):
-        super().__init__(0)
+        super().__init__(1)
         self.type = type
         self.goesTo = goesTo
 
@@ -57,6 +61,12 @@ def buildFromJson(jsonInput):
         return res
     else : return None
 
+def buildConnections(graph):
+    res = [[] for _i in range(len(graph))]
+    for index in graph:
+        if type(graph[index]) != Gate:
+            res[index] = [id_node for (id_node,p) in graph[index]["goesTo"]]
+    return res
 
 if __name__ == "__main__" :
     got = ""
