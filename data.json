@@ -1,0 +1,48 @@
+[
+    {
+        "node_id": 0,
+        "type": "road",
+        "capacity": 10,
+        "allowed_veh": [
+            "cars",
+            "trucks"
+        ],
+        "start_pos": {
+            "x": 0,
+            "y": 0
+        },
+        "end_pos": {
+            "x": 0,
+            "y": 4
+        },
+        "connectsTo": [
+            [
+                1,
+                0
+            ]
+        ]
+    },
+    {
+        "node_id": 1,
+        "type": "road",
+        "capacity": 10,
+        "allowed_veh": [
+            "cars",
+            "trucks"
+        ],
+        "start_pos": {
+            "x": 0,
+            "y": 0
+        },
+        "end_pos": {
+            "x": 4,
+            "y": 0
+        },
+        "connectsTo": [
+            [
+                0,
+                0
+            ]
+        ]
+    }
+]
