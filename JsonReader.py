@@ -47,13 +47,13 @@ def buildFromJson(jsonInput):
 
     for obj in content:
         if obj["type"].lower() == "parking":
-            res[obj["id"]] = ParkingSlot(obj["parking-type"],
+            res[obj["id"]] = ParkingSlot(obj["type-allowed"],
                                   [(obj["goesTo"][j]["id"], obj["goesTo"][j]["pos"]) for j in range(len(obj["goesTo"]))])
         elif obj["type"].lower() == "road":
-            res[obj["id"]] = Road(obj["road-type"], obj["length"], obj["entry"],
+            res[obj["id"]] = Road(obj["type-allowed"], obj["length"], obj["entry"],
                                   [(obj["goesTo"][j]["id"], obj["goesTo"][j]["pos"]) for j in range(len(obj["goesTo"]))])
         elif obj["type"].lower() == "check-in":
-            res[obj["id"]] = Gate(obj["checkin-type"])
+            res[obj["id"]] = Gate(obj["type-allowed"])
         else :
             print("unread object : " + str(obj))
 
@@ -61,11 +61,18 @@ def buildFromJson(jsonInput):
         return res
     else : return None
 
+def getVehiculesType(jsonInput):
+    content = json.loads(jsonInput)
+    res = set()
+    for it in range(len(content)):
+        res = res.union(set(content[it]["type-allowed"]))
+    return res
+
 def buildConnections(graph):
     res = [[] for _i in range(len(graph))]
     for index in graph:
         if type(graph[index]) != Gate:
-            res[index] = [id_node for (id_node,p) in graph[index]["goesTo"]]
+            res[index] = [(id_node,graph[id_node].type) for (id_node,p) in graph[index].goesTo]
     return res
 
 if __name__ == "__main__" :

@@ -6,10 +6,11 @@ class Graph:
     def __init__(self, jsonFile):
         r = open(jsonFile,"r").read()
         jsonResult = buildFromJson(r)
+        self.vehiculesTypes = getVehiculesType(r)
         self.nodes = [jsonResult[index] for index in jsonResult]
         self.connections = buildConnections(jsonResult)
         # paths[a][b] will contain the next node in the path from a to b, and the length of the path (for now, assimilated with capacity)
-        self.paths = [[(None,-1)for _n2 in self.nodes] for _n in self.nodes]
+        self.paths = {t:[[(None,-1)for _n2 in self.nodes] for _n in self.nodes]for t in self.vehiculesTypes}
         self.make_paths()
 
     def link_resources(self, parking_lot, env):
@@ -18,33 +19,38 @@ class Graph:
 
     def make_paths(self):
         #First, we add direct paths
-        for start in range(len(self.connections)):
-            for e in self.connections[start]:
-                self.paths[start][e] = (e, self.nodes[start].capacity)
+        for type in self.vehiculesTypes:
+            for start in range(len(self.connections)):
+                for e in self.connections[start]:
+                    if type in e[1]:
+                        self.paths[type][start][e[0]] = (e[0], self.nodes[start].capacity)
+            # then, we build the rest (if we have a->b and b->c, we write paths[a][b] in paths[a][c] if it's interesting)
+            changed = True
+            while changed:
+                changed = False
+                for a in range(len(self.nodes)):
+                    for b in range(len(self.nodes)):
+                        if self.paths[type][a][b][1] != -1:  # path from a to b exists
+                            for c in range(len(self.nodes)):
+                                if self.paths[type][b][c][1] != -1:  # path from b to c exists
+                                    c1 = self.paths[type][a][c][1] == -1
+                                    # that would mean the path from a to c doesn't exist yet
+                                    c2 = self.paths[type][a][c][1] > self.paths[type][a][b][1] + self.paths[type][b][c][1]
+                                    # that would mean the existing path from a to c is longer than from a to b to c
+                                    if c1 or c2:
+                                        self.paths[type][a][c] = (
+                                            self.paths[type][a][b][0], self.paths[type][a][b][1] + self.paths[type][b][c][1])
+                                        changed = True
 
-        #then, we build the rest (if we have a->b and b->c, we write paths[a][b] in paths[a][c] if it's interesting)
-        changed = True
-        while changed:
-            changed = False
-            for a in range(len(self.nodes)):
-                for b in range(len(self.nodes)):
-                    if self.paths[a][b][1] != -1 : #path from a to b exists
-                        for c in range(len(self.nodes)):
-                            if self.paths[b][c][1] != -1: #path from b to c exists
-                                c1 = self.paths[a][c][1] == -1 #that would mean the path from a to c doesn't exist yet
-                                c2 = self.paths[a][c][1] > self.paths[a][b][1] + self.paths[b][c][1]
-                                #that would mean the existing path from a to c is longer than from a to b to c
-                                if c1 or c2 :
-                                    self.paths[a][c] = (self.paths[a][b][0],self.paths[a][b][1] + self.paths[b][c][1])
-                                    changed = True
 
-    def make_path(self, start, end):
-        if self.paths[start][end][1] != -1:
+
+    def make_path(self, start, end, v_type = "car"):
+        if self.paths[v_type][start][end][1] != -1:
             current = start
             res = []
             while current != end:
                 res.append(current)
-                current = self.paths[current][end][0]
+                current = self.paths[v_type][current][end][0]
             res.append(end)
             return res
         else : print("Path from {} to {} not found".format(start, end))

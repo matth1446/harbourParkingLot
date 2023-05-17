@@ -1,1 +1,8 @@
-[{"id": 0,"type": "check-in","checkin-type": "car"},{"id": 1,"type": "road","road-type": "car-only","goesTo": [{"id": 0,"pos": 0}],"length": 3,"entry": true},{"id": 2,"type": "parking","parking-type": "car","goesTo": [{"id": 1,"pos": 0}]},{"id": 3,"type": "parking","parking-type": "car","goesTo": [{"id": 1,"pos": 0}]},{"id": 4,"type": "parking","parking-type": "car","goesTo": [{"id": 1,"pos": 1}]},{"id": 5,"type": "parking","parking-type": "car","goesTo": [{"id": 1,"pos": 1}]},{"id": 6,"type": "parking","parking-type": "car","goesTo": [{"id": 1,"pos": 2}]}]
+[ {"id": 0,"type": "check-in","type-allowed": ["car"]},
+  {"id": 1,"type": "road","type-allowed": ["car"],"goesTo": [{"id": 0,"pos": 0}],"length": 3,"entry": true},
+  {"id": 2,"type": "parking","type-allowed": ["car"],"goesTo": [{"id": 1,"pos": 0}]},
+  {"id": 3,"type": "parking","type-allowed": ["car"],"goesTo": [{"id": 1,"pos": 0}]},
+  {"id": 4,"type": "parking","type-allowed": ["car"],"goesTo": [{"id": 1,"pos": 1}]},
+  {"id": 5,"type": "parking","type-allowed": ["car"],"goesTo": [{"id": 1,"pos": 1}]},
+  {"id": 6,"type": "parking","type-allowed": ["car"],"goesTo": [{"id": 1,"pos": 2}]}
+]
