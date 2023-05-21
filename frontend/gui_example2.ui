@@ -81,6 +81,11 @@
          </item>
          <item>
           <property name="text">
+           <string>Check-in</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>Entry</string>
           </property>
          </item>
