@@ -4,6 +4,8 @@ from gui import Ui_MainWindow
 
 class MainWindow(QMainWindow):
     current_area_selected = []
+    # Hold information on layout
+    parking_layout = []
 
     def __init__(self):
         super().__init__()
@@ -26,6 +28,30 @@ class MainWindow(QMainWindow):
         button_reset_layout = self.ui.but_reset_layout
         button_reset_layout.clicked.connect(self.reset_area_layout)
 
+        # Add functionality for updating capacity multiplier text when moving slider
+        slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
+        slider_capacity_multiplier.valueChanged.connect(self.update_multiplier_text)
+
+        all = []
+        a = {
+            "text": "a"
+        }
+        b = {
+            "text": "b"
+        }
+
+        all.append(a)
+        all.append(b)
+
+        # print(all)
+
+    def update_multiplier_text(self):
+        slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
+        slider_val = slider_capacity_multiplier.property("value") / 100.0
+
+        label_capacity_multiplier = self.ui.lab_horSlider_capacity_multi
+        label_capacity_multiplier.setText(f'x {slider_val}')
+
     def reset_area_layout(self):
         for row in range(self.ui.gridLayout_roads.rowCount()):
             for col in range(self.ui.gridLayout_roads.columnCount()):
@@ -35,26 +61,7 @@ class MainWindow(QMainWindow):
         # clear current selection
         self.current_area_selected.clear()
 
-    def add_area_to_layout(self):
-        """
-        each type of area has a different color
-        when a user clicks on a tile it changes to light-blue (selected)
-        once the user adds the current area to the layout, the color for the type of
-        area will change accordingly:
-        - red = road
-        - green = check-in
-        - yellow = parking
-        - violet = entry
-
-        Limitations:
-        - Top row = only check-in possible
-        - Bottom row = only entry possible
-        """
-
-        # first get necessary info for json and save them in variables
-        # get current area type for coloring
-        area_type = self.ui.comboBox_area_type.currentText()
-
+    def get_vehicles_data(self):
         allowed_vehicles = []
         allowed_cars = self.ui.checkBox_allowed_car.isChecked()
         allowed_trucks = self.ui.checkBox_allowed_truck.isChecked()
@@ -77,9 +84,41 @@ class MainWindow(QMainWindow):
         if allowed_online:
             allowed_vehicles.append("online")
 
+        return allowed_vehicles
+
+    def add_area_to_layout(self):
+        """
+        each type of area has a different color
+        when a user clicks on a tile it changes to light-blue (selected)
+        once the user adds the current area to the layout, the color for the type of
+        area will change accordingly:
+        - red = road
+        - green = check-in
+        - yellow = parking
+        - violet = entry
+
+        Limitations:
+        - Top row = only check-in possible
+        - Bottom row = only entry possible
+        """
+
+        # update counter (node_id)
+        area_id = len(self.parking_layout)
+
+        # first get necessary info for json and save them in variables
+        # get current area type for coloring
+        area_type = self.ui.comboBox_area_type.currentText()
         print(area_type)
+
+        # get allowed vehicle types
+        allowed_vehicles = self.get_vehicles_data()
         print(allowed_vehicles)
 
+        # get capacity and capacity multiplier
+        capacity = self.ui.doubleSpinBox_capacity.property("value")
+        capacity_multiplier = self.ui.horSlider_capacity_multiplier.property("value") / 100.0
+
+        # assign colors to tiles
         for x, y in self.current_area_selected:
             btn = self.ui.gridLayout_roads.itemAtPosition(x, y).widget()
             if area_type == "Road":
@@ -89,23 +128,68 @@ class MainWindow(QMainWindow):
                 btn.setProperty("color", "violet")
                 btn.setStyleSheet("background-color: violet")
             elif area_type == "Parking":
+                # if area = parking; also check for the capacity
                 btn.setProperty("color", "yellow")
                 btn.setStyleSheet("background-color: yellow")
             elif area_type == "Check-in":
                 btn.setProperty("color", "green")
                 btn.setStyleSheet("background-color: green")
 
-        print("Added area to layout!")
+        # handle areas and connections
+        # roads
+        if area_type == "Road":
+            num_entries = len(self.current_area_selected)
+            # if it is a road the capacity is equal to the number of tiles
+            capacity = num_entries
+            connections = []
+
+            if num_entries > 0:  # only if there is more than 1 entry
+                start_coords = self.current_area_selected[0]
+                end_coords = self.current_area_selected[num_entries - 1]
+
+                print(f"Road from {start_coords} to {end_coords}")
+
+                # add area to layout
+                area_info = {
+                    "node_id": area_id,
+                    "type": area_type,
+                    "capacity": capacity * capacity_multiplier,
+                    "allowed_veh": allowed_vehicles,
+                    "start_pos": {
+                        "x": start_coords[0],
+                        "y": start_coords[1]
+                    },
+                    "end_pos": {
+                        "x": end_coords[0],
+                        "y": end_coords[1]
+                    },
+                    "connectsTo": connections
+                }
+
+                self.parking_layout.append(area_info)
+
+        print(f'====================\n'
+              f'Area type: {area_type}\n'
+              f'Allowed: {allowed_vehicles}\n'
+              f'Parking: {capacity}\n'
+              f'Multiplier: {capacity_multiplier}\n'
+              f'Total: {int(capacity * capacity_multiplier)}')
+
+        print(self.parking_layout)
+        # print("Added area to layout!")
         # reset area type to road (index = 0)
         self.ui.comboBox_area_type.setCurrentIndex(0)
         # clear current selection
         self.current_area_selected.clear()
+        # reset multiplier
+        self.ui.horSlider_capacity_multiplier.setValue(100)
 
     def handle_click_event_grid(self):
         button = self.sender()
+        print(button.property("color"))
 
         # check if current button has already area type associated and color it differently
-        if button.property("color") is not None:
+        if button.property("color") != "None" and button.property("color") is not None:
             button.setProperty("color", "darkorange")
             button.setStyleSheet("background-color: darkorange")
         else:
