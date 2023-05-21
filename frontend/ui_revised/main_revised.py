@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from gui import Ui_MainWindow
+from matrix import is_coordinate_in_range, update_connection_between_areas
 
 
 class MainWindow(QMainWindow):
@@ -147,7 +148,24 @@ class MainWindow(QMainWindow):
                 start_coords = self.current_area_selected[0]
                 end_coords = self.current_area_selected[num_entries - 1]
 
-                print(f"Road from {start_coords} to {end_coords}")
+                # check each coordinate of current road against existing roads
+                for coord in self.current_area_selected:
+                    for area in self.parking_layout:
+                        range_start = (area['start_pos']['x'], area['start_pos']['y'])
+                        range_end = (area['end_pos']['x'], area['end_pos']['y'])
+
+                        # if there is an overlap, get node_id from other area
+                        if is_coordinate_in_range(coord, range_start, range_end):
+                            # id of current area = area_id
+                            other_area_id = area['node_id']
+
+                            # add connection to current area (connection list)
+                            connections.append([other_area_id, 0])
+
+                            # change connection information in other area
+                            update_connection_between_areas(
+                                self.parking_layout, other_area_id, area_id
+                            )
 
                 # add area to layout
                 area_info = {
@@ -163,17 +181,19 @@ class MainWindow(QMainWindow):
                         "x": end_coords[0],
                         "y": end_coords[1]
                     },
-                    "connectsTo": connections
+                    "connectsTo": [
+                        connections
+                    ]
                 }
 
                 self.parking_layout.append(area_info)
 
-        print(f'====================\n'
-              f'Area type: {area_type}\n'
-              f'Allowed: {allowed_vehicles}\n'
-              f'Parking: {capacity}\n'
-              f'Multiplier: {capacity_multiplier}\n'
-              f'Total: {int(capacity * capacity_multiplier)}')
+        # print(f'====================\n'
+        #       f'Area type: {area_type}\n'
+        #       f'Allowed: {allowed_vehicles}\n'
+        #       f'Parking: {capacity}\n'
+        #       f'Multiplier: {capacity_multiplier}\n'
+        #       f'Total: {int(capacity * capacity_multiplier)}')
 
         print(self.parking_layout)
         # print("Added area to layout!")
@@ -186,7 +206,6 @@ class MainWindow(QMainWindow):
 
     def handle_click_event_grid(self):
         button = self.sender()
-        print(button.property("color"))
 
         # check if current button has already area type associated and color it differently
         if button.property("color") != "None" and button.property("color") is not None:
@@ -196,9 +215,6 @@ class MainWindow(QMainWindow):
             button.setProperty("color", "gray")
             button.setStyleSheet("background-color: gray")
 
-        print(str(button.property("objectName")).split("_")[1],
-              str(button.property("objectName")).split("_")[2])
-
         # add current coord tuple to selection
         self.current_area_selected.append(
             (
@@ -206,7 +222,6 @@ class MainWindow(QMainWindow):
                 int(str(button.property("objectName")).split("_")[2])
             )
         )
-        print(self.current_area_selected)
 
 
 if __name__ == "__main__":
