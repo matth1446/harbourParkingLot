@@ -1,12 +1,17 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from gui import Ui_MainWindow
 from matrix import is_coordinate_in_range, update_connection_between_areas
+from utils import write_layout_to_json
 
 
 class MainWindow(QMainWindow):
     current_area_selected = []
+
     # Hold information on layout
     parking_layout = []
+
+    # json safe path
+    layout_json_save_path = 'layout.json'
 
     def __init__(self):
         super().__init__()
@@ -181,9 +186,9 @@ class MainWindow(QMainWindow):
                         "x": end_coords[0],
                         "y": end_coords[1]
                     },
-                    "connectsTo": [
+                    "connectsTo":
                         connections
-                    ]
+
                 }
 
                 self.parking_layout.append(area_info)
@@ -196,11 +201,17 @@ class MainWindow(QMainWindow):
         #       f'Total: {int(capacity * capacity_multiplier)}')
 
         print(self.parking_layout)
-        # print("Added area to layout!")
+        print("Added area to layout!")
+
+        # write layout to json file
+        write_layout_to_json(self.layout_json_save_path, self.parking_layout)
+
         # reset area type to road (index = 0)
         self.ui.comboBox_area_type.setCurrentIndex(0)
+
         # clear current selection
         self.current_area_selected.clear()
+
         # reset multiplier
         self.ui.horSlider_capacity_multiplier.setValue(100)
 
