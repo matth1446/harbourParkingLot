@@ -51,9 +51,34 @@ class MainWindow(QMainWindow):
         - Bottom row = only entry possible
         """
 
+        # first get necessary info for json and save them in variables
         # get current area type for coloring
         area_type = self.ui.comboBox_area_type.currentText()
+
+        allowed_vehicles = []
+        allowed_cars = self.ui.checkBox_allowed_car.isChecked()
+        allowed_trucks = self.ui.checkBox_allowed_truck.isChecked()
+        allowed_trailers = self.ui.checkBox_allowed_disabled.isChecked()
+        allowed_disabled = self.ui.checkBox_allowed_disabled.isChecked()
+        allowed_online = self.ui.checkBox_allowed_online.isChecked()
+
+        if allowed_cars:
+            allowed_vehicles.append("cars")
+
+        if allowed_trucks:
+            allowed_vehicles.append("trucks")
+
+        if allowed_trailers:
+            allowed_vehicles.append("trailers")
+
+        if allowed_disabled:
+            allowed_vehicles.append("disabled")
+
+        if allowed_online:
+            allowed_vehicles.append("online")
+
         print(area_type)
+        print(allowed_vehicles)
 
         for x, y in self.current_area_selected:
             btn = self.ui.gridLayout_roads.itemAtPosition(x, y).widget()
@@ -76,17 +101,21 @@ class MainWindow(QMainWindow):
         # clear current selection
         self.current_area_selected.clear()
 
-        # for row in range(self.ui.gridLayout_roads.rowCount()):
-        #    for col in range(self.ui.gridLayout_roads.columnCount()):
-        #        btn_on_grid = self.ui.gridLayout_roads.itemAtPosition(row, col).widget()
-        #        btn_on_grid.clicked.connect(self.print_coords)
-
     def handle_click_event_grid(self):
         button = self.sender()
-        button.setProperty("color", "lightblue")
-        button.setStyleSheet("background-color: lightblue")
+
+        # check if current button has already area type associated and color it differently
+        if button.property("color") is not None:
+            button.setProperty("color", "darkorange")
+            button.setStyleSheet("background-color: darkorange")
+        else:
+            button.setProperty("color", "gray")
+            button.setStyleSheet("background-color: gray")
+
         print(str(button.property("objectName")).split("_")[1],
               str(button.property("objectName")).split("_")[2])
+
+        # add current coord tuple to selection
         self.current_area_selected.append(
             (
                 int(str(button.property("objectName")).split("_")[1]),
