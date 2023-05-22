@@ -2,16 +2,89 @@
     {
         "node_id": 0,
         "type": "Road",
-        "capacity": 4.0,
+        "capacity": 5.0,
         "allowed_veh": [],
         "start_pos": {
-            "x": 2,
-            "y": 7
+            "x": 0,
+            "y": 5
         },
         "end_pos": {
-            "x": 5,
-            "y": 7
+            "x": 4,
+            "y": 5
         },
-        "connectsTo": []
+        "connectsTo": [
+            [
+                1,
+                0
+            ],
+            [
+                2,
+                0
+            ]
+        ]
+    },
+    {
+        "node_id": 1,
+        "type": "Check-in",
+        "capacity": 20.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 0,
+            "y": 5
+        },
+        "end_pos": {
+            "x": 0,
+            "y": 5
+        },
+        "connectsTo": [
+            [
+                0,
+                0
+            ]
+        ]
+    },
+    {
+        "node_id": 2,
+        "type": "Road",
+        "capacity": 5.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 4,
+            "y": 5
+        },
+        "end_pos": {
+            "x": 8,
+            "y": 5
+        },
+        "connectsTo": [
+            [
+                0,
+                0
+            ],
+            [
+                3,
+                0
+            ]
+        ]
+    },
+    {
+        "node_id": 3,
+        "type": "Entry",
+        "capacity": 20.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 8,
+            "y": 5
+        },
+        "end_pos": {
+            "x": 8,
+            "y": 5
+        },
+        "connectsTo": [
+            [
+                2,
+                0
+            ]
+        ]
     }
 ]

@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
-from gui import Ui_MainWindow
+from frontend.ui_revised.gui import Ui_MainWindow
 from matrix import is_coordinate_in_range, update_connection_between_areas
 from utils import write_layout_to_json
 
@@ -185,9 +185,18 @@ class MainWindow(QMainWindow):
 
                 self.parking_layout.append(area_info)
 
-        elif area_type == "Parking":
+        elif area_type == "Parking" or area_type == "Entry" or area_type == "Check-in":
+            # assign color according to area
+            color = ""
+            if area_type == "Parking":
+                color = "yellow"
+            elif area_type == "Entry":
+                color = "violet"
+            elif area_type == "Check-in":
+                color = "green"
+
             coord = ()
-            # check if there are exactly 2 entries (one = parking, other one = connection to road)
+            # check if there are exactly 2 entries (one = parking/entry/check-in, other one = connection to road)
             if num_entries == 2:
                 start_coord = self.current_area_selected[0]
                 end_coord = self.current_area_selected[num_entries - 1]
@@ -208,8 +217,8 @@ class MainWindow(QMainWindow):
 
                         # color the tile that connects to the road yellow = parking
                         btn_parking = self.ui.gridLayout_roads.itemAtPosition(end_coord[0], end_coord[1]).widget()
-                        btn_parking.setProperty("color", "yellow")
-                        btn_parking.setStyleSheet("background-color: yellow")
+                        btn_parking.setProperty("color", color)
+                        btn_parking.setStyleSheet("background-color: " + color)
 
                         # update the connection information for the tiles
                         other_area_id = area['node_id']
@@ -230,10 +239,10 @@ class MainWindow(QMainWindow):
                         btn_overlap.setProperty("color", "red")
                         btn_overlap.setStyleSheet("background-color: red")
 
-                        # color the tile that connects to the road yellow = parking
+                        # color the tile that connects to the road
                         btn_parking = self.ui.gridLayout_roads.itemAtPosition(start_coord[0], start_coord[1]).widget()
-                        btn_parking.setProperty("color", "yellow")
-                        btn_parking.setStyleSheet("background-color: yellow")
+                        btn_parking.setProperty("color", color)
+                        btn_parking.setStyleSheet("background-color: " + color)
 
                         # update the connection information for the tiles
                         other_area_id = area['node_id']
