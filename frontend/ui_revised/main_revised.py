@@ -97,6 +97,14 @@ class MainWindow(QMainWindow):
         chart_1_1_label = self.ui.img_out_1_1
         chart_1_1_label.setPixmap(chart_img_1_1)
 
+        # update simulation text label and id
+        lab_sim_text = self.ui.lab_out_simulation_id_text
+        lab_sim_id = self.ui.lab_out_simulation_id
+
+        lab_sim_text.setText("Simulation id: ")
+        lab_sim_id.setText("0")
+
+
     def update_multiplier_text(self):
         slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
         slider_val = slider_capacity_multiplier.property("value") / 100.0
