@@ -53,6 +53,8 @@ class MainWindow(QMainWindow):
                 btn.setStyleSheet("background-color: None")
         # clear current selection
         self.current_area_selected.clear()
+        # clear current layout
+        self.parking_layout.clear()
 
     def get_vehicles_data(self):
         allowed_vehicles = []
