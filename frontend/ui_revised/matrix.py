@@ -20,5 +20,5 @@ def is_coordinate_in_range(coordinate, range_start, range_end):
 def update_connection_between_areas(data_list, filter_value, new_connection_value):
     filtered_list = [item for item in data_list if item.get('node_id') == filter_value]
     for item in filtered_list:
-        item['connectsTo'].append([new_connection_value, 0])
+        item['connectsTo'].append({"id": new_connection_value, "pos": 0})
     return filtered_list

@@ -1,42 +1,17 @@
 [
     {
-        "node_id": 0,
+        "id": 0,
         "type": "Road",
-        "capacity": 5.0,
+        "capacity": 3.0,
         "allowed_veh": [],
         "start_pos": {
-            "x": 1,
-            "y": 0
+            "x": 0,
+            "y": 6
         },
         "end_pos": {
-            "x": 1,
-            "y": 4
+            "x": 0,
+            "y": 8
         },
-        "connectsTo": [
-            [
-                1,
-                0
-            ]
-        ]
-    },
-    {
-        "node_id": 1,
-        "type": "Road",
-        "capacity": 5.0,
-        "allowed_veh": [],
-        "start_pos": {
-            "x": 1,
-            "y": 0
-        },
-        "end_pos": {
-            "x": 5,
-            "y": 0
-        },
-        "connectsTo": [
-            [
-                0,
-                0
-            ]
-        ]
+        "connectsTo": []
     }
 ]

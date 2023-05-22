@@ -166,7 +166,7 @@ class MainWindow(QMainWindow):
                             other_area_id = area['node_id']
 
                             # add connection to current area (connection list)
-                            connections.append([other_area_id, 0])
+                            connections.append({"id": other_area_id, "pos": 0})
 
                             # change connection information in other area
                             update_connection_between_areas(
@@ -175,7 +175,7 @@ class MainWindow(QMainWindow):
 
                 # add area to layout
                 area_info = {
-                    "node_id": area_id,
+                    "id": area_id,
                     "type": area_type,
                     "capacity": capacity * capacity_multiplier,
                     "allowed_veh": allowed_vehicles,
@@ -233,7 +233,7 @@ class MainWindow(QMainWindow):
                         other_area_id = area['node_id']
 
                         # add connection to current area (connection list)
-                        connections.append([other_area_id, 0])
+                        connections.append({"id": other_area_id, "pos": 0})
 
                         # change connection information in other area
                         update_connection_between_areas(
@@ -257,7 +257,7 @@ class MainWindow(QMainWindow):
                         other_area_id = area['node_id']
 
                         # add connection to current area (connection list)
-                        connections.append([other_area_id, 0])
+                        connections.append({"id": other_area_id, "pos": 0})
 
                         # change connection information in other area
                         update_connection_between_areas(
@@ -266,7 +266,7 @@ class MainWindow(QMainWindow):
 
                 # add area to layout
                 area_info = {
-                    "node_id": area_id,
+                    "id": area_id,
                     "type": area_type,
                     "capacity": capacity,
                     "allowed_veh": allowed_vehicles,
