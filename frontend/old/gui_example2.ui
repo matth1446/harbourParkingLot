@@ -1845,13 +1845,51 @@ p, li { white-space: pre-wrap; }
        <string>Retrieve results...</string>
       </property>
      </widget>
-     <widget class="QWidget" name="">
+     <widget class="QLabel" name="lab_out_simulation_id_text">
       <property name="geometry">
        <rect>
         <x>200</x>
         <y>10</y>
+        <width>81</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QLabel" name="lab_out_simulation_id">
+      <property name="geometry">
+       <rect>
+        <x>280</x>
+        <y>10</y>
+        <width>16</width>
+        <height>16</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+     <widget class="QWidget" name="">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>30</y>
         <width>1008</width>
-        <height>1011</height>
+        <height>1008</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout">
