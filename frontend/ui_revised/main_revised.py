@@ -1,7 +1,12 @@
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QPixmap
+from PyQt5.uic.properties import QtCore
+
 from frontend.ui_revised.gui import Ui_MainWindow
 from matrix import is_coordinate_in_range, update_connection_between_areas
 import utils
+import matplotlib.pyplot as mpl
+import numpy as np
 
 
 class MainWindow(QMainWindow):
@@ -19,7 +24,7 @@ class MainWindow(QMainWindow):
         # Create an instance of the generated UI class
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self)
-        self.setGeometry(100, 100, 800, 900)
+        #self.setGeometry(100, 100, 800, 900)
 
         # Add functionality to grid buttons
         for row in range(self.ui.gridLayout_roads.rowCount()):
@@ -42,7 +47,55 @@ class MainWindow(QMainWindow):
         slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
         slider_capacity_multiplier.valueChanged.connect(self.update_multiplier_text)
 
+        # Add functionality for plotting a chart to the output panel
+        button_retrieve_results = self.ui.but_retrieve_res
+        button_retrieve_results.clicked.connect(self.create_charts)
 
+    def create_charts(self):
+        gates = [1, 2, 3, 4]
+        data_y1 = [10, 20, 30, 40]
+        data_y2 = [20, 30, 40, 50]
+        data_x = np.arange(len(gates))
+        # Creating the Figure container
+        fig = mpl.figure(figsize=(5, 5))
+        # Creating the axis
+        ax = fig.add_subplot()
+        # Line plot command
+        ax.bar(data_x, data_y1, label='Vehicles handled')
+        ax.bar(data_x, data_y2, bottom=data_y1, label='Vehicles waiting')
+        ax.set_ylabel('Vehicles')
+        ax.set_xlabel('Gates')
+        ax.set_title('Handled Vehicles per Gate')
+        ax.legend()
+
+        ax.set_xticks(data_x, gates)
+        fig.savefig('img/chart_0_0.png')
+
+        # assigning charts to the placeholders
+
+        chart_img_0_0 = QPixmap('./img/chart_0_0.png')
+        chart_img_0_0 = chart_img_0_0.scaled(500, 500)
+
+        chart_img_0_1 = QPixmap('./img/chart_0_0.png')
+        chart_img_0_1 = chart_img_0_1.scaled(500, 500)
+
+        chart_img_1_0 = QPixmap('./img/chart_0_0.png')
+        chart_img_1_0 = chart_img_1_0.scaled(500, 500)
+
+        chart_img_1_1 = QPixmap('./img/chart_0_0.png')
+        chart_img_1_1 = chart_img_1_1.scaled(500, 500)
+
+        chart_0_0_label = self.ui.img_out_0_0
+        chart_0_0_label.setPixmap(chart_img_0_0)
+
+        chart_0_1_label = self.ui.img_out_0_1
+        chart_0_1_label.setPixmap(chart_img_0_1)
+
+        chart_1_0_label = self.ui.img_out_1_0
+        chart_1_0_label.setPixmap(chart_img_1_0)
+
+        chart_1_1_label = self.ui.img_out_1_1
+        chart_1_1_label.setPixmap(chart_img_1_1)
 
     def update_multiplier_text(self):
         slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
@@ -106,7 +159,7 @@ class MainWindow(QMainWindow):
         - Bottom row = only entry possible
         """
 
-        # update counter (node_id)
+        # update counter (id)
         area_id = len(self.parking_layout)
         # store all connections
         connections = []
@@ -160,10 +213,10 @@ class MainWindow(QMainWindow):
                         range_start = (area['start_pos']['x'], area['start_pos']['y'])
                         range_end = (area['end_pos']['x'], area['end_pos']['y'])
 
-                        # if there is an overlap, get node_id from other area
+                        # if there is an overlap, get id from other area
                         if is_coordinate_in_range(coord, range_start, range_end):
                             # id of current area = area_id
-                            other_area_id = area['node_id']
+                            other_area_id = area['id']
 
                             # add connection to current area (connection list)
                             connections.append({"id": other_area_id, "pos": 0})
@@ -215,7 +268,7 @@ class MainWindow(QMainWindow):
                     range_start = (area['start_pos']['x'], area['start_pos']['y'])
                     range_end = (area['end_pos']['x'], area['end_pos']['y'])
 
-                    # if start_coord is an overlap, get node_id from other area
+                    # if start_coord is an overlap, get id from other area
                     if is_coordinate_in_range(start_coord, range_start, range_end):
                         coord = start_coord
                         print(f'{start_coord} overlapping with road')
@@ -230,7 +283,7 @@ class MainWindow(QMainWindow):
                         btn_parking.setStyleSheet("background-color: " + color)
 
                         # update the connection information for the tiles
-                        other_area_id = area['node_id']
+                        other_area_id = area['id']
 
                         # add connection to current area (connection list)
                         connections.append({"id": other_area_id, "pos": 0})
@@ -240,7 +293,7 @@ class MainWindow(QMainWindow):
                             self.parking_layout, other_area_id, area_id
                         )
 
-                    # if end_coord is an overlap, get node_id from other area
+                    # if end_coord is an overlap, get id from other area
                     elif is_coordinate_in_range(end_coord, range_start, range_end):
                         coord = end_coord
                         print(f'{end_coord} overlapping with road')
@@ -254,7 +307,7 @@ class MainWindow(QMainWindow):
                         btn_parking.setStyleSheet("background-color: " + color)
 
                         # update the connection information for the tiles
-                        other_area_id = area['node_id']
+                        other_area_id = area['id']
 
                         # add connection to current area (connection list)
                         connections.append({"id": other_area_id, "pos": 0})
