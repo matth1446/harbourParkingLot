@@ -34,9 +34,15 @@ class MainWindow(QMainWindow):
         button_reset_layout = self.ui.but_reset_layout
         button_reset_layout.clicked.connect(self.reset_area_layout)
 
+        # Add functionality for resetting the current selection
+        button_reset_selection = self.ui.but_reset_selection
+        button_reset_selection.clicked.connect(self.reset_current_selection)
+
         # Add functionality for updating capacity multiplier text when moving slider
         slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
         slider_capacity_multiplier.valueChanged.connect(self.update_multiplier_text)
+
+
 
     def update_multiplier_text(self):
         slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
@@ -343,6 +349,12 @@ class MainWindow(QMainWindow):
                         layout_string += "N,"
 
         utils.write_content_to_file('layout_matrix.txt', layout_string)
+
+    def reset_current_selection(self):
+        for x, y in self.current_area_selected:
+            btn = self.ui.gridLayout_roads.itemAtPosition(x, y).widget()
+            btn.setProperty("color", None)
+            btn.setStyleSheet("background-color: None")
 
 
 if __name__ == "__main__":
