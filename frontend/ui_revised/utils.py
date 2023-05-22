@@ -9,6 +9,11 @@ def write_layout_to_json(file_path, entries):
                   separators=(',', ': '))
 
 
+def write_content_to_file(file_path, content):
+    with open(file_path, 'w') as file:
+        file.write(content)
+
+
 def matrix_to_txt(file_path, content):
     row_str = ""
     arr = np.array(content)

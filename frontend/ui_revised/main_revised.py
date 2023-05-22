@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from frontend.ui_revised.gui import Ui_MainWindow
 from matrix import is_coordinate_in_range, update_connection_between_areas
-from utils import write_layout_to_json
+import utils
 
 
 class MainWindow(QMainWindow):
@@ -46,6 +46,9 @@ class MainWindow(QMainWindow):
         label_capacity_multiplier.setText(f'x {slider_val}')
 
     def reset_area_layout(self):
+        # before resetting the layout create a string
+        self.convert_matrix_to_string()
+
         for row in range(self.ui.gridLayout_roads.rowCount()):
             for col in range(self.ui.gridLayout_roads.columnCount()):
                 btn = self.ui.gridLayout_roads.itemAtPosition(row, col).widget()
@@ -287,7 +290,7 @@ class MainWindow(QMainWindow):
         print(self.parking_layout)
 
         # write layout to json file
-        write_layout_to_json(self.layout_json_save_path, self.parking_layout)
+        utils.write_layout_to_json(self.layout_json_save_path, self.parking_layout)
 
         # reset area type to road (index = 0)
         self.ui.comboBox_area_type.setCurrentIndex(0)
@@ -316,6 +319,30 @@ class MainWindow(QMainWindow):
                 int(str(button.property("objectName")).split("_")[2])
             )
         )
+
+    def convert_matrix_to_string(self):
+        layout_string = ""
+
+        # go through each tile and add its type to the string
+        for row in range(self.ui.gridLayout_roads.rowCount()):
+            for col in range(self.ui.gridLayout_roads.columnCount()):
+                btn = self.ui.gridLayout_roads.itemAtPosition(row, col).widget()
+                """according to the button color represent area type as letter
+                N ... None, R ... Road (red), P ... Parking (yellow), 
+                G ... Check-in gate (green), E ... Entry (violet)"""
+                match btn.property("color"):
+                    case "red":
+                        layout_string += "R,"
+                    case "yellow":
+                        layout_string += "P,"
+                    case "green":
+                        layout_string += "G,"
+                    case "violet":
+                        layout_string += "E,"
+                    case _:
+                        layout_string += "N,"
+
+        utils.write_content_to_file('layout_matrix.txt', layout_string)
 
 
 if __name__ == "__main__":
