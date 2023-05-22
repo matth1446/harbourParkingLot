@@ -38,19 +38,6 @@ class MainWindow(QMainWindow):
         slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
         slider_capacity_multiplier.valueChanged.connect(self.update_multiplier_text)
 
-        all = []
-        a = {
-            "text": "a"
-        }
-        b = {
-            "text": "b"
-        }
-
-        all.append(a)
-        all.append(b)
-
-        # print(all)
-
     def update_multiplier_text(self):
         slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
         slider_val = slider_capacity_multiplier.property("value") / 100.0
@@ -110,6 +97,8 @@ class MainWindow(QMainWindow):
 
         # update counter (node_id)
         area_id = len(self.parking_layout)
+        # store all connections
+        connections = []
 
         # first get necessary info for json and save them in variables
         # get current area type for coloring
@@ -135,19 +124,20 @@ class MainWindow(QMainWindow):
                 btn.setStyleSheet("background-color: violet")
             elif area_type == "Parking":
                 # if area = parking; also check for the capacity
-                btn.setProperty("color", "yellow")
-                btn.setStyleSheet("background-color: yellow")
+                # btn.setProperty("color", "yellow")
+                # btn.setStyleSheet("background-color: yellow")
+                print()
             elif area_type == "Check-in":
                 btn.setProperty("color", "green")
                 btn.setStyleSheet("background-color: green")
 
         # handle areas and connections
+        num_entries = len(self.current_area_selected)
+
         # roads
         if area_type == "Road":
-            num_entries = len(self.current_area_selected)
             # if it is a road the capacity is equal to the number of tiles
             capacity = num_entries
-            connections = []
 
             if num_entries > 0:  # only if there is more than 1 entry
                 start_coords = self.current_area_selected[0]
@@ -193,6 +183,88 @@ class MainWindow(QMainWindow):
 
                 self.parking_layout.append(area_info)
 
+        elif area_type == "Parking":
+            coord = ()
+            # check if there are exactly 2 entries (one = parking, other one = connection to road)
+            if num_entries == 2:
+                start_coord = self.current_area_selected[0]
+                end_coord = self.current_area_selected[num_entries - 1]
+
+                # check if either start or end coordinate are connected with
+                for area in self.parking_layout:
+                    range_start = (area['start_pos']['x'], area['start_pos']['y'])
+                    range_end = (area['end_pos']['x'], area['end_pos']['y'])
+
+                    # if start_coord is an overlap, get node_id from other area
+                    if is_coordinate_in_range(start_coord, range_start, range_end):
+                        coord = start_coord
+                        print(f'{start_coord} overlapping with road')
+                        # color the tile that has an overlap with the road red
+                        btn_overlap = self.ui.gridLayout_roads.itemAtPosition(start_coord[0], start_coord[1]).widget()
+                        btn_overlap.setProperty("color", "red")
+                        btn_overlap.setStyleSheet("background-color: red")
+
+                        # color the tile that connects to the road yellow = parking
+                        btn_parking = self.ui.gridLayout_roads.itemAtPosition(end_coord[0], end_coord[1]).widget()
+                        btn_parking.setProperty("color", "yellow")
+                        btn_parking.setStyleSheet("background-color: yellow")
+
+                        # update the connection information for the tiles
+                        other_area_id = area['node_id']
+
+                        # add connection to current area (connection list)
+                        connections.append([other_area_id, 0])
+
+                        # change connection information in other area
+                        update_connection_between_areas(
+                            self.parking_layout, other_area_id, area_id
+                        )
+
+                    # if end_coord is an overlap, get node_id from other area
+                    elif is_coordinate_in_range(end_coord, range_start, range_end):
+                        coord = end_coord
+                        print(f'{end_coord} overlapping with road')
+                        btn_overlap = self.ui.gridLayout_roads.itemAtPosition(end_coord[0], end_coord[1]).widget()
+                        btn_overlap.setProperty("color", "red")
+                        btn_overlap.setStyleSheet("background-color: red")
+
+                        # color the tile that connects to the road yellow = parking
+                        btn_parking = self.ui.gridLayout_roads.itemAtPosition(start_coord[0], start_coord[1]).widget()
+                        btn_parking.setProperty("color", "yellow")
+                        btn_parking.setStyleSheet("background-color: yellow")
+
+                        # update the connection information for the tiles
+                        other_area_id = area['node_id']
+
+                        # add connection to current area (connection list)
+                        connections.append([other_area_id, 0])
+
+                        # change connection information in other area
+                        update_connection_between_areas(
+                            self.parking_layout, other_area_id, area_id
+                        )
+
+                # add area to layout
+                area_info = {
+                    "node_id": area_id,
+                    "type": area_type,
+                    "capacity": capacity,
+                    "allowed_veh": allowed_vehicles,
+                    "start_pos": {
+                        "x": coord[0],
+                        "y": coord[1]
+                    },
+                    "end_pos": {
+                        "x": coord[0],
+                        "y": coord[1]
+                    },
+                    "connectsTo":
+                        connections
+
+                }
+
+                self.parking_layout.append(area_info)
+
         # print(f'====================\n'
         #       f'Area type: {area_type}\n'
         #       f'Allowed: {allowed_vehicles}\n'
@@ -200,8 +272,8 @@ class MainWindow(QMainWindow):
         #       f'Multiplier: {capacity_multiplier}\n'
         #       f'Total: {int(capacity * capacity_multiplier)}')
 
-        print(self.parking_layout)
         print("Added area to layout!")
+        print(self.parking_layout)
 
         # write layout to json file
         write_layout_to_json(self.layout_json_save_path, self.parking_layout)

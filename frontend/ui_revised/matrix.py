@@ -6,8 +6,12 @@ def is_coordinate_in_range(coordinate, range_start, range_end):
     # 4, 0
     range_end_x, range_end_y = range_end
 
-    # Check if the coordinate is within the range
+    # Check if the coordinate is within the range (positive direction)
     if range_start_x <= x <= range_end_x and range_start_y <= y <= range_end_y:
+        return True
+
+    # Check if the coordinate is within the range (negative direction)
+    if range_start_x >= x >= range_end_x and range_start_y >= y >= range_end_y:
         return True
 
     return False
