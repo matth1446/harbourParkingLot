@@ -1,4 +1,6 @@
-# https://www.tutorialkart.com/mongodb/connect-to-mongodb-from-python/
+#install pymongo -> https://www.tutorialkart.com/mongodb/connect-to-mongodb-from-python/
+#work with pymongo -> https://pymongo.readthedocs.io/en/stable/tutorial.html
+
 import pymongo
 from pymongo import MongoClient
 
@@ -11,7 +13,6 @@ db = client.database_dss
 collection_input = db.input
 collection_output = db.output
 
-# https://pymongo.readthedocs.io/en/stable/tutorial.html
 #INPUT
 #create entry for input
 entry = {"parameters":
