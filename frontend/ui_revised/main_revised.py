@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 
 from frontend.ui_revised.gui import Ui_MainWindow
-from matrix import is_coordinate_in_range, update_connection_between_areas
+from matrix import *
 from frontend.visualization.visualization import *
 import utils
 
@@ -235,13 +235,13 @@ class MainWindow(QMainWindow):
                         "y": end_coords[1]
                     },
                     "connectsTo":
-                        connections
-
+                        connections,
+                    "entry": False
                 }
 
                 self.parking_layout.append(area_info)
-
-        elif area_type == "Parking" or area_type == "Entry" or area_type == "Check-in":
+        # parking & check-in
+        elif area_type == "Parking" or area_type == "Check-in":
             # assign color according to area
             color = ""
             if area_type == "Parking":
@@ -326,11 +326,26 @@ class MainWindow(QMainWindow):
                         "y": coord[1]
                     },
                     "connectsTo":
-                        connections
-
+                        connections,
+                    "entry": False
                 }
 
                 self.parking_layout.append(area_info)
+        # entry
+        elif area_type == "Entry":
+            # in case the area is marked as entry just assign the entry key of the corresponding
+            # road to true and color the end of the road violet
+            # check each coordinate of current road against existing roads
+            for coord in self.current_area_selected:
+                # check to which road the entry is connected to
+                for area in self.parking_layout:
+                    range_start = (area['start_pos']['x'], area['start_pos']['y'])
+                    range_end = (area['end_pos']['x'], area['end_pos']['y'])
+
+                    # if it is an overlap, change the entry key of the road to true
+                    if is_coordinate_in_range(coord, range_start, range_end):
+                        print(f'{coord} overlapping with road')
+                        update_entry_key_for_road(self.parking_layout, area['id'])
 
         # print(f'====================\n'
         #       f'Area type: {area_type}\n'
