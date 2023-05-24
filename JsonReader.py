@@ -20,18 +20,18 @@ class Gate (QueueInterface):
 
 class Road (QueueInterface):
 
-    def __init__(self, type, lengthQueue, isEntry, goesTo):
+    def __init__(self, type, lengthQueue, isEntry, connectsTo):
         super().__init__(lengthQueue)
         self.type = type
         self.isEntry = isEntry
-        self.goesTo = goesTo
+        self.goesTo = connectsTo
 
 class ParkingSlot (QueueInterface):
 
-    def __init__(self, type, goesTo ):
-        super().__init__(1)
+    def __init__(self, type, connectsTo, cap):
+        super().__init__(cap)
         self.type = type
-        self.goesTo = goesTo
+        self.goesTo = connectsTo
 
 def validateExtract(dict):
     for obj in dict:
@@ -48,10 +48,11 @@ def buildFromJson(jsonInput):
     for obj in content:
         if obj["type"].lower() == "parking":
             res[obj["id"]] = ParkingSlot(obj["type-allowed"],
-                                  [(obj["goesTo"][j]["id"], obj["goesTo"][j]["pos"]) for j in range(len(obj["goesTo"]))])
+                                  [(obj["connectsTo"][j]["id"], obj["connectsTo"][j]["pos"]) for j in range(len(obj["connectsTo"]))],
+                                         obj["capacity"])
         elif obj["type"].lower() == "road":
             res[obj["id"]] = Road(obj["type-allowed"], obj["length"], obj["entry"],
-                                  [(obj["goesTo"][j]["id"], obj["goesTo"][j]["pos"]) for j in range(len(obj["goesTo"]))])
+                                  [(obj["connectsTo"][j]["id"], obj["connectsTo"][j]["pos"]) for j in range(len(obj["connectsTo"]))])
         elif obj["type"].lower() == "check-in":
             res[obj["id"]] = Gate(obj["type-allowed"])
         else :
