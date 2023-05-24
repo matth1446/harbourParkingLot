@@ -2,29 +2,29 @@
     {
         "id": 0,
         "type": "Road",
-        "capacity": 3.0,
+        "capacity": 8.0,
         "allowed_veh": [],
         "start_pos": {
-            "x": 0,
-            "y": 4
+            "x": 8,
+            "y": 0
         },
         "end_pos": {
-            "x": 0,
-            "y": 6
+            "x": 1,
+            "y": 0
         },
         "connectsTo": []
     },
     {
         "id": 1,
         "type": "Road",
-        "capacity": 3.0,
+        "capacity": 7.0,
         "allowed_veh": [],
         "start_pos": {
-            "x": 0,
-            "y": 6
+            "x": 1,
+            "y": 0
         },
         "end_pos": {
-            "x": 2,
+            "x": 1,
             "y": 6
         },
         "connectsTo": [
@@ -36,15 +36,15 @@
     },
     {
         "id": 2,
-        "type": "Parking",
-        "capacity": 20.0,
+        "type": "Road",
+        "capacity": 8.0,
         "allowed_veh": [],
         "start_pos": {
-            "x": 2,
+            "x": 1,
             "y": 6
         },
         "end_pos": {
-            "x": 2,
+            "x": 8,
             "y": 6
         },
         "connectsTo": [
@@ -57,14 +57,102 @@
     {
         "id": 3,
         "type": "Road",
-        "capacity": 3.0,
+        "capacity": 7.0,
         "allowed_veh": [],
         "start_pos": {
-            "x": 2,
+            "x": 5,
+            "y": 0
+        },
+        "end_pos": {
+            "x": 5,
+            "y": 6
+        },
+        "connectsTo": [
+            {
+                "id": 0,
+                "pos": 0
+            },
+            {
+                "id": 2,
+                "pos": 0
+            }
+        ]
+    },
+    {
+        "id": 4,
+        "type": "Entry",
+        "capacity": 20.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 8,
+            "y": 0
+        },
+        "end_pos": {
+            "x": 8,
+            "y": 0
+        },
+        "connectsTo": [
+            {
+                "id": 0,
+                "pos": 0
+            }
+        ]
+    },
+    {
+        "id": 5,
+        "type": "Entry",
+        "capacity": 20.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 8,
             "y": 6
         },
         "end_pos": {
-            "x": 4,
+            "x": 8,
+            "y": 6
+        },
+        "connectsTo": [
+            {
+                "id": 2,
+                "pos": 0
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "type": "Check-in",
+        "capacity": 20.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 1,
+            "y": 0
+        },
+        "end_pos": {
+            "x": 1,
+            "y": 0
+        },
+        "connectsTo": [
+            {
+                "id": 0,
+                "pos": 0
+            },
+            {
+                "id": 1,
+                "pos": 0
+            }
+        ]
+    },
+    {
+        "id": 7,
+        "type": "Check-in",
+        "capacity": 20.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 1,
+            "y": 6
+        },
+        "end_pos": {
+            "x": 1,
             "y": 6
         },
         "connectsTo": [
@@ -72,6 +160,86 @@
                 "id": 1,
                 "pos": 0
             },
+            {
+                "id": 2,
+                "pos": 0
+            }
+        ]
+    },
+    {
+        "id": 8,
+        "type": "Parking",
+        "capacity": 20.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 3,
+            "y": 6
+        },
+        "end_pos": {
+            "x": 3,
+            "y": 6
+        },
+        "connectsTo": [
+            {
+                "id": 2,
+                "pos": 0
+            }
+        ]
+    },
+    {
+        "id": 9,
+        "type": "Parking",
+        "capacity": 20.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 3,
+            "y": 0
+        },
+        "end_pos": {
+            "x": 3,
+            "y": 0
+        },
+        "connectsTo": [
+            {
+                "id": 0,
+                "pos": 0
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "type": "Parking",
+        "capacity": 20.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 7,
+            "y": 0
+        },
+        "end_pos": {
+            "x": 7,
+            "y": 0
+        },
+        "connectsTo": [
+            {
+                "id": 0,
+                "pos": 0
+            }
+        ]
+    },
+    {
+        "id": 11,
+        "type": "Parking",
+        "capacity": 20.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 7,
+            "y": 6
+        },
+        "end_pos": {
+            "x": 7,
+            "y": 6
+        },
+        "connectsTo": [
             {
                 "id": 2,
                 "pos": 0
