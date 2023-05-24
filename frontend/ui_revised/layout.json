@@ -2,15 +2,15 @@
     {
         "id": 0,
         "type": "Road",
-        "capacity": 3.0,
+        "capacity": 9.0,
         "allowed_veh": [],
         "start_pos": {
             "x": 9,
-            "y": 2
+            "y": 1
         },
         "end_pos": {
-            "x": 7,
-            "y": 2
+            "x": 1,
+            "y": 1
         },
         "connectsTo": [
             {
@@ -22,153 +22,20 @@
     },
     {
         "id": 1,
-        "type": "Road",
-        "capacity": 3.0,
-        "allowed_veh": [],
-        "start_pos": {
-            "x": 7,
-            "y": 2
-        },
-        "end_pos": {
-            "x": 7,
-            "y": 4
-        },
-        "connectsTo": [
-            {
-                "id": 0,
-                "pos": 0
-            },
-            {
-                "id": 2,
-                "pos": 0
-            },
-            {
-                "id": 3,
-                "pos": 0
-            }
-        ],
-        "entry": false
-    },
-    {
-        "id": 2,
-        "type": "Road",
-        "capacity": 4.0,
-        "allowed_veh": [],
-        "start_pos": {
-            "x": 7,
-            "y": 4
-        },
-        "end_pos": {
-            "x": 4,
-            "y": 4
-        },
-        "connectsTo": [
-            {
-                "id": 1,
-                "pos": 0
-            },
-            {
-                "id": 3,
-                "pos": 0
-            },
-            {
-                "id": 4,
-                "pos": 0
-            }
-        ],
-        "entry": false
-    },
-    {
-        "id": 3,
-        "type": "Road",
-        "capacity": 3.0,
-        "allowed_veh": [],
-        "start_pos": {
-            "x": 7,
-            "y": 4
-        },
-        "end_pos": {
-            "x": 9,
-            "y": 4
-        },
-        "connectsTo": [
-            {
-                "id": 1,
-                "pos": 0
-            },
-            {
-                "id": 2,
-                "pos": 0
-            }
-        ],
-        "entry": true
-    },
-    {
-        "id": 4,
-        "type": "Road",
-        "capacity": 5.0,
-        "allowed_veh": [],
-        "start_pos": {
-            "x": 4,
-            "y": 4
-        },
-        "end_pos": {
-            "x": 4,
-            "y": 8
-        },
-        "connectsTo": [
-            {
-                "id": 2,
-                "pos": 0
-            },
-            {
-                "id": 5,
-                "pos": 0
-            }
-        ],
-        "entry": false
-    },
-    {
-        "id": 5,
-        "type": "Road",
-        "capacity": 4.0,
-        "allowed_veh": [],
-        "start_pos": {
-            "x": 4,
-            "y": 8
-        },
-        "end_pos": {
-            "x": 1,
-            "y": 8
-        },
-        "connectsTo": [
-            {
-                "id": 4,
-                "pos": 0
-            },
-            {
-                "id": 6,
-                "pos": 0
-            }
-        ],
-        "entry": false
-    },
-    {
-        "id": 6,
         "type": "Check-in",
         "capacity": 20.0,
         "allowed_veh": [],
         "start_pos": {
             "x": 1,
-            "y": 8
+            "y": 1
         },
         "end_pos": {
             "x": 1,
-            "y": 8
+            "y": 1
         },
         "connectsTo": [
             {
-                "id": 5,
+                "id": 0,
                 "pos": 0
             }
         ],

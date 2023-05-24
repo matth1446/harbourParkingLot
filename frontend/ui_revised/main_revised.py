@@ -5,6 +5,7 @@ from frontend.ui_revised.gui import Ui_MainWindow
 from matrix import *
 from frontend.visualization.visualization import *
 import utils
+from pymongo import MongoClient
 
 
 class MainWindow(QMainWindow):
@@ -48,6 +49,58 @@ class MainWindow(QMainWindow):
         # Add functionality for plotting a chart to the output panel
         button_retrieve_results = self.ui.but_retrieve_res
         button_retrieve_results.clicked.connect(self.retrieve_simulation_results)
+
+        # Add functionality for starting the simulation
+        button_simulate = self.ui.but_simulate
+        button_simulate.clicked.connect(self.start_simulation)
+
+    def write_inputs_to_db(self):
+        inp_gate_open_time = self.ui.timeEdit_gates_open.dateTime().toString("hh:mm")
+        inp_gate_close_time = self.ui.timeEdit_gates_close.dateTime().toString("hh:mm")
+        inp_num_cars = self.ui.doubleSpinBox_num_cars.property("value")
+        inp_num_trucks = self.ui.doubleSpinBox_num_trucks.property("value")
+        inp_num_trailers = self.ui.doubleSpinBox_num_trailers.property("value")
+        inp_employee_cost = self.ui.doubleSpinBox_employ_cost.property("value")
+        inp_gate_cost = self.ui.doubleSpinBox_gate_cost.property("value")
+        inp_ticket_cost = self.ui.doubleSpinBox_ticket_cost.property("value")
+        inp_area_width = self.ui.doubleSpinBox_area_width.property("value")
+        inp_area_length = self.ui.doubleSpinBox_area_length.property("value")
+        inp_perc_online_checkin = self.ui.horizontalSlider_perc_online_checkin.property("value")
+
+        # write input data and layout information into the database
+        URI = "mongodb+srv://db_user:db_user@dss.icklgr1.mongodb.net/"
+        client = MongoClient(URI)
+        db = client.database_dss
+        collection_input = db.input
+
+        # create entry for input
+        entry = {"parameters":
+            {
+                "gate_open_time": inp_gate_open_time,
+                "gate_closing_time": inp_gate_close_time,
+                "no_of_cars": inp_num_cars,
+                "no_of_trucks": inp_num_trucks,
+                "no_of_trailers": inp_num_trailers,
+                "employee_cost": inp_employee_cost,
+                "gate_cost": inp_gate_cost,
+                "ticket_cost": inp_ticket_cost,
+                "total_area_width": inp_area_width,
+                "total_area_length": inp_area_length,
+                "perc_online_check_in": inp_perc_online_checkin
+            },
+            "layout":
+                self.parking_layout
+        }
+        collection_input.insert_one(entry)
+        client.close()
+
+    def start_simulation(self):
+        # validate layout
+        print("validating layout.... OK")
+
+        # gather input fields data
+        self.write_inputs_to_db()
+
 
     def retrieve_simulation_results(self):
         # update simulation text label and id
