@@ -2,10 +2,10 @@ import matplotlib.pyplot as mpl
 import numpy as np
 
 
-def create_handled_vehicles_chart():
+def create_handled_vehicles_chart(save_path):
     # chart 1 ---------------------------------------------------------------------------------------
     # Handled Vehicles per Gate
-    # createing ficticious data to plot.
+    # creating ficticious data to plot.
     gates = [1, 2, 3, 4]
     data_y1 = [10, 20, 30, 40]
     data_y2 = [20, 30, 40, 50]
@@ -23,11 +23,12 @@ def create_handled_vehicles_chart():
     ax.legend()
 
     ax.set_xticks(data_x, gates)
+    fig.savefig(save_path)
     # ax.grid()
     # mpl.show()
 
 
-def create_income_expenses_chart():
+def create_income_expenses_chart(save_path):
     # chart 2 ---------------------------------------------------------------------------------------
     # Overview of Income and Expenses
     # Income = sold ticked
@@ -62,9 +63,10 @@ def create_income_expenses_chart():
     ax.set_title('Overview of Income and Expenses')
     ax.set_xticks(data_x, x_labels)
     # mpl.show()
+    fig.savefig(save_path)
 
 
-def create_avg_waiting_chart():
+def create_avg_waiting_chart(save_path):
     # chart 3 ---------------------------------------------------------------------------------------
     # Average waiting time
     avg_car = 23
@@ -79,13 +81,14 @@ def create_avg_waiting_chart():
     ax.set_title('Average Waiting Time in Minutes')
     ax.set_xticks(data_x, x_labels)
     # mpl.show()
+    fig.savefig(save_path)
 
 
-def create_co2_emission_chart():
+def create_co2_emission_chart(save_path):
     # chart 4 ---------------------------------------------------------------------------------------
     # CO² Emission of Vehicles
-    # Car: 19,1 Gramm CO² per min
-    # Truck: 45,56 gramm CO² per min
+    # Car: 19,1 g CO² per min
+    # Truck: 45,56 g CO² per min
     emission_car = 19.1
     emission_truck = 45.56
 
@@ -114,5 +117,5 @@ def create_co2_emission_chart():
     ax.set_xticks(data_x, gates)
     ax.grid()
     ax.legend()
-
-    mpl.show()
+    # mpl.show()
+    fig.savefig(save_path)

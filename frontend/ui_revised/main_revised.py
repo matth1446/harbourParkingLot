@@ -1,12 +1,10 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
-from PyQt5.uic.properties import QtCore
 
 from frontend.ui_revised.gui import Ui_MainWindow
 from matrix import is_coordinate_in_range, update_connection_between_areas
+from frontend.visualization.visualization import *
 import utils
-import matplotlib.pyplot as mpl
-import numpy as np
 
 
 class MainWindow(QMainWindow):
@@ -52,82 +50,20 @@ class MainWindow(QMainWindow):
         button_retrieve_results.clicked.connect(self.retrieve_simulation_results)
 
     def retrieve_simulation_results(self):
+        # update simulation text label and id
+        lab_sim_text = self.ui.lab_out_simulation_id_text
+        lab_sim_id = self.ui.lab_out_simulation_id
+
+        lab_sim_text.setText("Simulation id: ")
+        lab_sim_id.setText("0")
+
         # gather all data from the simulation (inputs, results)
 
         # generate charts for the simulation
-
-        ax, fig = self.create_serviced_vehicles_chart()
-
-        # create chart two
-        cars = 35
-        trucks = 25
-        ticket_price = 7.5
-        percentage_for_parking = 0.05
-        gates = 4
-        gates_open = 2  # hours
-        payment = 15  # hours
-
-        ticket_parking = ticket_price * percentage_for_parking
-
-        income = (cars * ticket_parking) + (trucks * (ticket_parking * 1.5))
-        # Expenses = price for each employee per gate (excl. sel-check-in) and hours
-        expenses = (gates * (gates_open * payment))
-
-        x_labels = ["Income", "Expenses"]
-        y_axis = [income, expenses]
-        data_x = np.arange(len(x_labels))
-        barlist = ax.bar(data_x, y_axis)
-        barlist[1].set_color('red')
-        ax.set_ylabel('Euro')
-        ax.set_title('Overview of Income and Expenses')
-        ax.set_xticks(data_x, x_labels)
-
-        fig.savefig('img/chart_0_1.png')
-        ax.clear()
-
-        # create chart three
-        avg_car = 23
-        avg_truck = 45
-        fig = mpl.figure(figsize=(5, 5))
-        ax = fig.add_subplot()
-        x_labels = ["Car", "Truck"]
-        y_axis = [avg_car, avg_truck]
-        data_x = np.arange(len(x_labels))
-        ax.bar(data_x, y_axis)
-        ax.set_ylabel('Minutes')
-        ax.set_title('Average Waiting Time in Minutes')
-        ax.set_xticks(data_x, x_labels)
-
-        fig.savefig('img/chart_1_0.png')
-        ax.clear()
-
-        # create chart four
-        emission_car = 19.1
-        emission_truck = 45.56
-        gates = [1, 2, 3, 4]
-        waiting_time_cars = [50, 30, 58, 48]
-        waiting_time_trucks = [60, 12, 0, 70]
-
-        # to add emission
-        for i in range(len(waiting_time_cars)):
-            waiting_time_cars[i] = waiting_time_cars[i] * emission_car
-
-        for i in range(len(waiting_time_trucks)):
-            waiting_time_trucks[i] = waiting_time_trucks[i] * emission_truck
-
-        print(waiting_time_cars)
-        data_x = np.arange(len(gates))
-        width = 0.25
-        ax.bar(data_x - width / 2, waiting_time_cars, width, label='Cars')
-        ax.bar(data_x + width / 2, waiting_time_trucks, width, label='Trucks')
-        ax.set_ylabel('co¹ emission in gramm per min')
-        ax.set_xlabel('Gates')
-        ax.set_title('Produced CO² Emission during Waiting Time')
-        ax.set_xticks(data_x, gates)
-        ax.grid()
-        ax.legend()
-
-        fig.savefig('img/chart_1_1.png')
+        create_handled_vehicles_chart('./img/chart_0_0.png')
+        create_income_expenses_chart('./img/chart_0_1.png')
+        create_avg_waiting_chart('./img/chart_1_0.png')
+        create_co2_emission_chart('./img/chart_1_1.png')
 
         # assigning charts to the placeholders
 
@@ -154,35 +90,6 @@ class MainWindow(QMainWindow):
 
         chart_1_1_label = self.ui.img_out_1_1
         chart_1_1_label.setPixmap(chart_img_1_1)
-
-        # update simulation text label and id
-        lab_sim_text = self.ui.lab_out_simulation_id_text
-        lab_sim_id = self.ui.lab_out_simulation_id
-
-        lab_sim_text.setText("Simulation id: ")
-        lab_sim_id.setText("0")
-
-    def create_serviced_vehicles_chart(self):
-        # create chart one
-        gates = [1, 2, 3, 4]
-        data_y1 = [10, 20, 30, 40]
-        data_y2 = [20, 30, 40, 50]
-        data_x = np.arange(len(gates))
-        # Creating the Figure container
-        fig = mpl.figure(figsize=(5, 5))
-        # Creating the axis
-        ax = fig.add_subplot()
-        # Line plot command
-        ax.bar(data_x, data_y1, label='Vehicles handled')
-        ax.bar(data_x, data_y2, bottom=data_y1, label='Vehicles waiting')
-        ax.set_ylabel('Vehicles')
-        ax.set_xlabel('Gates')
-        ax.set_title('Handled Vehicles per Gate')
-        ax.legend()
-        ax.set_xticks(data_x, gates)
-        fig.savefig('img/chart_0_0.png')
-        ax.clear()
-        return ax, fig
 
     def update_multiplier_text(self):
         slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
