@@ -51,7 +51,7 @@ def buildFromJson(jsonInput):
                                   [(obj["connectsTo"][j]["id"], obj["connectsTo"][j]["pos"]) for j in range(len(obj["connectsTo"]))],
                                          obj["capacity"])
         elif obj["type"].lower() == "road":
-            res[obj["id"]] = Road(obj["type-allowed"], obj["length"], obj["entry"],
+            res[obj["id"]] = Road(obj["type-allowed"], obj["capacity"], obj["entry"],
                                   [(obj["connectsTo"][j]["id"], obj["connectsTo"][j]["pos"]) for j in range(len(obj["connectsTo"]))])
         elif obj["type"].lower() == "check-in":
             res[obj["id"]] = Gate(obj["type-allowed"])

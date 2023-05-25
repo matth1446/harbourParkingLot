@@ -1,5 +1,5 @@
 [ {"id": 0,"type": "check-in","type-allowed": ["car"]},
-  {"id": 1,"type": "road","type-allowed": ["car"],"conectsTo": [{"id": 0,"pos": 0}],"capacity": 3 ,"entry": true},
+  {"id": 1,"type": "road","type-allowed": ["car"],"connectsTo": [{"id": 0,"pos": 0}],"capacity": 3 ,"entry": true},
   {"id": 2,"type": "parking","type-allowed": ["car"],"connectsTo": [{"id": 1,"pos": 0}],"capacity": 10 },
   {"id": 3,"type": "parking","type-allowed": ["car"],"connectsTo": [{"id": 1,"pos": 0}],"capacity": 10 },
   {"id": 4,"type": "parking","type-allowed": ["car"],"connectsTo": [{"id": 1,"pos": 1}],"capacity": 10 },
