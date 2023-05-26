@@ -2,19 +2,23 @@
     {
         "id": 0,
         "type": "Road",
-        "capacity": 9.0,
+        "capacity": 3.0,
         "allowed_veh": [],
         "start_pos": {
             "x": 9,
-            "y": 1
+            "y": 0
         },
         "end_pos": {
-            "x": 1,
-            "y": 1
+            "x": 7,
+            "y": 0
         },
         "connectsTo": [
             {
                 "id": 1,
+                "pos": 0
+            },
+            {
+                "id": 2,
                 "pos": 0
             }
         ],
@@ -22,20 +26,74 @@
     },
     {
         "id": 1,
+        "type": "Parking",
+        "capacity": 20.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 7,
+            "y": 0
+        },
+        "end_pos": {
+            "x": 7,
+            "y": 0
+        },
+        "connectsTo": [
+            {
+                "id": 0,
+                "pos": 0
+            },
+            {
+                "id": 2,
+                "pos": 0
+            }
+        ],
+        "entry": false
+    },
+    {
+        "id": 2,
+        "type": "Road",
+        "capacity": 7.0,
+        "allowed_veh": [],
+        "start_pos": {
+            "x": 7,
+            "y": 0
+        },
+        "end_pos": {
+            "x": 1,
+            "y": 0
+        },
+        "connectsTo": [
+            {
+                "id": 0,
+                "pos": 0
+            },
+            {
+                "id": 1,
+                "pos": 0
+            },
+            {
+                "id": 3,
+                "pos": 0
+            }
+        ],
+        "entry": false
+    },
+    {
+        "id": 3,
         "type": "Check-in",
         "capacity": 20.0,
         "allowed_veh": [],
         "start_pos": {
             "x": 1,
-            "y": 1
+            "y": 0
         },
         "end_pos": {
             "x": 1,
-            "y": 1
+            "y": 0
         },
         "connectsTo": [
             {
-                "id": 0,
+                "id": 2,
                 "pos": 0
             }
         ],

@@ -9,7 +9,10 @@ from pymongo import MongoClient
 
 
 class MainWindow(QMainWindow):
+    # track coordinates of currently selected tiles
     current_area_selected = []
+    # track type of tile
+    current_area_selected_color = []
 
     # Hold information on layout
     parking_layout = []
@@ -91,16 +94,16 @@ class MainWindow(QMainWindow):
             "layout":
                 self.parking_layout
         }
-        collection_input.insert_one(entry)
+        # collection_input.insert_one(entry)
         client.close()
 
     def start_simulation(self):
         # validate layout
         print("validating layout.... OK")
+        self.convert_matrix_to_string()
 
         # gather input fields data
         self.write_inputs_to_db()
-
 
     def retrieve_simulation_results(self):
         # update simulation text label and id
@@ -418,12 +421,16 @@ class MainWindow(QMainWindow):
 
         # clear current selection
         self.current_area_selected.clear()
+        self.current_area_selected_color.clear()
 
         # reset multiplier
         self.ui.horSlider_capacity_multiplier.setValue(100)
 
     def handle_click_event_grid(self):
         button = self.sender()
+
+        # before changing the color, remember the color (type) of the tile to help with reset selection process
+        self.current_area_selected_color.append(button.property("color"))
 
         # check if current button has already area type associated and color it differently
         if button.property("color") != "None" and button.property("color") is not None:
@@ -440,6 +447,9 @@ class MainWindow(QMainWindow):
                 int(str(button.property("objectName")).split("_")[2])
             )
         )
+
+        print(self.current_area_selected)
+        print(self.current_area_selected_color)
 
     def convert_matrix_to_string(self):
         layout_string = ""
@@ -466,10 +476,20 @@ class MainWindow(QMainWindow):
         utils.write_content_to_file('layout_matrix.txt', layout_string)
 
     def reset_current_selection(self):
+        counter = 0
         for x, y in self.current_area_selected:
             btn = self.ui.gridLayout_roads.itemAtPosition(x, y).widget()
-            btn.setProperty("color", None)
-            btn.setStyleSheet("background-color: None")
+            if btn.property("color") == "gray":
+                btn.setProperty("color", None)
+                btn.setStyleSheet("background-color: None")
+            else:
+                color = self.current_area_selected_color[counter]
+                btn.setProperty("color", color)
+                btn.setStyleSheet("background-color: " + color)
+            counter += 1
+
+        self.current_area_selected.clear()
+        self.current_area_selected_color.clear()
 
 
 if __name__ == "__main__":
