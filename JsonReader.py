@@ -4,7 +4,11 @@ import json
 
 class QueueInterface :
 
+    i = 0;
+
     def __init__(self, lengthQueue):
+        self.id = QueueInterface.i
+        QueueInterface.i += 1
         self.store = None
         self.capacity = lengthQueue
         self.queue = deque()
@@ -26,7 +30,7 @@ class Road (QueueInterface):
         self.isEntry = isEntry
         self.goesTo = connectsTo
 
-class ParkingSlot (QueueInterface):
+class ParkingSpot (QueueInterface):
 
     def __init__(self, type, connectsTo, cap):
         super().__init__(cap)
@@ -35,7 +39,7 @@ class ParkingSlot (QueueInterface):
 
 def validateExtract(dict):
     for obj in dict:
-        if type(obj) in [ParkingSlot, Road] :
+        if type(obj) in [ParkingSpot, Road] :
             for g in obj.goesTo:
                 if not (g[0] in dict.keys()):
                     return False
@@ -47,7 +51,7 @@ def buildFromJson(jsonInput):
 
     for obj in content:
         if obj["type"].lower() == "parking":
-            res[obj["id"]] = ParkingSlot(obj["type-allowed"],
+            res[obj["id"]] = ParkingSpot(obj["type-allowed"],
                                   [(obj["connectsTo"][j]["id"], obj["connectsTo"][j]["pos"]) for j in range(len(obj["connectsTo"]))],
                                          obj["capacity"])
         elif obj["type"].lower() == "road":

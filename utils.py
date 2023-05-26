@@ -49,9 +49,9 @@ class Graph:
             current = start
             res = []
             while current != end:
-                res.append(current)
+                res.append(self.nodes[current])
                 current = self.paths[v_type][current][end][0]
-            res.append(end)
+            res.append(self.nodes[end])
             return res
         else : print("Path from {} to {} not found".format(start, end))
 

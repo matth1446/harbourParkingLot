@@ -184,7 +184,7 @@ def car_through_the_pl(env, car, parkinglot):
             continue
 
         #entering parking spot
-        if next_road.is_parking_spot():
+        if type(next_road) == ParkingSpot:
             yield env.process(parkinglot.park(car, previous_road, next_road))
             continue
 
@@ -200,12 +200,12 @@ def run_parkinglot(env, metrics):
     # I think here the input parameters should be something derived from the graph
     config = Config(env.now, 10)
     parkinglot = ParkingLot(env, metrics, config)
-    graph = Graph()
+    graph = Graph("input.json")
     graph.link_resources(parkinglot, env)
     for node in graph.nodes:
         metrics.set_initial_values(node, 0)
     car_id = 0
-    car = Vehicle(car_id, VehicleType(1 + car_id % 2, 1), graph, 0, 3)
+    car = Vehicle(car_id, VehicleType(1 + car_id % 2, 1), graph, 3, 0)
 
     car_arrival_stop_time = env.now + 1.2
 
@@ -214,7 +214,7 @@ def run_parkinglot(env, metrics):
         yield env.timeout(0.2)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
 
         car_id += 1
-        car = Vehicle(car_id, VehicleType(1 + car_id % 2, 1), graph, 0 if car_id != 3 else 1, 3)
+        car = Vehicle(car_id, VehicleType(1 + car_id % 2, 1), graph, 3, 0 if car_id != 3 else 1)
         env.process(car_through_the_pl(env, car, parkinglot))
 
 
