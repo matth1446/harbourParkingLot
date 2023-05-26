@@ -1,41 +1,7 @@
-from collections import deque
+#from collections import deque
 from os.path import exists
 import json
-
-class QueueInterface :
-
-    i = 0;
-
-    def __init__(self, lengthQueue):
-        self.id = QueueInterface.i
-        QueueInterface.i += 1
-        self.store = None
-        self.capacity = lengthQueue
-        self.queue = deque()
-
-    def define_store(self, store):
-        self.store = store
-
-class Gate (QueueInterface):
-
-    def __init__(self, type):
-        super().__init__(1)
-        self.type = type
-
-class Road (QueueInterface):
-
-    def __init__(self, type, lengthQueue, isEntry, connectsTo):
-        super().__init__(lengthQueue)
-        self.type = type
-        self.isEntry = isEntry
-        self.goesTo = connectsTo
-
-class ParkingSpot (QueueInterface):
-
-    def __init__(self, type, connectsTo, cap):
-        super().__init__(cap)
-        self.type = type
-        self.goesTo = connectsTo
+from utils import QueueInterface, Gate, Road, ParkingSpot, Graph
 
 def validateExtract(dict):
     for obj in dict:
@@ -46,7 +12,8 @@ def validateExtract(dict):
     return True
 
 def buildFromJson(jsonInput):
-    content = json.loads(jsonInput)
+    r = open(jsonInput,"r").read()
+    content = json.loads(r)
     res = {}
 
     for obj in content:
@@ -63,7 +30,7 @@ def buildFromJson(jsonInput):
             print("unread object : " + str(obj))
 
     if validateExtract(res):
-        return res
+        return Graph(res, getVehiculesType(r), buildConnections(res))
     else : return None
 
 def getVehiculesType(jsonInput):
