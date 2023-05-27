@@ -136,8 +136,16 @@ class Metrics:
         print(f"zero_intervals = {self.zero_intervals}")
         print(f"full_intervals = {self.full_intervals}")
 
+        number_of_cars = 0.0
+        number_of_trucks = 0.0
         for gate in self.gates:
-            print("number of vehicules that went through gate n°" + gate.id+f" : {gate.population}")
+            print("number of vehicules that went through gate n°" + gate.id + f" : {gate.population}")
+            if(gate.type=="car"):
+                number_of_cars+=gate.population
+            else if(gate.type=="truck"):
+                number_of_trucks+=gate.population
+        print(f"total cars = {number_of_cars}")
+        print(f"total_trucks = {number_of_trucks}")
 
     def add_time_key_if_unknown(self, car_id, road_id=None):
         if car_id not in self.outside_queue_wait_times.keys():

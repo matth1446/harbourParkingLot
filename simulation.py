@@ -548,6 +548,7 @@ def main():
     env.run(until=100)
 
     metrics.finalize_count_changes(env.now)
+    # this is the output
     metrics.print_all()
 
     # View the results
