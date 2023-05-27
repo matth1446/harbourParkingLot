@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 
-from frontend.ui_revised.gui import Ui_MainWindow
+from frontend.ui_revised.gui import Ui_PreGateParkingSimulation
 from matrix import *
 from frontend.visualization.visualization import *
 import utils
@@ -24,7 +24,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # Create an instance of the generated UI class
-        self.ui = Ui_MainWindow()
+        self.ui = Ui_PreGateParkingSimulation()
         self.ui.setupUi(self)
         # self.setGeometry(100, 100, 800, 900)
 

@@ -2,23 +2,19 @@
     {
         "id": 0,
         "type": "Road",
-        "capacity": 3.0,
+        "capacity": 4.0,
         "allowed_veh": [],
         "start_pos": {
             "x": 9,
             "y": 0
         },
         "end_pos": {
-            "x": 7,
+            "x": 6,
             "y": 0
         },
         "connectsTo": [
             {
                 "id": 1,
-                "pos": 0
-            },
-            {
-                "id": 2,
                 "pos": 0
             }
         ],
@@ -26,16 +22,16 @@
     },
     {
         "id": 1,
-        "type": "Parking",
-        "capacity": 20.0,
+        "type": "Road",
+        "capacity": 5.0,
         "allowed_veh": [],
         "start_pos": {
-            "x": 7,
+            "x": 6,
             "y": 0
         },
         "end_pos": {
-            "x": 7,
-            "y": 0
+            "x": 6,
+            "y": 4
         },
         "connectsTo": [
             {
@@ -52,27 +48,27 @@
     {
         "id": 2,
         "type": "Road",
-        "capacity": 7.0,
+        "capacity": 6.0,
         "allowed_veh": [],
         "start_pos": {
-            "x": 7,
-            "y": 0
+            "x": 6,
+            "y": 4
         },
         "end_pos": {
             "x": 1,
-            "y": 0
+            "y": 4
         },
         "connectsTo": [
-            {
-                "id": 0,
-                "pos": 0
-            },
             {
                 "id": 1,
                 "pos": 0
             },
             {
                 "id": 3,
+                "pos": 0
+            },
+            {
+                "id": 4,
                 "pos": 0
             }
         ],
@@ -85,11 +81,35 @@
         "allowed_veh": [],
         "start_pos": {
             "x": 1,
-            "y": 0
+            "y": 4
         },
         "end_pos": {
             "x": 1,
-            "y": 0
+            "y": 4
+        },
+        "connectsTo": [
+            {
+                "id": 2,
+                "pos": 0
+            }
+        ],
+        "entry": false
+    },
+    {
+        "id": 4,
+        "type": "Parking",
+        "capacity": 100.0,
+        "allowed_veh": [
+            "cars",
+            "trucks"
+        ],
+        "start_pos": {
+            "x": 3,
+            "y": 4
+        },
+        "end_pos": {
+            "x": 3,
+            "y": 4
         },
         "connectsTo": [
             {
