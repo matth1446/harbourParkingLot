@@ -34,6 +34,7 @@ class Gate (QueueInterface):
     def __init__(self, type):
         super().__init__(size_of_type(type))
         self.type = type
+        self.population = 0.0
 
     def __str__(self):
         return super().__str__() + " (Gate)"
@@ -64,7 +65,7 @@ class Graph:
     def __init__(self, jsonResult, vehicle_types, connections):
         self.vehiculesTypes = vehicle_types
         self.nodes = [jsonResult[index] for index in jsonResult]
-        self.connections = connections 
+        self.connections = connections
         # paths[a][b] will contain the next node in the path from a to b, and the length of the path (for now, assimilated with capacity)
         self.paths = {t:[[(None,-1)for _n2 in self.nodes] for _n in self.nodes]for t in self.vehiculesTypes}
         self.make_paths()
@@ -125,6 +126,7 @@ class Metrics:
         self.full_intervals = {}
 
         self.roads = {}
+        self.gates = {}
         pass
 
     def print_all(self):
@@ -133,6 +135,9 @@ class Metrics:
         print(f"total_wait_times = {self.total_wait_times}")
         print(f"zero_intervals = {self.zero_intervals}")
         print(f"full_intervals = {self.full_intervals}")
+
+        for gate in self.gates:
+            print("number of vehicules that went through gate n°" + gate.id+f" : {gate.population}")
 
     def add_time_key_if_unknown(self, car_id, road_id=None):
         if car_id not in self.outside_queue_wait_times.keys():
@@ -165,13 +170,17 @@ class Metrics:
         self.travel_times[car_id][road_id] += travel_time
         self.total_wait_times[car_id] += travel_time
 
-    def set_initial_values(self, road, initial_count):
-        self.roads[road.id] = road
-        self.road_counts[road.id] = (
-            initial_count,
-            self.initial_time if initial_count == 0 else None,
-            self.initial_time if initial_count == road.capacity else None
-        )
+    def set_initial_values(self, node, initial_count):
+        if(type(node)=="Road"):
+            self.roads[node.id] = node
+            self.road_counts[node.id] = (
+                initial_count,
+                self.initial_time if initial_count == 0 else None,
+                self.initial_time if initial_count == road.capacity else None
+            )
+        if(type(node)=="Gate"):
+            self.gates[node.id] = node
+
 
     def add_zero_interval(self, road_id, zero_time):
         if road_id not in self.zero_intervals.keys():
