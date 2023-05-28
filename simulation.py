@@ -459,16 +459,21 @@ def run_parkinglot(env, metrics):
         metrics.set_initial_values(node, 0)
     car_id = 0
     # car = Vehicle(car_id, VehicleType(1 + car_id % 2, 1), graph, 1, 0, 3)
-    additional_time = 1.2
-    car_arrival_stop_time = env.now + additional_time
-    expected_num_of_cars = 2
-    expected_num_of_trucks = 1
+
+    sim_duration = 100
+    car_arrival_stop_time = env.now + sim_duration
+    print('Env.now = '+str(env.now))
+    print('car_arrival_stop_time = '+str(car_arrival_stop_time))
+
+    expected_num_of_cars = 50
+    expected_num_of_trucks = 30
     lambda_arrivals_cars = expected_num_of_cars/car_arrival_stop_time   # this is the mean number of arrivals per unit of time
     lambda_arrivals_trucks = expected_num_of_trucks/car_arrival_stop_time
     p_car = expected_num_of_cars/(expected_num_of_trucks+expected_num_of_cars)
     p_truck = 1-p_car
     # we can use the avg_num_of_cars we expect
     while env.now < car_arrival_stop_time:
+        print('env.now = '+str(env.now))
         vehicle_type = np.random.choice(['car', 'truck'], p=[p_car, p_truck])
         if vehicle_type == ['car']:
             arrival = float(np.random.exponential(1/lambda_arrivals_cars))
@@ -488,7 +493,7 @@ def run_parkinglot(env, metrics):
 
         car = Vehicle(car_id, VehicleType(type_name, type_speed, type_size), graph, 1, gate_id, parking_spot)
         env.process(car_through_the_pl(env, car, parkinglot))
-
+    print('FINAL env.now = '+str(env.now))
 
 def get_average_wait_time(wait_times):
     average_wait = statistics.mean(wait_times)
@@ -558,7 +563,7 @@ def main():
     # it decides here when to stop the simulation, I think we can either leave this decision to the avg num of cars we expect (so the run_parkinglot())
     # or to the main, speaking in terms of time, meaning for ex when the check-in gates close.
     stop_time = 100
-    env.run(until=stop_time)
+    env.run()
 
     metrics.finalize_count_changes(env.now)
     # this is the output
