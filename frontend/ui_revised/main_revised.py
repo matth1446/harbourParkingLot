@@ -125,6 +125,43 @@ p, li { white-space: pre-wrap; }
 
     def retrieve_simulation_results(self):
         # gather all data from the simulation (inputs, results)
+        out_lab_1 = self.ui.lineEdit_out1
+        out_lab_2 = self.ui.lineEdit_out2
+        out_lab_3 = self.ui.lineEdit_out3
+        out_lab_4 = self.ui.lineEdit_out4
+        out_lab_5 = self.ui.lineEdit_out5
+        out_lab_6 = self.ui.lineEdit_out6
+
+        out_gate_open = self.ui.lineEdit_gate_open_out
+        out_gate_close = self.ui.lineEdit_gate_close_out
+        out_num_cars = self.ui.lineEdit_num_cars_out
+        out_num_trucks = self.ui.lineEdit_num_trucks_out
+        out_num_trailers = self.ui.lineEdit_num_trailers_out
+        out_empl_cost = self.ui.lineEdit_employee_cost_out
+        out_gate_cost = self.ui.lineEdit_gate_cost_out
+        out_ticket_cost = self.ui.lineEdit_ticket_cost_out
+        out_area_width = self.ui.lineEdit_area_width_out
+        out_area_length = self.ui.lineEdit_area_length_out
+        out_perc_online = self.ui.lineEdit_perc_online_checkin_out
+
+        out_lab_1.setText("A")
+        out_lab_2.setText("A")
+        out_lab_3.setText("A")
+        out_lab_4.setText("A")
+        out_lab_5.setText("A")
+        out_lab_6.setText("A")
+
+        out_gate_open.setText("A")
+        out_gate_close.setText("A")
+        out_num_cars.setText("A")
+        out_num_trucks.setText("A")
+        out_num_trailers.setText("A")
+        out_empl_cost.setText("A")
+        out_gate_cost.setText("A")
+        out_ticket_cost.setText("A")
+        out_area_width.setText("A")
+        out_area_length.setText("A")
+        out_perc_online.setText("A")
 
         # display latest simulated layout
         layout_img = QPixmap('./img/current_gridlayout.jpg')
