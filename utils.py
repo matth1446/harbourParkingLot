@@ -1,5 +1,7 @@
 import simpy
 
+import utils
+
 
 def size_of_type(type):
     if "truck" in type:
@@ -7,8 +9,8 @@ def size_of_type(type):
     else:
         return 1
 
-class QueueInterface :
 
+class QueueInterface:
     i = 0;
 
     def __init__(self, lengthQueue):
@@ -17,7 +19,7 @@ class QueueInterface :
         self.store = None
         self.queue_lock = None
         self.capacity = lengthQueue
-        #self.queue = deque()
+        # self.queue = deque()
 
     def define_store(self, store, queue_lock):
         self.store = store
@@ -29,7 +31,8 @@ class QueueInterface :
     def __repr__(self):
         return self.__str__()
 
-class Gate (QueueInterface):
+
+class Gate(QueueInterface):
 
     def __init__(self, type):
         super().__init__(size_of_type(type))
@@ -39,7 +42,8 @@ class Gate (QueueInterface):
     def __str__(self):
         return super().__str__() + " (Gate)"
 
-class Road (QueueInterface):
+
+class Road(QueueInterface):
 
     def __init__(self, type, lengthQueue, isEntry, connectsTo):
         super().__init__(lengthQueue)
@@ -50,7 +54,8 @@ class Road (QueueInterface):
     def __str__(self):
         return super().__str__() + " (Road)"
 
-class ParkingSpot (QueueInterface):
+
+class ParkingSpot(QueueInterface):
 
     def __init__(self, type, connectsTo, cap):
         super().__init__(cap)
@@ -67,7 +72,7 @@ class Graph:
         self.nodes = [jsonResult[index] for index in jsonResult]
         self.connections = connections
         # paths[a][b] will contain the next node in the path from a to b, and the length of the path (for now, assimilated with capacity)
-        self.paths = {t:[[(None,-1)for _n2 in self.nodes] for _n in self.nodes]for t in self.vehiculesTypes}
+        self.paths = {t: [[(None, -1) for _n2 in self.nodes] for _n in self.nodes] for t in self.vehiculesTypes}
         self.make_paths()
 
     def link_resources(self, parking_lot, env):
@@ -75,7 +80,7 @@ class Graph:
             node.define_store(simpy.Store(env, node.capacity), simpy.Resource(env, capacity=1))
 
     def make_paths(self):
-        #First, we add direct paths
+        # First, we add direct paths
         for type in self.vehiculesTypes:
             for start in range(len(self.connections)):
                 for e in self.connections[start]:
@@ -92,16 +97,16 @@ class Graph:
                                 if self.paths[type][b][c][1] != -1:  # path from b to c exists
                                     c1 = self.paths[type][a][c][1] == -1
                                     # that would mean the path from a to c doesn't exist yet
-                                    c2 = self.paths[type][a][c][1] > self.paths[type][a][b][1] + self.paths[type][b][c][1]
+                                    c2 = self.paths[type][a][c][1] > self.paths[type][a][b][1] + self.paths[type][b][c][
+                                        1]
                                     # that would mean the existing path from a to c is longer than from a to b to c
                                     if c1 or c2:
                                         self.paths[type][a][c] = (
-                                            self.paths[type][a][b][0], self.paths[type][a][b][1] + self.paths[type][b][c][1])
+                                            self.paths[type][a][b][0],
+                                            self.paths[type][a][b][1] + self.paths[type][b][c][1])
                                         changed = True
 
-
-
-    def make_path(self, start, end, v_type = "car"):
+    def make_path(self, start, end, v_type="car"):
         if self.paths[v_type][start][end][1] != -1:
             current = start
             res = []
@@ -110,7 +115,8 @@ class Graph:
                 current = self.paths[v_type][current][end][0]
             res.append(self.nodes[end])
             return res
-        else : print("Path from {} to {} not found".format(start, end))
+        else:
+            print("Path from {} to {} not found".format(start, end))
 
 
 class Metrics:
@@ -126,7 +132,7 @@ class Metrics:
         self.full_intervals = {}
 
         self.roads = {}
-        self.gates = {}
+        self.gates = []
         pass
 
     def print_all(self):
@@ -139,11 +145,11 @@ class Metrics:
         number_of_cars = 0.0
         number_of_trucks = 0.0
         for gate in self.gates:
-            print("number of vehicules that went through gate n°" + gate.id + f" : {gate.population}")
-            if(gate.type=="car"):
-                number_of_cars+=gate.population
-            else if(gate.type=="truck"):
-                number_of_trucks+=gate.population
+            print("number of vehicules that went through gate n°" + str(gate.id) + f" : {gate.population}")
+            if gate.type == ["car"]:
+                number_of_cars += gate.population
+            elif gate.type == ["truck"]:
+                number_of_trucks += gate.population
         print(f"total cars = {number_of_cars}")
         print(f"total_trucks = {number_of_trucks}")
 
@@ -179,16 +185,15 @@ class Metrics:
         self.total_wait_times[car_id] += travel_time
 
     def set_initial_values(self, node, initial_count):
-        if(type(node)=="Road"):
-            self.roads[node.id] = node
-            self.road_counts[node.id] = (
-                initial_count,
-                self.initial_time if initial_count == 0 else None,
-                self.initial_time if initial_count == road.capacity else None
-            )
-        if(type(node)=="Gate"):
-            self.gates[node.id] = node
+        if type(node) == utils.Gate:
+            self.gates.append(node)
 
+        self.roads[node.id] = node
+        self.road_counts[node.id] = (
+            initial_count,
+            self.initial_time if initial_count == 0 else None,
+            self.initial_time if initial_count == node.capacity else None
+        )
 
     def add_zero_interval(self, road_id, zero_time):
         if road_id not in self.zero_intervals.keys():

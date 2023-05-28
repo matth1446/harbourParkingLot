@@ -7,7 +7,7 @@ Original file is located at
     https://colab.research.google.com/drive/1BCB-H3Bz0cM0ZHoMrI4z2j_JJHvUf1Q6
 """
 
-#pip install simpy
+# pip install simpy
 
 """Companion code to https://realpython.com/simulation-with-simpy/
 
@@ -23,8 +23,10 @@ import statistics
 from functools import reduce
 from utils import *
 from JsonReader import *
+import numpy as np
 
 wait_times = []
+
 
 # I didn't choose any of the time-inputs, so don't look at me
 
@@ -33,6 +35,7 @@ class VehicleType:
         self.max_speed = max_speed
         self.size = size
         self.name = type_name
+
 
 def compare_floats(val1, val2, *, delta=0.00001, lte=False, gte=False):
     if gte and lte:
@@ -44,7 +47,8 @@ def compare_floats(val1, val2, *, delta=0.00001, lte=False, gte=False):
     if gte is True:
         return val1 > val2 - delta
 
-    return - delta < (val1 - val2) and (val1 - val2) < delta 
+    return - delta < (val1 - val2) and (val1 - val2) < delta
+
 
 class VehicleToken:
     def __init__(self, vehicle_id=None, vehicle_type=None, creation_time=None):
@@ -58,7 +62,8 @@ class VehicleToken:
         self.activation_time = None
 
     def __str__(self):
-        return f'[{self.vehicle_id} {self.is_true()}]' + (" {" + f'{self.activation_time}:{self.trajectory}:{self.total_travel_time}' + "} " if self.activation_time is not None else '')
+        return f'[{self.vehicle_id} {self.is_true()}]' + (
+            " {" + f'{self.activation_time}:{self.trajectory}:{self.total_travel_time}' + "} " if self.activation_time is not None else '')
 
     def __repr__(self):
         return self.__str__()
@@ -107,14 +112,14 @@ class VehicleToken:
 
         if move_start_index == -1:
             raise ValueError("the followed trajectory starts after the activation time")
-        
+
         if move_start_index is None and not compare_floats(followed_trajectory[-1][3], self.activation_time, gte=True):
             raise ValueError("the followed trajectory ends before the activation time")
         elif move_start_index is None:
             move_start_index = len(followed_trajectory) - 1
 
         return move_start_index
-    
+
     def find_zero_time(self, followed_trajectory, start_index):
         zero_index = None
         for i in range(start_index, len(followed_trajectory)):
@@ -136,35 +141,35 @@ class VehicleToken:
             raise ValueError("the followed trajectory ends before the activation time")
 
         return zero_index, follow_zero_time
-        
 
     def follow_trajectory(self, followed_trajectory, road_size):
 
-        #Format: [time_start, speed, position, time_end]
-        #1 find activation time in the followed trajectory
-        #2 if followed position < 0 at activation time: add [activation, 0, 0, time_end]
-        #3 set move_start = activation or time_end accordingly
-        #4 set curr_vel = speed if we are in the same position, else max_speed
-        #5 loop over trajectory points (starting at time_end) and calcutate the intersection
-        #6 for each point:
-        #7   calcutate end point of vehicle if we were always at curr_vel
-        #8   if we caught up (intersection) then add a point at the intersection, set curr_vel = catch up speed and add the followed point as well
-        #9   otherwise set a point anyway but dont change curr_vel
-        #10at the end point, we add a final point using curr_vel
+        # Format: [time_start, speed, position, time_end]
+        # 1 find activation time in the followed trajectory
+        # 2 if followed position < 0 at activation time: add [activation, 0, 0, time_end]
+        # 3 set move_start = activation or time_end accordingly
+        # 4 set curr_vel = speed if we are in the same position, else max_speed
+        # 5 loop over trajectory points (starting at time_end) and calcutate the intersection
+        # 6 for each point:
+        # 7   calcutate end point of vehicle if we were always at curr_vel
+        # 8   if we caught up (intersection) then add a point at the intersection, set curr_vel = catch up speed and add the followed point as well
+        # 9   otherwise set a point anyway but dont change curr_vel
+        # 10at the end point, we add a final point using curr_vel
 
         result_trajectory = []
         curr_time = self.activation_time
         curr_speed = self.vehicle_type.max_speed
         curr_pos = 0
 
-        #1
+        # 1
         move_start_index = self.find_activation_time(followed_trajectory)
 
-        #2
+        # 2
         prev_follow_time, prev_follow_speed, prev_follow_pos, prev_end_time = followed_trajectory[move_start_index]
         follow_pos_at_activation = prev_follow_pos + (self.activation_time - prev_follow_time) * prev_follow_speed
 
-        print(f' > {self} identified activation time between {move_start_index} and {move_start_index + 1}, followed segment = {followed_trajectory[move_start_index]}, followed position = {follow_pos_at_activation}')
+        print(
+            f' > {self} identified activation time between {move_start_index} and {move_start_index + 1}, followed segment = {followed_trajectory[move_start_index]}, followed position = {follow_pos_at_activation}')
 
         if not compare_floats(follow_pos_at_activation, 0, gte=True):
             zero_index, follow_zero_time = self.find_zero_time(followed_trajectory, move_start_index)
@@ -173,13 +178,14 @@ class VehicleToken:
             move_start_index = zero_index
             print(f' > {self} added waiting segment from {self.activation_time} to {follow_zero_time}')
 
-        #5
+        # 5
 
         curr_index = move_start_index
         while curr_index < len(followed_trajectory):
             curr_follow_segment = followed_trajectory[curr_index]
             curr_segment = (curr_time, self.vehicle_type.max_speed, curr_pos, None)
-            print(f' > {self} current segment: {curr_segment}, current follow index: {curr_index}, current follow segment: {curr_follow_segment}')
+            print(
+                f' > {self} current segment: {curr_segment}, current follow index: {curr_index}, current follow segment: {curr_follow_segment}')
 
             caught_up, end_pos, new_segment = self.intersect(curr_segment, curr_follow_segment)
 
@@ -188,7 +194,7 @@ class VehicleToken:
                 base_segment = (curr_time, curr_speed, curr_pos, new_segment[0])
                 result_trajectory.append(base_segment)
                 print(f' > {self} added base segment: {base_segment}')
-            
+
             if caught_up:
                 result_trajectory.append(new_segment)
                 print(f' > {self} added slowed segment: {new_segment}')
@@ -201,7 +207,7 @@ class VehicleToken:
             if curr_pos > road_size:
                 raise ValueError("the segment went beyond the road size")
 
-        #10
+        # 10
 
         final_time = curr_time + (road_size - curr_pos) / curr_speed
         final_segment = (curr_time, curr_speed, curr_pos, final_time)
@@ -209,19 +215,16 @@ class VehicleToken:
         print(f' > {self} added final segment: {final_segment}')
 
         return result_trajectory
-        
 
     def default_trajectory(self, road_size):
         self.total_travel_time = road_size / self.vehicle_type.max_speed
-        self.trajectory = [(self.activation_time, self.vehicle_type.max_speed, 0, self.total_travel_time + self.activation_time)]
-        
-
+        self.trajectory = [
+            (self.activation_time, self.vehicle_type.max_speed, 0, self.total_travel_time + self.activation_time)]
 
     def follow_token(self, followed_token, road_size):
         followed_trajectory = followed_token.adjust_for_size()
         self.trajectory = self.follow_trajectory(followed_trajectory, road_size)
         self.total_travel_time = self.trajectory[-1][3] - self.activation_time
-
 
     def activate(self, activation_time, *, wait_time=None, road_size=None, follow=None):
         self.activation_time = activation_time
@@ -231,7 +234,7 @@ class VehicleToken:
 
         if road_size is not None and wait_time is not None:
             raise ValueError("cannot activate token with both a road size and a given wait time")
-        
+
         if wait_time is not None:
             self.trajectory = [(self.activation_time, 0, 0, wait_time + self.activation_time)]
             self.total_travel_time = wait_time
@@ -257,6 +260,7 @@ class VehicleToken:
     def time_since_creation(self, current_time):
         return current_time - self.creation_time
 
+
 class Vehicle:
     def __init__(self, id, vehicle_type, graph, start, end, parking_step=None):
         self.current_position = -1
@@ -264,12 +268,12 @@ class Vehicle:
         self.id = id
 
         if parking_step is not None:
-            self.path = graph.make_path(start, parking_step, self.type.name)[:-1] + graph.make_path(parking_step, end, self.type.name)
+            self.path = graph.make_path(start, parking_step, self.type.name)[:-1] + graph.make_path(parking_step, end,
+                                                                                                    self.type.name)
         else:
             self.path = graph.make_path(start, end, self.type.name)
-        
+
         print(f'PATH: {self.path}')
-        
 
     def has_left(self):
         return self.current_position == len(self.path)
@@ -281,7 +285,6 @@ class Vehicle:
             None if self.has_left() else self.path[self.current_position]
         )
 
-
     def queue_node_transitions(self, env, true_token, previous_node=None, next_node=None):
         if next_node is None:
             yield env.process(self.perform_node_transfers(env, previous_node=previous_node))
@@ -289,10 +292,10 @@ class Vehicle:
 
         with next_node.queue_lock.request() as lock:
             yield lock
-            #print(f'#[{env.now:.2f}] car {self.id} has got the lock for node {next_node.id}')
+            # print(f'#[{env.now:.2f}] car {self.id} has got the lock for node {next_node.id}')
             yield env.process(self.perform_node_transfers(env, true_token, previous_node, next_node))
-        
-        #print(f'#[{env.now:.2f}] car {self.id} has released the lock for node {next_node.id}')
+
+        # print(f'#[{env.now:.2f}] car {self.id} has released the lock for node {next_node.id}')
 
     def perform_node_transfers(self, env, true_token=None, previous_node=None, next_node=None):
         yield env.process(self.perform_node_transfer(env, previous_node, next_node, true_token))
@@ -306,22 +309,17 @@ class Vehicle:
 
         if next_node is not None:
             yield next_node.store.put(token)
-            #print(f"#[{env.now:.2f}] car {self.id} has placed a {token_str(token)} token in node {next_node.id}")
+            # print(f"#[{env.now:.2f}] car {self.id} has placed a {token_str(token)} token in node {next_node.id}")
 
         if previous_node is not None:
             get_request = yield previous_node.store.get()
-            #print(f"#[{env.now:.2f}] car {self.id} has removed a {token_str(get_request)} token in node {previous_node.id}")
-
-        
-
-
-    
+            # print(f"#[{env.now:.2f}] car {self.id} has removed a {token_str(get_request)} token in node {previous_node.id}")
 
 
 class Config:
     def __init__(self, initial_time, gate_opening_time):
         self.initial_time = initial_time
-        self.gate_opening_time = gate_opening_time   
+        self.gate_opening_time = gate_opening_time
 
 
 class ParkingLot(object):
@@ -336,11 +334,13 @@ class ParkingLot(object):
     # once the car comes in the entrance gate, the goal is to park it:
     # find a parking slot available (we should think of the type of vehicle/parking space)
     def park(self, car, previous_road, parking_spot):
-        token = VehicleToken(car.id, car.type, self.env.now) # vehicles do not take any time "travelling" through parking spots
+        token = VehicleToken(car.id, car.type,
+                             self.env.now)  # vehicles do not take any time "travelling" through parking spots
         print(f"[{self.env.now:.2f}] car {car.id} is ready to park at spot {parking_spot.id}")
 
         yield self.env.process(car.queue_node_transitions(self.env, token, previous_road, parking_spot))
-        print(f"[{self.env.now:.2f}] car {car.id} has left road {previous_road.id} and parked at spot {parking_spot.id}")
+        print(
+            f"[{self.env.now:.2f}] car {car.id} has left road {previous_road.id} and parked at spot {parking_spot.id}")
         self.metrics.acknowledge_count_change(previous_road, self.env.now)
         self.metrics.acknowledge_count_change(parking_spot, self.env.now)
 
@@ -360,11 +360,12 @@ class ParkingLot(object):
         print(f"[{self.env.now:.2f}] car {car.id} is ready to enter road {next_road.id}")
 
         yield self.env.process(car.queue_node_transitions(self.env, token, previous_road, next_road))
-        print(f"[{self.env.now:.2f}] car {car.id} has left road/spot {previous_road.id} and entered road {next_road.id}")
+        print(
+            f"[{self.env.now:.2f}] car {car.id} has left road/spot {previous_road.id} and entered road {next_road.id}")
         self.metrics.acknowledge_count_change(previous_road, self.env.now)
         self.metrics.acknowledge_count_change(next_road, self.env.now)
 
-        #we have now entered the road
+        # we have now entered the road
         token.activate(self.env.now, follow=self.get_follow_token(next_road), road_size=next_road.capacity)
         self.metrics.add_outside_queue_wait_time(car.id, previous_road.id, token.outside_queue_wait_time)
 
@@ -387,16 +388,16 @@ class ParkingLot(object):
         yield self.env.timeout(token.total_travel_time)
         self.metrics.add_travel_time(car.id, road.id, token.total_travel_time)
 
-
     # cars arriving to the final queue/gate/goal:
     # after moving in the parking lot they reach the check-in gates, and then leave the system (get on board)
     def leave_gate(self, car, gate):
         yield self.env.process(car.queue_node_transitions(self.env, None, gate, None))
         # increasing the number of vehicles that went through a gate
-        gate.population = gate.population+1.0
+        gate.population = gate.population + 1.0
         self.metrics.acknowledge_count_change(gate, self.env.now)
         print(f"[{self.env.now:.2f}] car {car.id} has left road/gate {gate.id}")
-        yield self.env.timeout(0) #leaving the gate is free (since we have already used timeout when we entered the gate)
+        yield self.env.timeout(
+            0)  # leaving the gate is free (since we have already used timeout when we entered the gate)
 
     def get_follow_token(self, road):
         if len(road.store.items) == 0:
@@ -406,43 +407,42 @@ class ParkingLot(object):
 
         last_vehicle_passed = False
         for i in range(len(road.store.items) - 1, -1, -1):
-            #print(road.store.items[i], last_vehicle_passed)
+            # print(road.store.items[i], last_vehicle_passed)
             found_vehicle_head = road.store.items[i].is_true()
             if found_vehicle_head and last_vehicle_passed:
                 print(f'FOLLOWING {road.store.items[i]}')
                 return road.store.items[i]
-            
+
             last_vehicle_passed = last_vehicle_passed or found_vehicle_head
 
-        #print(None)
+        # print(None)
         return None
 
 
 # what actually happens to a car inside the parkinglot
 def car_through_the_pl(env, car, parkinglot):
-
     # car arrives at the parkinglot
     arrival_time = env.now
 
-    while(not car.has_left()):
+    while (not car.has_left()):
         previous_road, next_road = car.advance()
 
-        #leaving gate
+        # leaving gate
         if next_road is None:
             yield env.process(parkinglot.leave_gate(car, previous_road))
             continue
 
-        #entry
+        # entry
         if previous_road is None:
             yield env.process(parkinglot.enter_road(car, next_road))
             continue
 
-        #entering parking spot
+        # entering parking spot
         if type(next_road) == ParkingSpot:
             yield env.process(parkinglot.park(car, previous_road, next_road))
             continue
 
-        #moving to a road (base case)
+        # moving to a road (base case)
         yield env.process(parkinglot.change_road(car, previous_road, next_road))
 
     # Car is boarded : "thread" is finished
@@ -450,7 +450,6 @@ def car_through_the_pl(env, car, parkinglot):
 
 
 def run_parkinglot(env, metrics):
-
     # I think here the input parameters should be something derived from the graph
     config = Config(env.now, 10)
     parkinglot = ParkingLot(env, metrics, config)
@@ -459,17 +458,27 @@ def run_parkinglot(env, metrics):
     for node in graph.nodes:
         metrics.set_initial_values(node, 0)
     car_id = 0
-    #car = Vehicle(car_id, VehicleType(1 + car_id % 2, 1), graph, 1, 0, 3)
-
-    car_arrival_stop_time = env.now + 1.2
-
+    # car = Vehicle(car_id, VehicleType(1 + car_id % 2, 1), graph, 1, 0, 3)
+    additional_time = 1.2
+    car_arrival_stop_time = env.now + additional_time
+    expected_num_of_cars = 2
+    expected_num_of_trucks = 1
+    lambda_arrivals_cars = expected_num_of_cars/car_arrival_stop_time   # this is the mean number of arrivals per unit of time
+    lambda_arrivals_trucks = expected_num_of_trucks/car_arrival_stop_time
+    p_car = expected_num_of_cars/(expected_num_of_trucks+expected_num_of_cars)
+    p_truck = 1-p_car
     # we can use the avg_num_of_cars we expect
     while env.now < car_arrival_stop_time:
-        yield env.timeout(0.2)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
+        vehicle_type = np.random.choice(['car', 'truck'], p=[p_car, p_truck])
+        if vehicle_type == ['car']:
+            arrival = float(np.random.exponential(1/lambda_arrivals_cars))
+        else:
+            arrival = float(np.random.exponential(1 / lambda_arrivals_trucks))
+        yield env.timeout(arrival)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
 
         car_id += 1
 
-        type_is_car = car_id % 2 == 0
+        type_is_car = (vehicle_type=='car')
         type_name = "car" if type_is_car else "truck"
         type_size = 1 if type_is_car else 2
         type_speed = 3 if type_is_car else 1
@@ -488,6 +497,7 @@ def get_average_wait_time(wait_times):
     seconds = frac_minutes * 60
     return round(minutes), round(seconds)
 
+
 # this is not my code, of course we need to elaborate the graph input
 def get_user_input():
     num_roads = input("Input # of roads: ")
@@ -504,40 +514,42 @@ def get_user_input():
         params = [1, 1]
     return params
 
+
 def input():
-  # Read the json file
-  # extract the graph and turn it into roads and connections
-  # and get the other attributes inserted by the user
+    # Read the json file
+    # extract the graph and turn it into roads and connections
+    # and get the other attributes inserted by the user
 
-  # Budget stuff that will be used at the end of the simulation:
-  # wages, ticket prices
+    # Budget stuff that will be used at the end of the simulation:
+    # wages, ticket prices
 
-  # Capacity stuff:
-  # N of parking slots per type
-  # N of check-in gates
+    # Capacity stuff:
+    # N of parking slots per type
+    # N of check-in gates
 
-  # Flow stuff:
-  # arrivals are exp
-  # departures depend on the roads
-  avg_num_of_cars = 90
-  avg_num_of_trucks = 5
-  avg_num_of_trailers = 10
+    # Flow stuff:
+    # arrivals are exp
+    # departures depend on the roads
+    avg_num_of_cars = 90
+    avg_num_of_trucks = 5
+    avg_num_of_trailers = 10
 
-  perc_online_tickets = 0.60
+    perc_online_tickets = 0.60
 
-  # Time stuff:
-  # how long is the simulation?
-  # opening time-closing time of the check-in gates
-  # closing time of the entrace gates
-  # 'how long' the roads are (time value)?
-  # how long does it take to serve at the check-in gates?
+    # Time stuff:
+    # how long is the simulation?
+    # opening time-closing time of the check-in gates
+    # closing time of the entrace gates
+    # 'how long' the roads are (time value)?
+    # how long does it take to serve at the check-in gates?
+
 
 def main():
     # Setup
     random.seed(42)
 
     # Get inputs from the graph
-    #num_roads, num_gates = get_user_input()
+    # num_roads, num_gates = get_user_input()
 
     # Run the simulation
     env = simpy.Environment()
@@ -545,7 +557,8 @@ def main():
     env.process(run_parkinglot(env, metrics))
     # it decides here when to stop the simulation, I think we can either leave this decision to the avg num of cars we expect (so the run_parkinglot())
     # or to the main, speaking in terms of time, meaning for ex when the check-in gates close.
-    env.run(until=100)
+    stop_time = 100
+    env.run(until=stop_time)
 
     metrics.finalize_count_changes(env.now)
     # this is the output
