@@ -1,3 +1,5 @@
+import pymongo
+from pymongo import MongoClient
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QRect
@@ -7,7 +9,6 @@ from matrix import *
 from frontend.visualization.visualization import *
 from frontend.validation.GUIgraphCheck import *
 import utils
-from pymongo import MongoClient
 
 
 class MainWindow(QMainWindow):
@@ -38,6 +39,22 @@ p, li { white-space: pre-wrap; }
 </style></head><body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
 <p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt; font-weight:600; color:#000000;">Status:</span><span style=" font-size:8pt; color:#00ff00;"> </span><span style=" font-size:8pt; color:#aa0000;">Invalid layout</span></p></body></html>
     """
+
+    status_output_OK = """
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt; font-weight:600;">Status</span><span style=" font-size:8pt;">: </span><span style=" font-size:8pt; color:#00aa00;">Showing simulation results</span></p></body></html>
+"""
+
+    status_output_NOK = """
+   <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt; font-weight:600;">Status</span><span style=" font-size:8pt;">:</span><span style=" font-size:8pt; color:#00aa00;"> </span><span style=" font-size:8pt; color:#aa0000;">No simulation results yet</span></p></body></html>
+"""
 
     def __init__(self):
         super().__init__()
@@ -124,89 +141,109 @@ p, li { white-space: pre-wrap; }
         self.write_inputs_to_db()
 
     def retrieve_simulation_results(self):
-        # gather all data from the simulation (inputs, results)
-        out_lab_1 = self.ui.lineEdit_out1
-        out_lab_2 = self.ui.lineEdit_out2
-        out_lab_3 = self.ui.lineEdit_out3
-        out_lab_4 = self.ui.lineEdit_out4
-        out_lab_5 = self.ui.lineEdit_out5
-        out_lab_6 = self.ui.lineEdit_out6
+        # check if there is data available for the last simulation
+        # write input data and layout information into the database
+        URI = "mongodb+srv://db_user:db_user@dss.icklgr1.mongodb.net/"
+        client = MongoClient(URI)
+        db = client.database_dss
+        collection_input = db.input
+        collection_output = db.output
 
-        out_gate_open = self.ui.lineEdit_gate_open_out
-        out_gate_close = self.ui.lineEdit_gate_close_out
-        out_num_cars = self.ui.lineEdit_num_cars_out
-        out_num_trucks = self.ui.lineEdit_num_trucks_out
-        out_num_trailers = self.ui.lineEdit_num_trailers_out
-        out_empl_cost = self.ui.lineEdit_employee_cost_out
-        out_gate_cost = self.ui.lineEdit_gate_cost_out
-        out_ticket_cost = self.ui.lineEdit_ticket_cost_out
-        out_area_width = self.ui.lineEdit_area_width_out
-        out_area_length = self.ui.lineEdit_area_length_out
-        out_perc_online = self.ui.lineEdit_perc_online_checkin_out
+        last_entry = collection_input.find_one({}, sort=[('_id', pymongo.DESCENDING)])
+        entry_id = last_entry["_id"]
+        if collection_output.find_one({"input_id": entry_id}) is not None:
+            print(entry_id)
+            # Set status to OK
+            self.ui.textBrowser_out_result_status.setHtml(self.status_output_OK)
+            # gather all data from the simulation (inputs, results)
+            out_lab_1 = self.ui.lineEdit_out1
+            out_lab_2 = self.ui.lineEdit_out2
+            out_lab_3 = self.ui.lineEdit_out3
+            out_lab_4 = self.ui.lineEdit_out4
+            out_lab_5 = self.ui.lineEdit_out5
+            out_lab_6 = self.ui.lineEdit_out6
 
-        out_lab_1.setText("A")
-        out_lab_2.setText("A")
-        out_lab_3.setText("A")
-        out_lab_4.setText("A")
-        out_lab_5.setText("A")
-        out_lab_6.setText("A")
+            out_gate_open = self.ui.lineEdit_gate_open_out
+            out_gate_close = self.ui.lineEdit_gate_close_out
+            out_num_cars = self.ui.lineEdit_num_cars_out
+            out_num_trucks = self.ui.lineEdit_num_trucks_out
+            out_num_trailers = self.ui.lineEdit_num_trailers_out
+            out_empl_cost = self.ui.lineEdit_employee_cost_out
+            out_gate_cost = self.ui.lineEdit_gate_cost_out
+            out_ticket_cost = self.ui.lineEdit_ticket_cost_out
+            out_area_width = self.ui.lineEdit_area_width_out
+            out_area_length = self.ui.lineEdit_area_length_out
+            out_perc_online = self.ui.lineEdit_perc_online_checkin_out
 
-        out_gate_open.setText("A")
-        out_gate_close.setText("A")
-        out_num_cars.setText("A")
-        out_num_trucks.setText("A")
-        out_num_trailers.setText("A")
-        out_empl_cost.setText("A")
-        out_gate_cost.setText("A")
-        out_ticket_cost.setText("A")
-        out_area_width.setText("A")
-        out_area_length.setText("A")
-        out_perc_online.setText("A")
+            out_lab_1.setText("A")
+            out_lab_2.setText("A")
+            out_lab_3.setText("A")
+            out_lab_4.setText("A")
+            out_lab_5.setText("A")
+            out_lab_6.setText("A")
 
-        # display latest simulated layout
-        layout_img = QPixmap('./img/current_gridlayout.jpg')
-        layout_img = layout_img.scaled(150, 150)
-        layout_img_label = self.ui.img_out_sim_layout
-        layout_img_label.setPixmap(layout_img)
+            out_gate_open.setText("A")
+            out_gate_close.setText("A")
+            out_num_cars.setText("A")
+            out_num_trucks.setText("A")
+            out_num_trailers.setText("A")
+            out_empl_cost.setText("A")
+            out_gate_cost.setText("A")
+            out_ticket_cost.setText("A")
+            out_area_width.setText("A")
+            out_area_length.setText("A")
+            out_perc_online.setText("A")
 
-        # update simulation text label and id
-        lab_sim_text = self.ui.lab_out_simulation_id_text
-        lab_sim_id = self.ui.lab_out_simulation_id
+            # display latest simulated layout
+            layout_img = QPixmap('./img/current_gridlayout.jpg')
+            layout_img = layout_img.scaled(150, 150)
+            layout_img_label = self.ui.img_out_sim_layout
+            layout_img_label.setPixmap(layout_img)
 
-        lab_sim_text.setText("Simulation id: ")
-        lab_sim_id.setText("0")
+            # update simulation text label and id
+            lab_sim_text = self.ui.lab_out_simulation_id_text
+            lab_sim_id = self.ui.lab_out_simulation_id
 
-        # generate charts for the simulation
-        create_handled_vehicles_chart('./img/chart_0_0.png')
-        create_income_expenses_chart('./img/chart_0_1.png')
-        create_avg_waiting_chart('./img/chart_1_0.png')
-        create_co2_emission_chart('./img/chart_1_1.png')
+            lab_sim_text.setText("Simulation id: ")
+            lab_sim_id.setText("0")
 
-        # assigning charts to the placeholders
+            # generate charts for the simulation
+            create_handled_vehicles_chart('./img/chart_0_0.png')
+            create_income_expenses_chart('./img/chart_0_1.png')
+            create_avg_waiting_chart('./img/chart_1_0.png')
+            create_co2_emission_chart('./img/chart_1_1.png')
 
-        chart_img_0_0 = QPixmap('./img/chart_0_0.png')
-        chart_img_0_0 = chart_img_0_0.scaled(500, 500)
+            # assigning charts to the placeholders
 
-        chart_img_0_1 = QPixmap('./img/chart_0_1.png')
-        chart_img_0_1 = chart_img_0_1.scaled(500, 500)
+            chart_img_0_0 = QPixmap('./img/chart_0_0.png')
+            chart_img_0_0 = chart_img_0_0.scaled(500, 500)
 
-        chart_img_1_0 = QPixmap('./img/chart_1_0.png')
-        chart_img_1_0 = chart_img_1_0.scaled(500, 500)
+            chart_img_0_1 = QPixmap('./img/chart_0_1.png')
+            chart_img_0_1 = chart_img_0_1.scaled(500, 500)
 
-        chart_img_1_1 = QPixmap('./img/chart_1_1.png')
-        chart_img_1_1 = chart_img_1_1.scaled(500, 500)
+            chart_img_1_0 = QPixmap('./img/chart_1_0.png')
+            chart_img_1_0 = chart_img_1_0.scaled(500, 500)
 
-        chart_0_0_label = self.ui.img_out_0_0
-        chart_0_0_label.setPixmap(chart_img_0_0)
+            chart_img_1_1 = QPixmap('./img/chart_1_1.png')
+            chart_img_1_1 = chart_img_1_1.scaled(500, 500)
 
-        chart_0_1_label = self.ui.img_out_0_1
-        chart_0_1_label.setPixmap(chart_img_0_1)
+            chart_0_0_label = self.ui.img_out_0_0
+            chart_0_0_label.setPixmap(chart_img_0_0)
 
-        chart_1_0_label = self.ui.img_out_1_0
-        chart_1_0_label.setPixmap(chart_img_1_0)
+            chart_0_1_label = self.ui.img_out_0_1
+            chart_0_1_label.setPixmap(chart_img_0_1)
 
-        chart_1_1_label = self.ui.img_out_1_1
-        chart_1_1_label.setPixmap(chart_img_1_1)
+            chart_1_0_label = self.ui.img_out_1_0
+            chart_1_0_label.setPixmap(chart_img_1_0)
+
+            chart_1_1_label = self.ui.img_out_1_1
+            chart_1_1_label.setPixmap(chart_img_1_1)
+        else:
+            # Set status to OK
+            self.ui.textBrowser_out_result_status.setHtml(self.status_output_NOK)
+            print(f"No simulation results for: {entry_id}" )
+
+        client.close()
 
     def update_multiplier_text(self):
         slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
