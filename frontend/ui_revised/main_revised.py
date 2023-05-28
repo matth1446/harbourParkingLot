@@ -1,9 +1,11 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
+from PyQt5.QtCore import QRect
 
 from frontend.ui_revised.gui import Ui_PreGateParkingSimulation
 from matrix import *
 from frontend.visualization.visualization import *
+from frontend.validation.GUIgraphCheck import *
 import utils
 from pymongo import MongoClient
 
@@ -19,6 +21,23 @@ class MainWindow(QMainWindow):
 
     # json safe path
     layout_json_save_path = 'layout.json'
+
+    # status text
+    status_text_OK = """
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt; font-weight:600;">Status</span><span style=" font-size:8pt;">: </span><span style=" font-size:8pt; color:#00aa00;">OK</span></p></body></html>
+    """
+
+    status_text_NOK = """
+    <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html><head><meta name="qrichtext" content="1" /><style type="text/css">
+p, li { white-space: pre-wrap; }
+</style></head><body style=" font-family:'MS Shell Dlg 2'; font-size:8.25pt; font-weight:400; font-style:normal;">
+<p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"><span style=" font-size:8pt; font-weight:600; color:#000000;">Status:</span><span style=" font-size:8pt; color:#00ff00;"> </span><span style=" font-size:8pt; color:#aa0000;">Invalid layout</span></p></body></html>
+    """
 
     def __init__(self):
         super().__init__()
@@ -56,6 +75,9 @@ class MainWindow(QMainWindow):
         # Add functionality for starting the simulation
         button_simulate = self.ui.but_simulate
         button_simulate.clicked.connect(self.start_simulation)
+
+        # Default status to NOK
+        self.ui.textBrowser_status.setHtml(self.status_text_NOK)
 
     def write_inputs_to_db(self):
         inp_gate_open_time = self.ui.timeEdit_gates_open.dateTime().toString("hh:mm")
@@ -98,22 +120,24 @@ class MainWindow(QMainWindow):
         client.close()
 
     def start_simulation(self):
-        # validate layout
-        print("validating layout.... OK")
-        self.convert_matrix_to_string()
-
         # gather input fields data
         self.write_inputs_to_db()
 
     def retrieve_simulation_results(self):
+        # gather all data from the simulation (inputs, results)
+
+        # display latest simulated layout
+        layout_img = QPixmap('./img/current_gridlayout.jpg')
+        layout_img = layout_img.scaled(150, 150)
+        layout_img_label = self.ui.img_out_sim_layout
+        layout_img_label.setPixmap(layout_img)
+
         # update simulation text label and id
         lab_sim_text = self.ui.lab_out_simulation_id_text
         lab_sim_id = self.ui.lab_out_simulation_id
 
         lab_sim_text.setText("Simulation id: ")
         lab_sim_id.setText("0")
-
-        # gather all data from the simulation (inputs, results)
 
         # generate charts for the simulation
         create_handled_vehicles_chart('./img/chart_0_0.png')
@@ -167,6 +191,8 @@ class MainWindow(QMainWindow):
         self.current_area_selected.clear()
         # clear current layout
         self.parking_layout.clear()
+        # change status text
+        self.ui.textBrowser_status.setHtml(self.status_text_NOK)
 
     def get_vehicles_data(self):
         allowed_vehicles = []
@@ -413,6 +439,12 @@ class MainWindow(QMainWindow):
         print("Added area to layout!")
         print(self.parking_layout)
 
+        # create screenshot of current layout
+        screenshot = self.grab(QRect(10, 220, 435, 395))
+        # Save the screenshot as an image file
+        screenshot.save("./img/current_gridlayout.jpg", "JPG")
+        print("Screenshot saved!")
+
         # write layout to json file
         utils.write_layout_to_json(self.layout_json_save_path, self.parking_layout)
 
@@ -425,6 +457,13 @@ class MainWindow(QMainWindow):
 
         # reset multiplier
         self.ui.horSlider_capacity_multiplier.setValue(100)
+
+        # check for valid layout
+        if isLayoutValid(self.convert_matrix_to_string()):
+            # activate simulate button
+            self.ui.but_simulate.setEnabled(True)
+            # change status text
+            self.ui.textBrowser_status.setHtml(self.status_text_OK)
 
     def handle_click_event_grid(self):
         button = self.sender()
@@ -474,6 +513,7 @@ class MainWindow(QMainWindow):
                         layout_string += "N,"
 
         utils.write_content_to_file('layout_matrix.txt', layout_string)
+        return layout_string[:-1]
 
     def reset_current_selection(self):
         counter = 0

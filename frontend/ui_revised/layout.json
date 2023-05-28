@@ -2,26 +2,19 @@
     {
         "id": 0,
         "type": "Road",
-        "capacity": 6.0,
-        "allowed_veh": [
-            "cars",
-            "trucks"
-        ],
+        "capacity": 9.0,
+        "allowed_veh": [],
         "start_pos": {
             "x": 9,
             "y": 0
         },
         "end_pos": {
-            "x": 4,
+            "x": 1,
             "y": 0
         },
         "connectsTo": [
             {
                 "id": 1,
-                "pos": 0
-            },
-            {
-                "id": 4,
                 "pos": 0
             }
         ],
@@ -29,101 +22,15 @@
     },
     {
         "id": 1,
-        "type": "Road",
-        "capacity": 5.0,
-        "allowed_veh": [
-            "cars",
-            "trucks"
-        ],
-        "start_pos": {
-            "x": 4,
-            "y": 0
-        },
-        "end_pos": {
-            "x": 4,
-            "y": 4
-        },
-        "connectsTo": [
-            {
-                "id": 0,
-                "pos": 0
-            },
-            {
-                "id": 2,
-                "pos": 0
-            }
-        ],
-        "entry": false
-    },
-    {
-        "id": 2,
-        "type": "Road",
-        "capacity": 4.0,
-        "allowed_veh": [
-            "cars",
-            "trucks"
-        ],
-        "start_pos": {
-            "x": 4,
-            "y": 4
-        },
-        "end_pos": {
-            "x": 1,
-            "y": 4
-        },
-        "connectsTo": [
-            {
-                "id": 1,
-                "pos": 0
-            },
-            {
-                "id": 3,
-                "pos": 0
-            }
-        ],
-        "entry": false
-    },
-    {
-        "id": 3,
         "type": "Check-in",
         "capacity": 20.0,
-        "allowed_veh": [
-            "cars",
-            "trucks"
-        ],
+        "allowed_veh": [],
         "start_pos": {
             "x": 1,
-            "y": 4
-        },
-        "end_pos": {
-            "x": 1,
-            "y": 4
-        },
-        "connectsTo": [
-            {
-                "id": 2,
-                "pos": 0
-            }
-        ],
-        "entry": false
-    },
-    {
-        "id": 4,
-        "type": "Parking",
-        "capacity": 50.0,
-        "allowed_veh": [
-            "cars",
-            "trucks",
-            "trailers",
-            "disabled",
-            "online"
-        ],
-        "start_pos": {
-            "x": 6,
             "y": 0
         },
         "end_pos": {
-            "x": 6,
+            "x": 1,
             "y": 0
         },
         "connectsTo": [
