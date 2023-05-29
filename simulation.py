@@ -57,6 +57,8 @@ def compare_floats(val1, val2, *, delta=0.00001, lte=False, gte=False):
 
 class VehicleToken:
     def __init__(self, vehicle_id=None, vehicle_type=None, creation_time=None):
+        self.total_wait_time = None
+        self.outside_queue_wait_time = None
         self.vehicle_id = vehicle_id
         self.vehicle_type = vehicle_type
         self.creation_time = creation_time
@@ -105,7 +107,7 @@ class VehicleToken:
         intersect_time = (pos_2 - pos_1 + time_1 * speed_1 - time_2 * speed_2) / (speed_1 - speed_2)
         intersect_pos = pos_1 + speed_1 * (intersect_time - time_1)
 
-        return (True, end_pos_2, (intersect_time, speed_2, intersect_pos, end_time_2))
+        return True, end_pos_2, (intersect_time, speed_2, intersect_pos, end_time_2)
 
     def find_activation_time(self, followed_trajectory):
         move_start_index = None
@@ -125,7 +127,8 @@ class VehicleToken:
 
         return move_start_index
 
-    def find_zero_time(self, followed_trajectory, start_index):
+    @staticmethod
+    def find_zero_time(followed_trajectory, start_index):
         zero_index = None
         for i in range(start_index, len(followed_trajectory)):
             curr_follow_time, curr_follow_speed, cur_follow_pos, _ = followed_trajectory[i]

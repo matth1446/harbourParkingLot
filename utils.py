@@ -136,7 +136,6 @@ def insert_output_into_db(self):
     entry = {"outputs":
         {
             "avg_number_vehicles_per_gate": self.avg_vehicles_per_gate,
-            # TO-DO
             "avg_vehicles_waiting": self.avg_vehicles_waiting,
 
             "total_number_cars": self.total_number_cars,
