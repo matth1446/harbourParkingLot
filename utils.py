@@ -1,4 +1,9 @@
+import pymongo
 import simpy
+from pymongo import MongoClient
+
+import time
+from datetime import datetime
 
 import utils
 
@@ -119,11 +124,92 @@ class Graph:
             print("Path from {} to {} not found".format(start, end))
 
 
+def insert_output_into_db(self):
+    # Conection to DB
+    URI = "mongodb+srv://db_user:db_user@dss.icklgr1.mongodb.net/"
+    client = MongoClient(URI)
+    print("Connection Successful")
+    db = client.database_dss
+    # output collection
+    collection_output = db.output
+    # create entry for output
+    entry = {"outputs":
+        {
+            "avg_number_vehicles_per_gate": self.avg_vehicles_per_gate,
+            # TO-DO
+            "avg_vehicles_waiting": self.avg_vehicles_waiting,
+
+            "total_number_cars": self.total_number_cars,
+            "total_number_trucks": self.total_number_trucks,
+
+            "avg_waiting_time_car": self.avg_waiting_time_car,
+            "avg_waiting_time_truck": self.avg_waiting_time_truck,
+
+            "list_of_waiting_times_cars": self.total_wait_times_cars,
+            "list_of_waiting_times_trucks": self.total_wait_times_trucks
+        }
+    }
+
+    id_output_entry = collection_output.insert_one(entry).inserted_id
+    print(id_output_entry)
+
+    # Close connection
+    client.close()
+    print("all the outputs should be online :))))")
+
+
+def get_last_entry_from_db():
+    # Conection to DB
+    URI = "mongodb+srv://db_user:db_user@dss.icklgr1.mongodb.net/"
+    client = MongoClient(URI)
+    print("Connection Successful")
+    db = client.database_dss
+    # two different collections, one for input and one for output
+    collection_input = db.input
+    collection_output = db.output
+
+    # Get last entry
+    last_entry = collection_input.find_one({}, sort=[('_id', pymongo.DESCENDING)])
+    id = last_entry["_id"]
+    if collection_output.find_one({"input_id": id}) is not None:
+        print('id : ' + str(id))
+
+    # Close connection
+    client.close()
+    return last_entry['parameters']
+
+
 class Metrics:
     def __init__(self, initial_time):
-        self.outside_queue_wait_times = {}
-        self.travel_times = {}
-        self.total_wait_times = {}
+        # Get inputs from the graph
+        dict_inputs = get_last_entry_from_db()
+        print(dict_inputs)
+        self.entrance_opening_time = '10:00'
+        self.gate_open_time = dict_inputs['gate_open_time']
+        format = '%H:%M'
+        elapsed_time = datetime.strptime(self.gate_open_time, format) - datetime.strptime(self.entrance_opening_time,
+                                                                                          format)
+        elapsed_hours = elapsed_time.seconds // 3600
+        elapsed_minutes = (elapsed_time.seconds // 60) % 60
+        self.checkin_opening_in_minutes = elapsed_hours * 60 + elapsed_minutes
+        self.gate_closing_time = dict_inputs['gate_closing_time']
+        self.no_of_cars = dict_inputs['no_of_cars']
+        self.no_of_trucks = dict_inputs['no_of_trucks']
+        self.no_of_trailers = dict_inputs['no_of_trailers']
+        self.employee_cost = dict_inputs['employee_cost']
+        self.gate_cost = dict_inputs['gate_cost']
+        self.ticket_cost = dict_inputs['ticket_cost']
+        self.total_area_width = dict_inputs['total_area_width']
+        self.total_area_length = dict_inputs['total_area_length']
+        self.perc_online_check_in = dict_inputs['perc_online_check_in']
+
+        # things we need during the simulation
+        self.outside_queue_wait_times_cars = {}
+        self.outside_queue_wait_times_trucks = {}
+        self.travel_times_cars = {}
+        self.travel_times_trucks = {}
+        self.total_wait_times_cars = {}
+        self.total_wait_times_trucks = {}
 
         self.road_counts = {}
         self.road_capacities = {}
@@ -133,12 +219,23 @@ class Metrics:
 
         self.roads = {}
         self.gates = []
+
+        # outputs
+        self.total_number_cars = 0.0
+        self.total_number_trucks = 0.0
+        self.avg_vehicles_per_gate = []
+        self.avg_vehicles_waiting = []
+        self.avg_waiting_time_car = 0.0
+        self.avg_waiting_time_truck = 0.0
         pass
 
     def print_all(self):
-        print(f"outside_queue_wait_times = {self.outside_queue_wait_times}")
-        print(f"travel_times = {self.travel_times}")
-        print(f"total_wait_times = {self.total_wait_times}")
+        print(f"outside_queue_wait_times_cars = {self.outside_queue_wait_times_cars}")
+        print(f"outside_queue_wait_times_trucks = {self.outside_queue_wait_times_trucks}")
+        print(f"travel_times_cars = {self.travel_times_cars}")
+        print(f"travel_times_trucks = {self.travel_times_trucks}")
+        print(f"total_wait_times_cars = {self.total_wait_times_cars}")
+        print(f"total_wait_times_trucks = {self.total_wait_times_trucks}")
         print(f"zero_intervals = {self.zero_intervals}")
         print(f"full_intervals = {self.full_intervals}")
 
@@ -146,43 +243,82 @@ class Metrics:
         number_of_trucks = 0.0
         for gate in self.gates:
             print("number of vehicules that went through gate n°" + str(gate.id) + f" : {gate.population}")
+            # idk why the gates are not numbered with an increasing order, if we fix that it's okay because their id matches their position in the list
+            self.avg_vehicles_per_gate.append(gate.population)
             if gate.type == ["car"]:
-                number_of_cars += gate.population
+                self.total_number_cars += gate.population
             elif gate.type == ["truck"]:
-                number_of_trucks += gate.population
-        print(f"total cars = {number_of_cars}")
-        print(f"total_trucks = {number_of_trucks}")
+                self.total_number_trucks += gate.population
+        print(f"total cars = {self.total_number_cars}")
+        print(f"total_trucks = {self.total_number_trucks}")
 
-    def add_time_key_if_unknown(self, car_id, road_id=None):
-        if car_id not in self.outside_queue_wait_times.keys():
-            self.outside_queue_wait_times[car_id] = {}
+        # extracting the avg_waiting_time
+        for val in self.total_wait_times_trucks.values():
+            self.avg_waiting_time_truck += val
+        # using len() to get total keys for mean computation
+        avg_waiting_time_truck = self.avg_waiting_time_truck / len(self.total_wait_times_trucks)
+        print(f"avg_waiting_time_truck = {self.avg_waiting_time_truck}")
+        for val in self.total_wait_times_cars.values():
+            self.avg_waiting_time_car += val
+        # using len() to get total keys for mean computation
+        avg_waiting_time_car = self.avg_waiting_time_car / len(self.total_wait_times_cars)
+        print(f"avg_waiting_time_car = {self.avg_waiting_time_car}")
+        # dumps everything in the db as the "results" entry
+        insert_output_into_db(self)
 
-        if road_id is not None and road_id not in self.outside_queue_wait_times[car_id].keys():
-            self.outside_queue_wait_times[car_id][road_id] = 0
+    def add_time_key_if_unknown(self, vehicle, road_id=None):
+        if vehicle.type == "car":
+            if vehicle.id not in self.outside_queue_wait_times_cars.keys():
+                self.outside_queue_wait_times_cars[vehicle.id] = {}
 
-        if car_id not in self.total_wait_times.keys():
-            self.total_wait_times[car_id] = 0
+            if road_id is not None and road_id not in self.outside_queue_wait_times_cars[vehicle.id].keys():
+                self.outside_queue_wait_times_cars[vehicle.id][road_id] = 0
 
-        if car_id not in self.travel_times.keys():
-            self.travel_times[car_id] = {}
+            if vehicle.id not in self.total_wait_times_cars.keys():
+                self.total_wait_times_cars[vehicle.id] = 0
 
-        if road_id is not None and road_id not in self.travel_times[car_id].keys():
-            self.travel_times[car_id][road_id] = 0
+            if vehicle.id not in self.travel_times_cars.keys():
+                self.travel_times_cars[vehicle.id] = {}
 
-    def add_outside_queue_wait_time(self, car_id, road_id, wait_time):
+            if road_id is not None and road_id not in self.travel_times_cars[vehicle.id].keys():
+                self.travel_times_cars[vehicle.id][road_id] = 0
+        if vehicle.type == "truck":
+            if vehicle.id not in self.outside_queue_wait_times_trucks.keys():
+                self.outside_queue_wait_times_trucks[vehicle.id] = {}
+
+            if road_id is not None and road_id not in self.outside_queue_wait_times_trucks[vehicle.id].keys():
+                self.outside_queue_wait_times_trucks[vehicle.id][road_id] = 0
+
+            if vehicle.id not in self.total_wait_times_trucks.keys():
+                self.total_wait_times_trucks[vehicle.id] = 0
+
+            if vehicle.id not in self.travel_times_trucks.keys():
+                self.travel_times_trucks[vehicle.id] = {}
+
+            if road_id is not None and road_id not in self.travel_times_trucks[vehicle.id].keys():
+                self.travel_times_trucks[vehicle.id][road_id] = 0
+
+    def add_outside_queue_wait_time(self, vehicle, road_id, wait_time):
         if road_id is None:
             road_id = "ENTRY"
 
-        self.add_time_key_if_unknown(car_id, road_id)
+        self.add_time_key_if_unknown(vehicle, road_id)
 
-        self.outside_queue_wait_times[car_id][road_id] += wait_time
-        self.total_wait_times[car_id] += wait_time
+        if vehicle.type == "car":
+            self.total_wait_times_cars[vehicle.id] += wait_time
+            self.outside_queue_wait_times_cars[vehicle.id][road_id] += wait_time
+        if vehicle.type == "truck":
+            self.total_wait_times_trucks[vehicle.id] += wait_time
+            self.outside_queue_wait_times_trucks[vehicle.id][road_id] += wait_time
 
-    def add_travel_time(self, car_id, road_id, travel_time):
-        self.add_time_key_if_unknown(car_id, road_id)
-
-        self.travel_times[car_id][road_id] += travel_time
-        self.total_wait_times[car_id] += travel_time
+    def add_travel_time(self, vehicle, road_id, travel_time):
+        self.add_time_key_if_unknown(vehicle, road_id)
+        if vehicle.type == "car":
+            self.travel_times_cars[vehicle.id][road_id] += travel_time
+            self.total_wait_times_cars[vehicle.id] += travel_time
+        if vehicle.type == "truck":
+            self.travel_times_trucks[vehicle.id][road_id] += travel_time
+            self.total_wait_times_trucks[vehicle.id] += travel_time
 
     def set_initial_values(self, node, initial_count):
         if type(node) == utils.Gate:
