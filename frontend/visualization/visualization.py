@@ -1,5 +1,60 @@
 import matplotlib.pyplot as mpl
 import numpy as np
+import pymongo
+from pymongo import MongoClient
+
+
+URI = "mongodb+srv://db_user:db_user@dss.icklgr1.mongodb.net/"
+client = MongoClient(URI)
+print("Connection Successful")
+db = client.database_dss
+#two different collections, one for input and one for output
+collection_input = db.input
+collection_output = db.output
+
+last_input = collection_input.find_one({},sort=[('_id', pymongo.DESCENDING)])
+last_output = collection_output.find_one({},sort=[('_id', pymongo.DESCENDING)])
+
+print(last_input)
+
+#---------------------------------------------------
+
+cars = last_output["outputs"]["total_number_cars"]
+trucks = last_output["outputs"]["total_number_trucks"]
+ticket_price = last_input["parameters"]["ticket_cost"]
+gate_cost = last_input["parameters"]["gate_cost"]
+employee_cost = last_input["parameters"]["employee_cost"]
+gates = 4
+gates_open = 2  # hours
+
+
+# how much is for the parking?
+# 5% for the pre-gate-parking
+percentage_for_parking = 0.05
+ticket_parking = ticket_price * percentage_for_parking
+
+income = (cars * ticket_parking) + (trucks * (ticket_parking * 1.5))
+
+# Expenses = price for each employee per gate (excl. sel-check-in) and hours + gates cost per hour
+expenses = (gates * (gates_open * employee_cost)) + (gates * (gates_open * gate_cost))
+
+# chart
+fig = mpl.figure(figsize=(5, 5))
+ax = fig.add_subplot()
+x_labels = ["Income", "Expenses"]
+y_axis = [income, expenses]
+data_x = np.arange(len(x_labels))
+barlist = ax.bar(data_x, y_axis)
+barlist[1].set_color('red')
+ax.set_ylabel('Euro')
+ax.set_title('Overview of Income and Expenses')
+ax.set_xticks(data_x, x_labels)
+
+mpl.show()
+
+
+
+
 
 
 def create_handled_vehicles_chart(save_path):
@@ -69,8 +124,11 @@ def create_income_expenses_chart(save_path):
 def create_avg_waiting_chart(save_path):
     # chart 3 ---------------------------------------------------------------------------------------
     # Average waiting time
-    avg_car = 23
-    avg_truck = 45
+    #avg_cars_waiting = last_output["_id"]["avg_waiting_time_car"]
+    #print(avg_cars_waiting)
+
+    avg_car = last_output["outputs"]["avg_waiting_time_car"]
+    avg_truck = last_output["outputs"]["avg_waiting_time_truck"]
     fig = mpl.figure(figsize=(5, 5))
     ax = fig.add_subplot()
     x_labels = ["Car", "Truck"]
