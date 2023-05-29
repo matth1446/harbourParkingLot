@@ -502,53 +502,6 @@ def get_average_wait_time(wait_times):
     seconds = frac_minutes * 60
     return round(minutes), round(seconds)
 
-
-# this is not my code, of course we need to elaborate the graph input
-def get_user_input():
-    num_roads = input("Input # of roads: ")
-    # we will have different gates for trucks and cars
-    num_gates = input("Input # of gates: ")
-    params = [num_roads, num_gates]
-    if all(str(i).isdigit() for i in params):  # Check input is valid
-        params = [int(x) for x in params]
-    else:
-        print(
-            "Could not parse input. Simulation will use default values:",
-            "\n1 roads, 1 gates.",
-        )
-        params = [1, 1]
-    return params
-
-
-def input():
-    # Read the json file
-    # extract the graph and turn it into roads and connections
-    # and get the other attributes inserted by the user
-
-    # Budget stuff that will be used at the end of the simulation:
-    # wages, ticket prices
-
-    # Capacity stuff:
-    # N of parking slots per type
-    # N of check-in gates
-
-    # Flow stuff:
-    # arrivals are exp
-    # departures depend on the roads
-    avg_num_of_cars = 90
-    avg_num_of_trucks = 5
-    avg_num_of_trailers = 10
-
-    perc_online_tickets = 0.60
-
-    # Time stuff:
-    # how long is the simulation?
-    # opening time-closing time of the check-in gates
-    # closing time of the entrace gates
-    # 'how long' the roads are (time value)?
-    # how long does it take to serve at the check-in gates?
-
-
 def main():
     # Setup
     random.seed(42)

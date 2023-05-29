@@ -11,7 +11,7 @@ def size_of_type(type):
 
 
 class QueueInterface:
-    i = 0;
+    i = 0
 
     def __init__(self, lengthQueue):
         self.id = QueueInterface.i
