@@ -9,6 +9,7 @@ from matrix import *
 from frontend.visualization.visualization import *
 from frontend.validation.GUIgraphCheck import *
 import utils
+import datetime
 
 
 class MainWindow(QMainWindow):
@@ -130,10 +131,10 @@ p, li { white-space: pre-wrap; }
                 "total_area_length": inp_area_length,
                 "perc_online_check_in": inp_perc_online_checkin
             },
-            "layout":
-                self.parking_layout
+            "layout": self.parking_layout,
+            "timestamp": datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
         }
-        # collection_input.insert_one(entry)
+        collection_input.insert_one(entry)
         client.close()
 
     def start_simulation(self):
@@ -241,7 +242,7 @@ p, li { white-space: pre-wrap; }
         else:
             # Set status to OK
             self.ui.textBrowser_out_result_status.setHtml(self.status_output_NOK)
-            print(f"No simulation results for: {entry_id}" )
+            print(f"No simulation results for: {entry_id}")
 
         client.close()
 
