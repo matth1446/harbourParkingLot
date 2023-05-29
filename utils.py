@@ -142,9 +142,15 @@ def insert_output_into_db(self):
     print("Connection Successful")
     db = client.database_dss
     # output collection
+    collection_input = db.input
     collection_output = db.output
+
+    # Get last entry
+    last_entry = collection_input.find_one({}, sort=[('_id', pymongo.DESCENDING)])
+    id_inputs = last_entry["_id"]
+
     # create entry for output
-    entry = {"outputs":
+    entry = {"input_id": id_inputs, "outputs":
         {
             "avg_number_vehicles_per_gate": self.avg_vehicles_per_gate,
             "avg_vehicles_waiting": self.avg_vehicles_waiting,
@@ -155,14 +161,11 @@ def insert_output_into_db(self):
             "avg_waiting_time_car": self.avg_waiting_time_car,
             "avg_waiting_time_truck": self.avg_waiting_time_truck,
 
-            "list_of_waiting_times_cars": self.total_wait_times_cars,
-            "list_of_waiting_times_trucks": self.total_wait_times_trucks
+            "list_of_waiting_times_cars": list(self.total_wait_times_cars.values()),
+            "list_of_waiting_times_trucks": list(self.total_wait_times_trucks.values())
         }
     }
-
-    id_output_entry = collection_output.insert_one(entry).inserted_id
-    print(id_output_entry)
-
+    var = collection_output.insert_one(entry).inserted_id
     # Close connection
     client.close()
     print("all the outputs should be online :))))")
@@ -277,7 +280,7 @@ class Metrics:
         insert_output_into_db(self)
 
     def add_time_key_if_unknown(self, vehicle, road_id=None):
-        if vehicle.type == "car":
+        if vehicle.type.name == "car":
             if vehicle.id not in self.outside_queue_wait_times_cars.keys():
                 self.outside_queue_wait_times_cars[vehicle.id] = {}
 
@@ -292,7 +295,7 @@ class Metrics:
 
             if road_id is not None and road_id not in self.travel_times_cars[vehicle.id].keys():
                 self.travel_times_cars[vehicle.id][road_id] = 0
-        if vehicle.type == "truck":
+        if vehicle.type.name == "truck":
             if vehicle.id not in self.outside_queue_wait_times_trucks.keys():
                 self.outside_queue_wait_times_trucks[vehicle.id] = {}
 
@@ -314,19 +317,20 @@ class Metrics:
 
         self.add_time_key_if_unknown(vehicle, road_id)
 
-        if vehicle.type == "car":
+        print("******************************************************* vehicle.type: " + str(vehicle.type.name) + "********************************************************")
+        if vehicle.type.name == "car":
             self.total_wait_times_cars[vehicle.id] += wait_time
             self.outside_queue_wait_times_cars[vehicle.id][road_id] += wait_time
-        if vehicle.type == "truck":
+        if vehicle.type.name == "truck":
             self.total_wait_times_trucks[vehicle.id] += wait_time
             self.outside_queue_wait_times_trucks[vehicle.id][road_id] += wait_time
 
     def add_travel_time(self, vehicle, road_id, travel_time):
         self.add_time_key_if_unknown(vehicle, road_id)
-        if vehicle.type == "car":
+        if vehicle.type.name == "car":
             self.travel_times_cars[vehicle.id][road_id] += travel_time
             self.total_wait_times_cars[vehicle.id] += travel_time
-        if vehicle.type == "truck":
+        if vehicle.type.name == "truck":
             self.travel_times_trucks[vehicle.id][road_id] += travel_time
             self.total_wait_times_trucks[vehicle.id] += travel_time
 
