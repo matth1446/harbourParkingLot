@@ -1,14 +1,18 @@
 import simpy
 from JsonReader import *
+from pymongo import MongoClient, DESCENDING
 
 
 class Graph:
-    def __init__(self, jsonFile):
-        r = open(jsonFile,"r").read()
-        jsonResult = buildFromJson(r)
-        self.vehiculesTypes = getVehiculesType(r)
-        self.nodes = [jsonResult[index] for index in jsonResult]
-        self.connections = buildConnections(jsonResult)
+    def __init__(self, input, fromJson = True):
+        if fromJson:
+            r = open(input,"r").read()
+            nodes = buildFromJson(r)
+            self.nodes = [nodes[index] for index in nodes]
+            self.vehiculesTypes = getVehiculesType(r)
+        else :
+            self.nodes, self.vehiculesTypes = buildFromTable(input)
+        self.connections = buildConnections(self.nodes)
         # paths[a][b] will contain the next node in the path from a to b, and the length of the path (for now, assimilated with capacity)
         self.paths = {t:[[(None,-1)for _n2 in self.nodes] for _n in self.nodes]for t in self.vehiculesTypes}
         self.make_paths()
@@ -157,3 +161,12 @@ class Metrics:
 
             if previous_count == 0:
                 self.add_zero_interval(road_id, current_time - last_zero)
+
+if __name__ == "__main__" :
+    uri = "mongodb+srv://db_user:db_user@dss.icklgr1.mongodb.net/"
+    db = MongoClient(uri).database_dss.input
+    last_entry = db.find_one({}, sort=[('_id', DESCENDING)])
+
+    g = Graph(last_entry["layout"],False)
+
+    print(g.make_path(0,1))
