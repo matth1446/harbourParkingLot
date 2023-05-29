@@ -333,10 +333,11 @@ class Vehicle:
 
 
 class Config:
-    def __init__(self, initial_time, gate_opening_time, checkin_opening_in_minutes):
+    def __init__(self, initial_time, gate_opening_time, checkin_opening_in_minutes, gate_service_time):
         self.initial_time = initial_time
         self.gate_opening_time = gate_opening_time
         self.checkin_opening_in_minutes = checkin_opening_in_minutes
+        self.gate_service_time = gate_service_time
 
 
 class ParkingLot(object):
@@ -412,9 +413,29 @@ class ParkingLot(object):
         # increasing the number of vehicles that went through a gate
         gate.population = gate.population + 1.0
         self.metrics.acknowledge_count_change(gate, self.env.now)
-        print(f"[{self.env.now:.2f}] car {car.id} has left road/gate {gate.id}")
+        print(f"[{self.env.now:.2f}] car {car.id} has left gate {gate.id}")
         yield self.env.timeout(
             0)  # leaving the gate is free (since we have already used timeout when we entered the gate)
+
+    def enter_gate(self, car, previous_road, gate):
+        token = VehicleToken(car.id, car.type,
+                             self.env.now)  # vehicles do not take any time "travelling" through parking spots
+        print(f"[{self.env.now:.2f}] car {car.id} is ready to enter gate {gate.id}")
+
+        yield self.env.process(car.queue_node_transitions(self.env, token, previous_road, gate))
+        print(
+            f"[{self.env.now:.2f}] car {car.id} has left road {previous_road.id} and entered gate {gate.id}")
+        self.metrics.acknowledge_count_change(previous_road, self.env.now)
+        self.metrics.acknowledge_count_change(gate, self.env.now)
+
+        gate_wait_time = self.config.gate_service_time
+        #parking_wait_time = 0 if parking_wait_time < 0 else parking_wait_time
+        token.activate(self.env.now, wait_time=gate_wait_time)
+        self.metrics.add_outside_queue_wait_time(car, previous_road.id, token.outside_queue_wait_time)
+
+        print(f"[{self.env.now:.2f}] car {car.id} will spend {token.total_travel_time:.2f} in gate {gate.id}")
+        yield self.env.timeout(token.total_travel_time)
+        self.metrics.add_travel_time(car, gate.id, token.total_travel_time)
 
     def get_follow_token(self, road):
         if len(road.store.items) == 0:
@@ -459,6 +480,10 @@ def car_through_the_pl(env, car, parkinglot):
             yield env.process(parkinglot.park(car, previous_road, next_road))
             continue
 
+        if type(next_road) == Gate:
+            yield env.process(parkinglot.enter_gate(car, previous_road, next_road))
+            continue
+
         # moving to a road (base case)
         yield env.process(parkinglot.change_road(car, previous_road, next_road))
 
@@ -468,7 +493,7 @@ def car_through_the_pl(env, car, parkinglot):
 
 def run_parkinglot(env, metrics):
     # I think here the input parameters should be something derived from the graph
-    config = Config(env.now, metrics.gate_closing_time, metrics.checkin_opening_in_minutes)
+    config = Config(env.now, metrics.gate_closing_time, metrics.checkin_opening_in_minutes, 1)
     parkinglot = ParkingLot(env, metrics, config)
     graph = buildFromJson("input.json")
     graph.link_resources(parkinglot, env)

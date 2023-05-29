@@ -18,9 +18,9 @@ def size_of_type(type):
 
 def speed_of_type(type):
     if "truck" in type:
-        return 1
+        return 10
     elif "car" in type:
-        return 3
+        return 30
     else:
         raise ValueError(f"unknown type {type}")
 
