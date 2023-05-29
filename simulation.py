@@ -460,13 +460,13 @@ def run_parkinglot(env, metrics):
     car_id = 0
     # car = Vehicle(car_id, VehicleType(1 + car_id % 2, 1), graph, 1, 0, 3)
 
-    sim_duration = 100
+    sim_duration = 5
     car_arrival_stop_time = env.now + sim_duration
     print('Env.now = '+str(env.now))
     print('car_arrival_stop_time = '+str(car_arrival_stop_time))
 
-    expected_num_of_cars = 50
-    expected_num_of_trucks = 30
+    expected_num_of_cars = 10
+    expected_num_of_trucks = 5
     lambda_arrivals_cars = expected_num_of_cars/car_arrival_stop_time   # this is the mean number of arrivals per unit of time
     lambda_arrivals_trucks = expected_num_of_trucks/car_arrival_stop_time
     p_car = expected_num_of_cars/(expected_num_of_trucks+expected_num_of_cars)
@@ -516,8 +516,8 @@ def main():
     # it decides here when to stop the simulation, I think we can either leave this decision to the avg num of cars we expect (so the run_parkinglot())
     # or to the main, speaking in terms of time, meaning for ex when the check-in gates close.
     stop_time = 100
-    env.run()
-
+    env.run(until=stop_time)
+    print('MAIN env.now = '+str(env.now))
     metrics.finalize_count_changes(env.now)
     # this is the output
     metrics.print_all()
