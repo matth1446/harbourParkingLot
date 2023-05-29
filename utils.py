@@ -11,8 +11,19 @@ import utils
 def size_of_type(type):
     if "truck" in type:
         return 2
-    else:
+    elif "car" in type:
         return 1
+    else:
+        raise ValueError(f"unknown type {type}")
+
+def speed_of_type(type):
+    if "truck" in type:
+        return 1
+    elif "car" in type:
+        return 3
+    else:
+        raise ValueError(f"unknown type {type}")
+
 
 
 class QueueInterface:
@@ -263,7 +274,7 @@ class Metrics:
         avg_waiting_time_car = self.avg_waiting_time_car / len(self.total_wait_times_cars)
         print(f"avg_waiting_time_car = {self.avg_waiting_time_car}")
         # dumps everything in the db as the "results" entry
-        insert_output_into_db(self)
+        #insert_output_into_db(self)
 
     def add_time_key_if_unknown(self, vehicle, road_id=None):
         if vehicle.type == "car":

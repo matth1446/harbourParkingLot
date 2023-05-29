@@ -83,8 +83,8 @@ class VehicleToken:
         time_1, speed_1, pos_1, _ = trajectory_segment_1
         time_2, speed_2, pos_2, end_time_2 = trajectory_segment_2
 
-        if not compare_floats(time_1, time_2, gte=True):
-            raise ValueError("trajectory segments must be ordered by start time for intersection")
+        #if not compare_floats(time_1, time_2, gte=True):
+        #    raise ValueError("trajectory segments must be ordered by start time for intersection")
 
         if not compare_floats(time_1, end_time_2, lte=True):
             raise ValueError("trajectory segments must have overlapping times for intersection")
@@ -118,10 +118,10 @@ class VehicleToken:
                 break
 
         if move_start_index == -1:
-            raise ValueError("the followed trajectory starts after the activation time")
+            return 0 #raise ValueError(f"the followed trajectory starts after the activation time ({self.vehicle_id})")
 
         if move_start_index is None and not compare_floats(followed_trajectory[-1][3], self.activation_time, gte=True):
-            raise ValueError("the followed trajectory ends before the activation time")
+            return None#raise ValueError("the followed trajectory ends before the activation time")
         elif move_start_index is None:
             move_start_index = len(followed_trajectory) - 1
 
@@ -146,7 +146,7 @@ class VehicleToken:
         follow_zero_time = prev_follow_time - prev_follow_pos / prev_follow_speed
 
         if not compare_floats(follow_zero_time, prev_end_time, lte=True):
-            raise ValueError("the followed trajectory ends before the activation time")
+            raise ValueError("the followed trajectory never reaches 0 before the activation time")
 
         return zero_index, follow_zero_time
 
@@ -171,6 +171,8 @@ class VehicleToken:
 
         # 1
         move_start_index = self.find_activation_time(followed_trajectory)
+        if move_start_index is None:
+            return None
 
         # 2
         prev_follow_time, prev_follow_speed, prev_follow_pos, prev_end_time = followed_trajectory[move_start_index]
@@ -231,7 +233,13 @@ class VehicleToken:
 
     def follow_token(self, followed_token, road_size):
         followed_trajectory = followed_token.adjust_for_size()
-        self.trajectory = self.follow_trajectory(followed_trajectory, road_size)
+        trajectory = self.follow_trajectory(followed_trajectory, road_size)
+
+        if trajectory is None:
+            self.default_trajectory(road_size)
+            return
+
+        self.trajectory = trajectory
         self.total_travel_time = self.trajectory[-1][3] - self.activation_time
 
     def activate(self, activation_time, *, wait_time=None, road_size=None, follow=None):
@@ -499,7 +507,8 @@ def run_parkinglot(env, metrics):
     while env.now < car_arrival_stop_time:
         print('env.now = ' + str(env.now))
         vehicle_type = np.random.choice(['car', 'truck'], p=[p_car, p_truck])
-        if vehicle_type == ['car']:
+        print(f"New vehicle: " + vehicle_type)
+        if vehicle_type == 'car':
             arrival = max(float(np.random.exponential(1 / lambda_arrivals_cars)), min_arrival)
         else:
             arrival = max(float(np.random.exponential(1 / lambda_arrivals_trucks)),min_arrival)
@@ -508,72 +517,16 @@ def run_parkinglot(env, metrics):
 
         car_id += 1
 
-        type_is_car = (vehicle_type == 'car')
-        type_name = "car" if type_is_car else "truck"
-        type_size = 1 if type_is_car else 2
-        type_speed = 3 if type_is_car else 1
+        type_name = vehicle_type
+        type_size = size_of_type([vehicle_type])
+        type_speed = speed_of_type([vehicle_type])
 
-        gate_id = 2 if type_is_car else 0
+        gate_id = 2 if type_name == "car" else 0
         parking_spot = 3 if car_id % 3 == 0 else None
 
         car = Vehicle(car_id, VehicleType(type_name, type_speed, type_size), graph, 1, gate_id, parking_spot)
         env.process(car_through_the_pl(env, car, parkinglot))
     print('FINAL env.now = ' + str(env.now))
-
-
-def get_average_wait_time(wait_times):
-    average_wait = statistics.mean(wait_times)
-    # Pretty print the results
-    minutes, frac_minutes = divmod(average_wait, 1)
-    seconds = frac_minutes * 60
-    return round(minutes), round(seconds)
-
-
-# this is not my code, of course we need to elaborate the graph input
-def get_user_input():
-    num_roads = input("Input # of roads: ")
-    # we will have different gates for trucks and cars
-    num_gates = input("Input # of gates: ")
-    params = [num_roads, num_gates]
-    if all(str(i).isdigit() for i in params):  # Check input is valid
-        params = [int(x) for x in params]
-    else:
-        print(
-            "Could not parse input. Simulation will use default values:",
-            "\n1 roads, 1 gates.",
-        )
-        params = [1, 1]
-    return params
-
-
-def input():
-    # Read the json file
-    # extract the graph and turn it into roads and connections
-    # and get the other attributes inserted by the user
-
-    # Budget stuff that will be used at the end of the simulation:
-    # wages, ticket prices
-
-    # Capacity stuff:
-    # N of parking slots per type
-    # N of check-in gates
-
-    # Flow stuff:
-    # arrivals are exp
-    # departures depend on the roads
-    avg_num_of_cars = 90
-    avg_num_of_trucks = 5
-    avg_num_of_trailers = 10
-
-    perc_online_tickets = 0.60
-
-    # Time stuff:
-    # how long is the simulation?
-    # opening time-closing time of the check-in gates
-    # closing time of the entrace gates
-    # 'how long' the roads are (time value)?
-    # how long does it take to serve at the check-in gates?
-
 
 
 def main():
@@ -611,11 +564,11 @@ def main():
 
 
     # View the results
-    mins, secs = get_average_wait_time(wait_times)
-    print(
-        "Running simulation...",
-        f"\nThe average wait time is {mins} minutes and {secs} seconds.",
-    )
+    #mins, secs = get_average_wait_time(wait_times)
+    #print(
+    #    "Running simulation...",
+    #    f"\nThe average wait time is {mins} minutes and {secs} seconds.",
+    #)
 
     # Of course we can add all the details we need for our ..*calculations^.^
 
