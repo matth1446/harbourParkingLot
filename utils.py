@@ -274,7 +274,7 @@ class Metrics:
         avg_waiting_time_car = self.avg_waiting_time_car / len(self.total_wait_times_cars)
         print(f"avg_waiting_time_car = {self.avg_waiting_time_car}")
         # dumps everything in the db as the "results" entry
-        #insert_output_into_db(self)
+        insert_output_into_db(self)
 
     def add_time_key_if_unknown(self, vehicle, road_id=None):
         if vehicle.type == "car":
