@@ -547,7 +547,8 @@ def run_parkinglot(env, metrics):
 
         parking_spot_id = None
         if env.now < config.checkin_opening_in_minutes:
-            parking_spot_id = graph.get_valid_parking_spot(type_name).id
+            parking_spot = graph.get_valid_parking_spot(type_name)
+            parking_spot_id = parking_spot.id if parking_spot is not None else None
 
         gate_id = graph.get_valid_gate(type_name).id
         entry_id = graph.get_valid_entry(type_name).id

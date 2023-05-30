@@ -94,7 +94,7 @@ class Graph:
         }
         self.parking_spots = {
             vehicle_type: [
-                node for node in self.nodes if type(node) == ParkingSpot and vehicle_type in node.type 
+                (node, True) for node in self.nodes if type(node) == ParkingSpot and vehicle_type in node.type 
             ] for vehicle_type in vehicle_types
         }
         self.entry_points = {
@@ -108,8 +108,12 @@ class Graph:
         self.make_paths()
 
     def get_valid_parking_spot(self, vehicle_type):
-        index = random.randrange(len(self.parking_spots[vehicle_type]))
-        return self.parking_spots[vehicle_type][index]
+        for i in range(len(self.parking_spots[vehicle_type])):
+            spot, spot_available = self.parking_spots[vehicle_type][i]
+            if spot_available:
+                self.parking_spots[vehicle_type][i] = (spot, False)
+                return spot
+        return None
 
     def get_valid_gate(self, vehicle_type):
         index = random.randrange(len(self.gates[vehicle_type]))
