@@ -536,22 +536,27 @@ def run_parkinglot(env, metrics):
             arrival = max(float(np.random.exponential(1 / lambda_arrivals_cars)), min_arrival)
         else:
             arrival = max(float(np.random.exponential(1 / lambda_arrivals_trucks)), min_arrival)
-        yield env.timeout(
-            arrival)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
+
+        yield env.timeout(arrival)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
 
         car_id += 1
+
         type_name = vehicle_type
         type_size = size_of_type([vehicle_type])
         type_speed = speed_of_type([vehicle_type])
 
-        gate_id = 2 if type_name == "car" else 0
-        parking_spot = 3 if car_id % 3 == 0 else None
+        parking_spot_id = None
+        if env.now < config.checkin_opening_in_minutes:
+            parking_spot_id = graph.get_valid_parking_spot(type_name).id
+
+        gate_id = graph.get_valid_gate(type_name).id
+        entry_id = graph.get_valid_entry(type_name).id
 #        if vehicle_type == 'car':
 #            metrics.number_of_cars_arrived_per_gate[gate_id] = metrics.number_of_cars_arrived_per_gate[gate_id]+1
 #        else:
 #            metrics.number_of_trucks_arrived_per_gate[gate_id] = metrics.number_of_trucks_arrived_per_gate[gate_id] + 1
 
-        vehicle = Vehicle(car_id, VehicleType(type_name, type_speed, type_size), graph, 1, gate_id, parking_spot)
+        vehicle = Vehicle(car_id, VehicleType(type_name, type_speed, type_size), graph, entry_id, gate_id, parking_spot_id)
         env.process(car_through_the_pl(env, vehicle, parkinglot))
     print('FINAL env.now = ' + str(env.now))
 

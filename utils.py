@@ -6,6 +6,7 @@ import time
 from datetime import datetime
 
 import utils
+import random
 
 
 def size_of_type(type):
@@ -86,10 +87,37 @@ class Graph:
     def __init__(self, jsonResult, vehicle_types, connections):
         self.vehiculesTypes = vehicle_types
         self.nodes = [jsonResult[index] for index in jsonResult]
+        self.gates = {
+            vehicle_type: [
+                node for node in self.nodes if type(node) == Gate and vehicle_type in node.type 
+            ] for vehicle_type in vehicle_types
+        }
+        self.parking_spots = {
+            vehicle_type: [
+                node for node in self.nodes if type(node) == ParkingSpot and vehicle_type in node.type 
+            ] for vehicle_type in vehicle_types
+        }
+        self.entry_points = {
+            vehicle_type: [
+                node for node in self.nodes if type(node) == Road and vehicle_type in node.type and node.isEntry
+            ] for vehicle_type in vehicle_types
+        }
         self.connections = connections
         # paths[a][b] will contain the next node in the path from a to b, and the length of the path (for now, assimilated with capacity)
         self.paths = {t: [[(None, -1) for _n2 in self.nodes] for _n in self.nodes] for t in self.vehiculesTypes}
         self.make_paths()
+
+    def get_valid_parking_spot(self, vehicle_type):
+        index = random.randrange(len(self.parking_spots[vehicle_type]))
+        return self.parking_spots[vehicle_type][index]
+
+    def get_valid_gate(self, vehicle_type):
+        index = random.randrange(len(self.gates[vehicle_type]))
+        return self.gates[vehicle_type][index]
+
+    def get_valid_entry(self, vehicle_type):
+        index = random.randrange(len(self.entry_points[vehicle_type]))
+        return self.entry_points[vehicle_type][index]
 
     def link_resources(self, parking_lot, env):
         for node in self.nodes:
