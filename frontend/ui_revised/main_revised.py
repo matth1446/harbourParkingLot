@@ -10,6 +10,7 @@ from frontend.visualization.visualization import *
 from frontend.validation.GUIgraphCheck import *
 import utils
 import datetime
+from datetime import datetime
 
 
 class MainWindow(QMainWindow):
@@ -152,7 +153,62 @@ p, li { white-space: pre-wrap; }
 
         last_entry = collection_input.find_one({}, sort=[('_id', pymongo.DESCENDING)])
         entry_id = last_entry["_id"]
+        last_result = collection_output.find_one({},sort=[('_id', pymongo.DESCENDING)])
+
         if collection_output.find_one({"input_id": entry_id}) is not None:
+
+
+            #from output
+            avg_car = (last_result["outputs"]["avg_waiting_time_car"])/60 #in minutes
+            avg_truck = (last_result["outputs"]["avg_waiting_time_truck"])/60 #in minutes
+            cars = last_result["outputs"]["total_number_cars"]
+            trucks = last_result["outputs"]["total_number_trucks"]
+            list_of_waiting_times_cars = last_result["outputs"]["list_of_waiting_times_cars"]
+            list_of_waiting_times_trucks = last_result["outputs"]["list_of_waiting_times_trucks"]
+            #from input
+            out_gate_open_val = last_entry["parameters"]["gate_open_time"]
+            out_gate_close_val = last_entry["parameters"]["gate_closing_time"]
+            out_num_cars_val = last_entry["parameters"]["no_of_cars"]
+            out_num_trucks_val = last_entry["parameters"]["no_of_trucks"]
+            out_num_trailers_val = last_entry["parameters"]["no_of_trailers"]
+            out_empl_cost_val = last_entry["parameters"]["employee_cost"]
+            out_gate_cost_val = last_entry["parameters"]["gate_cost"]
+            out_ticket_cost_val = last_entry["parameters"]["ticket_cost"]
+            out_area_width_val = last_entry["parameters"]["total_area_width"]
+            out_area_length_val = last_entry["parameters"]["total_area_length"]
+            out_perc_online_val = last_entry["parameters"]["perc_online_check_in"]
+
+
+            #Vizualization 2
+            gates = 4
+
+            open_time = datetime.strptime(out_gate_open_val, "%H:%M")
+            close_time = datetime.strptime(out_gate_close_val, "%H:%M")
+
+            gates_open = (close_time - open_time).seconds/3600 #to get from seconds to hours
+
+            # # how much is for the parking?
+            # # 5% for the pre-gate-parking
+            percentage_for_parking = 0.05
+            ticket_parking = out_ticket_cost_val * percentage_for_parking
+
+            income = (cars * ticket_parking) + (trucks * (ticket_parking * 1.5))
+
+            # # Expenses = price for each employee per gate (excl. sel-check-in) and hours + gates cost per hour
+            expenses = (gates * (gates_open * out_empl_cost_val)) + (gates * (gates_open * out_gate_cost_val))
+
+
+            #Vizualization 4
+            # CO² Emission of Vehicles
+            # Car: 19,1 g CO² per min
+            # Truck: 45,56 g CO² per min
+            emission_car = 19.1
+            emission_truck = 45.56
+
+            emission_car_all = (np.sum(list_of_waiting_times_cars))*emission_car
+            emission_truck_all = (np.sum(list_of_waiting_times_trucks)) * emission_truck
+
+
             print(entry_id)
             # Set status to OK
             self.ui.textBrowser_out_result_status.setHtml(self.status_output_OK)
@@ -183,17 +239,17 @@ p, li { white-space: pre-wrap; }
             out_lab_5.setText("A")
             out_lab_6.setText("A")
 
-            out_gate_open.setText("A")
-            out_gate_close.setText("A")
-            out_num_cars.setText("A")
-            out_num_trucks.setText("A")
-            out_num_trailers.setText("A")
-            out_empl_cost.setText("A")
-            out_gate_cost.setText("A")
-            out_ticket_cost.setText("A")
-            out_area_width.setText("A")
-            out_area_length.setText("A")
-            out_perc_online.setText("A")
+            out_gate_open.setText(str(out_gate_open_val))
+            out_gate_close.setText(str(out_gate_close_val))
+            out_num_cars.setText(str(out_num_cars_val))
+            out_num_trucks.setText(str(out_num_trucks_val))
+            out_num_trailers.setText(str(out_num_trailers_val))
+            out_empl_cost.setText(str(out_empl_cost_val))
+            out_gate_cost.setText(str(out_gate_cost_val))
+            out_ticket_cost.setText(str(out_ticket_cost_val))
+            out_area_width.setText(str(out_area_width_val))
+            out_area_length.setText(str(out_area_length_val))
+            out_perc_online.setText(str(out_perc_online_val))
 
             # display latest simulated layout
             layout_img = QPixmap('./img/current_gridlayout.jpg')
@@ -210,9 +266,9 @@ p, li { white-space: pre-wrap; }
 
             # generate charts for the simulation
             create_handled_vehicles_chart('./img/chart_0_0.png')
-            create_income_expenses_chart('./img/chart_0_1.png')
-            create_avg_waiting_chart('./img/chart_1_0.png')
-            create_co2_emission_chart('./img/chart_1_1.png')
+            create_income_expenses_chart('./img/chart_0_1.png', income, expenses)
+            create_avg_waiting_chart('./img/chart_1_0.png', avg_car, avg_truck)
+            create_co2_emission_chart('./img/chart_1_1.png', emission_car_all, emission_truck_all)
 
             # assigning charts to the placeholders
 
