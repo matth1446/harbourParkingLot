@@ -532,8 +532,9 @@ def run_parkinglot(env, metrics):
     p_car = expected_num_of_cars / (expected_num_of_trucks + expected_num_of_cars)
     p_truck = 1 - p_car
     min_arrival = 0.0
-    mean_arrival_time = (expected_num_of_cars + expected_num_of_trucks) / ((closing.minute + closing.hour*60) - (opening.minute + opening.hour*60))
-    std_arrival_time = 1
+    mean_arrival_time = (expected_num_of_cars+expected_num_of_trucks)/total_elapsed_minutes
+    std_arrival_time = 0.05
+
 
     # we can use the avg_num_of_cars we expect
     while env.now < car_arrival_stop_time:
