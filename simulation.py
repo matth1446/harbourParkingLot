@@ -500,6 +500,7 @@ def run_parkinglot(env, metrics):
     for node in graph.nodes:
         metrics.set_initial_values(node, 0)
     car_id = 0
+    #truck_id
     # car = Vehicle(car_id, VehicleType(1 + car_id % 2, 1), graph, 1, 0, 3)
 
     # Computing of the simulation duration
@@ -518,7 +519,6 @@ def run_parkinglot(env, metrics):
     # Stampa il tempo trascorso
     sim_duration = total_elapsed_minutes
     car_arrival_stop_time = env.now + sim_duration
-    print('Env.now = ' + str(env.now))
     print('car_arrival_stop_time = ' + str(car_arrival_stop_time))
 
     expected_num_of_cars = metrics.no_of_cars
@@ -530,27 +530,29 @@ def run_parkinglot(env, metrics):
     min_arrival = 0.0
     # we can use the avg_num_of_cars we expect
     while env.now < car_arrival_stop_time:
-        print('env.now = ' + str(env.now))
         vehicle_type = np.random.choice(['car', 'truck'], p=[p_car, p_truck])
         print(f"New vehicle: " + vehicle_type)
         if vehicle_type == 'car':
             arrival = max(float(np.random.exponential(1 / lambda_arrivals_cars)), min_arrival)
         else:
-            arrival = max(float(np.random.exponential(1 / lambda_arrivals_trucks)),min_arrival)
+            arrival = max(float(np.random.exponential(1 / lambda_arrivals_trucks)), min_arrival)
         yield env.timeout(
             arrival)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
 
         car_id += 1
-
         type_name = vehicle_type
         type_size = size_of_type([vehicle_type])
         type_speed = speed_of_type([vehicle_type])
 
         gate_id = 2 if type_name == "car" else 0
         parking_spot = 3 if car_id % 3 == 0 else None
+#        if vehicle_type == 'car':
+#            metrics.number_of_cars_arrived_per_gate[gate_id] = metrics.number_of_cars_arrived_per_gate[gate_id]+1
+#        else:
+#            metrics.number_of_trucks_arrived_per_gate[gate_id] = metrics.number_of_trucks_arrived_per_gate[gate_id] + 1
 
-        car = Vehicle(car_id, VehicleType(type_name, type_speed, type_size), graph, 1, gate_id, parking_spot)
-        env.process(car_through_the_pl(env, car, parkinglot))
+        vehicle = Vehicle(car_id, VehicleType(type_name, type_speed, type_size), graph, 1, gate_id, parking_spot)
+        env.process(car_through_the_pl(env, vehicle, parkinglot))
     print('FINAL env.now = ' + str(env.now))
 
 
@@ -563,6 +565,8 @@ def main():
     # Run the simulation
     env = simpy.Environment()
     metrics = Metrics(env.now)
+    print(metrics.gates)
+    print("*************************************************************************************************")
     env.process(run_parkinglot(env, metrics))
     # it decides here when to stop the simulation, I think we can either leave this decision to the avg num of cars we expect (so the run_parkinglot())
     # or to the main, speaking in terms of time, meaning for ex when the check-in gates close.

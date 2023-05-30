@@ -162,7 +162,11 @@ def insert_output_into_db(self):
             "avg_waiting_time_truck": self.avg_waiting_time_truck,
 
             "list_of_waiting_times_cars": list(self.total_wait_times_cars.values()),
-            "list_of_waiting_times_trucks": list(self.total_wait_times_trucks.values())
+            "list_of_waiting_times_trucks": list(self.total_wait_times_trucks.values()),
+
+            # for now is the number of all the cars, I have to do a subtraction but I am missing the gates
+            "list_of_n_cars_per_gate_that_did_not_pass": self.number_of_cars_arrived_per_gate,
+            "list_of_n_trucks_per_gate_that_did_not_pass": self.number_of_trucks_arrived_per_gate
         }
     }
     var = collection_output.insert_one(entry).inserted_id
@@ -217,6 +221,8 @@ class Metrics:
         self.perc_online_check_in = dict_inputs['perc_online_check_in']
 
         # things we need during the simulation
+        self.number_of_cars_arrived_per_gate = {}
+        self.number_of_trucks_arrived_per_gate = {}
         self.outside_queue_wait_times_cars = {}
         self.outside_queue_wait_times_trucks = {}
         self.travel_times_cars = {}
@@ -317,7 +323,7 @@ class Metrics:
 
         self.add_time_key_if_unknown(vehicle, road_id)
 
-        print("******************************************************* vehicle.type: " + str(vehicle.type.name) + "********************************************************")
+        #print("******************************************************* vehicle.type: " + str(vehicle.type.name) + "********************************************************")
         if vehicle.type.name == "car":
             self.total_wait_times_cars[vehicle.id] += wait_time
             self.outside_queue_wait_times_cars[vehicle.id][road_id] += wait_time
