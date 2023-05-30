@@ -3,7 +3,7 @@ import simpy
 from pymongo import MongoClient
 
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import utils
 import random
@@ -119,6 +119,12 @@ class Graph:
         index = random.randrange(len(self.gates[vehicle_type]))
         return self.gates[vehicle_type][index]
 
+    def get_all_cars_gates(self):
+        return self.gates["car"]
+
+    def get_all_trucks_gates(self):
+        return self.gates["truck"]
+
     def get_valid_entry(self, vehicle_type):
         index = random.randrange(len(self.entry_points[vehicle_type]))
         return self.entry_points[vehicle_type][index]
@@ -196,9 +202,8 @@ def insert_output_into_db(self):
             "list_of_waiting_times_cars": list(self.total_wait_times_cars.values()),
             "list_of_waiting_times_trucks": list(self.total_wait_times_trucks.values()),
 
-            # for now is the number of all the cars, I have to do a subtraction but I am missing the gates
-            "list_of_n_cars_per_gate_that_did_not_pass": self.number_of_cars_arrived_per_gate,
-            "list_of_n_trucks_per_gate_that_did_not_pass": self.number_of_trucks_arrived_per_gate
+            "list_of_n_cars_per_gate_that_did_not_pass": list(self.number_of_cars_arrived_per_gate.values()),
+            "list_of_n_trucks_per_gate_that_did_not_pass": list(self.number_of_trucks_arrived_per_gate.values())
         }
     }
     var = collection_output.insert_one(entry).inserted_id
@@ -231,13 +236,15 @@ def get_last_entry_from_db():
 class Metrics:
     def __init__(self, initial_time):
         # Get inputs from the graph
+        format = '%H:%M'
         dict_inputs = get_last_entry_from_db()
         print(dict_inputs)
-        self.entrance_opening_time = '10:00'
         self.gate_open_time = dict_inputs['gate_open_time']
-        format = '%H:%M'
-        elapsed_time = datetime.strptime(self.gate_open_time, format) - datetime.strptime(self.entrance_opening_time,
-                                                                                          format)
+        minutes_to_subtract = 90
+        self.entrance_opening_time = datetime.strptime(self.gate_open_time,format)- timedelta(minutes=minutes_to_subtract)
+        self.entrance_opening_time = self.entrance_opening_time.strftime("%H:%M")
+        print('Entrance opening time : '+str(self.entrance_opening_time))
+        elapsed_time = datetime.strptime(self.gate_open_time, format) - datetime.strptime(self.entrance_opening_time,format)
         elapsed_hours = elapsed_time.seconds // 3600
         elapsed_minutes = (elapsed_time.seconds // 60) % 60
         self.checkin_opening_in_minutes = elapsed_hours * 60 + elapsed_minutes
@@ -297,12 +304,17 @@ class Metrics:
             # idk why the gates are not numbered with an increasing order, if we fix that it's okay because their id matches their position in the list
             self.avg_vehicles_per_gate.append(gate.population)
             if gate.type == ["car"]:
-                self.total_number_cars += gate.population
+                self.number_of_cars_arrived_per_gate[gate.id]=self.number_of_cars_arrived_per_gate[gate.id]-gate.population
+                self.total_number_cars = self.total_number_cars + gate.population - self.number_of_cars_arrived_per_gate[gate.id]
             elif gate.type == ["truck"]:
-                self.total_number_trucks += gate.population
+                self.number_of_trucks_arrived_per_gate[gate.id]=self.number_of_trucks_arrived_per_gate[gate.id]-gate.population
+                self.total_number_trucks = self.total_number_trucks + gate.population - self.number_of_trucks_arrived_per_gate[gate.id]
+
         print(f"total cars = {self.total_number_cars}")
         print(f"total_trucks = {self.total_number_trucks}")
 
+        print("number_of_trucks_arrived_per_gate: " + str(self.number_of_trucks_arrived_per_gate))
+        print("number_of_cars_arrived_per_gate: " + str(self.number_of_cars_arrived_per_gate))
         # extracting the avg_waiting_time
         for val in self.total_wait_times_trucks.values():
             self.avg_waiting_time_truck += val
@@ -314,6 +326,7 @@ class Metrics:
         # using len() to get total keys for mean computation
         avg_waiting_time_car = self.avg_waiting_time_car / len(self.total_wait_times_cars)
         print(f"avg_waiting_time_car = {self.avg_waiting_time_car}")
+
         # dumps everything in the db as the "results" entry
         insert_output_into_db(self)
 

@@ -523,24 +523,26 @@ def run_parkinglot(env, metrics):
 
     expected_num_of_cars = metrics.no_of_cars
     expected_num_of_trucks = metrics.no_of_trucks
-    lambda_arrivals_cars = expected_num_of_cars / car_arrival_stop_time  # this is the mean number of arrivals per minute
-    lambda_arrivals_trucks = expected_num_of_trucks / car_arrival_stop_time
+
+    for g in graph.get_all_cars_gates():
+        metrics.number_of_cars_arrived_per_gate[g.id] = 0.0
+    for g in graph.get_all_trucks_gates():
+        metrics.number_of_trucks_arrived_per_gate[g.id] = 0.0
+
     p_car = expected_num_of_cars / (expected_num_of_trucks + expected_num_of_cars)
     p_truck = 1 - p_car
     min_arrival = 0.0
+    mean_arrival_time = (expected_num_of_cars + expected_num_of_trucks) / ((closing.minute + closing.hour*60) - (opening.minute + opening.hour*60))
+    std_arrival_time = 1
+
     # we can use the avg_num_of_cars we expect
     while env.now < car_arrival_stop_time:
         vehicle_type = np.random.choice(['car', 'truck'], p=[p_car, p_truck])
         print(f"New vehicle: " + vehicle_type)
-        if vehicle_type == 'car':
-            arrival = max(float(np.random.exponential(1 / lambda_arrivals_cars)), min_arrival)
-        else:
-            arrival = max(float(np.random.exponential(1 / lambda_arrivals_trucks)), min_arrival)
-
-        yield env.timeout(arrival)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
+        arrival_time = max(0, np.random.normal(mean_arrival_time, std_arrival_time))
+        yield env.timeout(arrival_time)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
 
         car_id += 1
-
         type_name = vehicle_type
         type_size = size_of_type([vehicle_type])
         type_speed = speed_of_type([vehicle_type])
@@ -551,15 +553,18 @@ def run_parkinglot(env, metrics):
             parking_spot_id = parking_spot.id if parking_spot is not None else None
 
         gate_id = graph.get_valid_gate(type_name).id
+        print('gate_id = ')
+        print(gate_id)
         entry_id = graph.get_valid_entry(type_name).id
-#        if vehicle_type == 'car':
-#            metrics.number_of_cars_arrived_per_gate[gate_id] = metrics.number_of_cars_arrived_per_gate[gate_id]+1
-#        else:
-#            metrics.number_of_trucks_arrived_per_gate[gate_id] = metrics.number_of_trucks_arrived_per_gate[gate_id] + 1
+        if vehicle_type == 'car':
+            metrics.number_of_cars_arrived_per_gate[gate_id] += 1
+        else:
+            metrics.number_of_trucks_arrived_per_gate[gate_id] += 1
 
         vehicle = Vehicle(car_id, VehicleType(type_name, type_speed, type_size), graph, entry_id, gate_id, parking_spot_id)
         env.process(car_through_the_pl(env, vehicle, parkinglot))
     print('FINAL env.now = ' + str(env.now))
+
 
 
 def main():
