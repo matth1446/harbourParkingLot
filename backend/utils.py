@@ -1,7 +1,9 @@
 from datetime import datetime, timedelta
+
+import pymongo
+import simpy
 from pymongo import MongoClient, DESCENDING
 
-import utils
 import random
 from TilesModel import*
 
@@ -309,7 +311,7 @@ class Metrics:
             self.total_wait_times_trucks[vehicle.id] += travel_time
 
     def set_initial_values(self, node, initial_count):
-        if type(node) == utils.Gate:
+        if type(node) == Gate:
             self.gates.append(node)
 
         self.roads[node.id] = node
