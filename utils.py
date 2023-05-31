@@ -190,8 +190,7 @@ def insert_output_into_db(self):
     # create entry for output
     entry = {"input_id": id_inputs, "outputs":
         {
-            "avg_number_vehicles_per_gate": self.avg_vehicles_per_gate,
-            "avg_vehicles_waiting": self.avg_vehicles_waiting,
+            "avg_number_vehicles_per_gate": str(self.avg_vehicles_per_gate),
 
             "total_number_cars": self.total_number_cars,
             "total_number_trucks": self.total_number_trucks,
@@ -281,8 +280,7 @@ class Metrics:
         # outputs
         self.total_number_cars = 0.0
         self.total_number_trucks = 0.0
-        self.avg_vehicles_per_gate = []
-        self.avg_vehicles_waiting = []
+        self.avg_vehicles_per_gate = {}
         self.avg_waiting_time_car = 0.0
         self.avg_waiting_time_truck = 0.0
         pass
@@ -302,7 +300,7 @@ class Metrics:
         for gate in self.gates:
             print("number of vehicules that went through gate n°" + str(gate.id) + f" : {gate.population}")
             # idk why the gates are not numbered with an increasing order, if we fix that it's okay because their id matches their position in the list
-            self.avg_vehicles_per_gate.append(gate.population)
+            self.avg_vehicles_per_gate[gate.id] = gate.population
             if gate.type == ["car"]:
                 self.number_of_cars_arrived_per_gate[gate.id]=self.number_of_cars_arrived_per_gate[gate.id]-gate.population
                 self.total_number_cars = self.total_number_cars + gate.population - self.number_of_cars_arrived_per_gate[gate.id]
