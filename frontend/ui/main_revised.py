@@ -211,17 +211,25 @@ p, li { white-space: pre-wrap; }
 
 
             # Vizualization 2
+            #Budget calculation
             gates = len(vehicles_per_gate)
+
+            #maintenance cost 1 EUR per m2
+            cost_per_m2 = 1
+            area_cost = out_area_width_val*out_area_length_val*cost_per_m2
+
+            cars_not = sum(did_not_pass_cars.values())
+            trucks_not = sum(did_not_pass_trucks.values())
 
             open_time = datetime.strptime(out_gate_open_val, "%H:%M")
             close_time = datetime.strptime(out_gate_close_val, "%H:%M")
 
             gates_open = (close_time - open_time).seconds / 3600  # to get from seconds to hours
 
-            income = (cars * out_ticket_cost_val) + (trucks * (out_ticket_cost_val * 1.5))
+            income = ((cars-cars_not) * out_ticket_cost_val) + ((trucks-trucks_not) * (out_ticket_cost_val * 1.5))
 
             # # Expenses = price for each employee per gate (excl. sel-check-in) and hours + gates cost per hour
-            expenses = (gates * (gates_open * out_empl_cost_val)) + (gates * (gates_open * out_gate_cost_val))
+            expenses = (gates * (gates_open * out_empl_cost_val)) + (gates * (gates_open * out_gate_cost_val)) + area_cost
 
             # Vizualization 4
             # CO² Emission of Vehicles
@@ -256,12 +264,14 @@ p, li { white-space: pre-wrap; }
             out_area_length = self.ui.lineEdit_area_length_out
             out_perc_online = self.ui.lineEdit_perc_online_checkin_out
 
-            out_lab_1.setText("A")
-            out_lab_2.setText("A")
-            out_lab_3.setText("A")
-            out_lab_4.setText("A")
-            out_lab_5.setText("A")
-            out_lab_6.setText("A")
+            out_lab_1.setText(str(sum(vehicles_per_gate.values())))
+            out_lab_2.setText(str(cars_not+trucks_not))
+            out_lab_3.setText("{:.1f}".format(income-expenses))
+            out_lab_4.setText("{:.1f}".format(emission_car_all+emission_truck_all))
+            out_lab_5.setText("{:.1f}".format(out_area_width_val*out_area_length_val))
+            space_car = 1.8 * 4.4
+            space_truck = 16.5 * 2.55
+            out_lab_6.setText("{:.1f}".format((cars*space_car)+(trucks*space_truck)))
 
             out_gate_open.setText(str(out_gate_open_val))
             out_gate_close.setText(str(out_gate_close_val))
