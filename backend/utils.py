@@ -126,8 +126,8 @@ def insert_output_into_db(self):
             "list_of_waiting_times_cars": str(self.total_wait_times_cars),
             "list_of_waiting_times_trucks": str(self.total_wait_times_trucks),
 
-            "list_of_n_cars_per_gate_that_did_not_pass": str(self.number_of_cars_arrived_per_gate),
-            "list_of_n_trucks_per_gate_that_did_not_pass": str(self.number_of_trucks_arrived_per_gate)
+            "list_of_n_cars_per_gate_that_did_not_pass": str(self.cars_that_did_not_pass_per_gate),
+            "list_of_n_trucks_per_gate_that_did_not_pass": str(self.trucks_that_did_not_pass_per_gate)
         }
     }
     var = collection_output.insert_one(entry).inserted_id
@@ -186,6 +186,8 @@ class Metrics:
         # things we need during the simulation
         self.number_of_cars_arrived_per_gate = {}
         self.number_of_trucks_arrived_per_gate = {}
+        self.cars_that_did_not_pass_per_gate = {}
+        self.trucks_that_did_not_pass_per_gate = {}
         self.outside_queue_wait_times_cars = {}
         self.outside_queue_wait_times_trucks = {}
         self.travel_times_cars = {}
@@ -221,15 +223,19 @@ class Metrics:
         print(f"full_intervals = {self.full_intervals}")
 
         for gate in self.gates:
-            self.avg_vehicles_per_gate[gate.id] = gate.population
-            if gate.type == ["car"]:
+            self.avg_vehicles_per_gate[gate.id] = gate.population_cars + gate.population_trucks
+            print(f"self.avg_vehicles_per_gate[x]: ", self.avg_vehicles_per_gate[gate.id])
+            if gate.type.__contains__('car'):
                 self.total_number_cars += self.number_of_cars_arrived_per_gate[gate.id]
-                print("number of cars that went through gate n°" + str(gate.id) + f" : {gate.population}")
-                print("number of cars that did not go through gate n° " + str(gate.id) + ": " + str(self.number_of_cars_arrived_per_gate[gate.id] - gate.population))
-            elif gate.type == ["truck"]:
+                print("number of cars that went through gate n° " + str(gate.id) + f" : {gate.population_cars}")
+                self.cars_that_did_not_pass_per_gate[gate.id] = self.number_of_cars_arrived_per_gate[gate.id] - gate.population_cars
+                print("number of cars that did not go through gate n° " + str(gate.id) + ": " + str(self.cars_that_did_not_pass_per_gate[gate.id]))
+            if gate.type.__contains__('truck'):
                 self.total_number_trucks += self.number_of_trucks_arrived_per_gate[gate.id]
-                print("number of trucks that went through gate n° " + str(gate.id) + f" : {gate.population}")
-                print("number of trucks that did not go through gate n°: " + str(gate.id) + ": " + str(self.number_of_trucks_arrived_per_gate[gate.id] - gate.population))
+                print("number of trucks that went through gate n° " + str(gate.id) + f" : {gate.population_trucks}")
+                self.trucks_that_did_not_pass_per_gate[gate.id] = self.number_of_trucks_arrived_per_gate[gate.id] - gate.population_trucks
+                print("number of trucks that did not go through gate n°: " + str(gate.id) + ": " + str(self.trucks_that_did_not_pass_per_gate[gate.id]))
+            #print(gate.type)
         print(f"total_trucks = {self.total_number_trucks}")
         print(f"total cars = {self.total_number_cars}")
 

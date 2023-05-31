@@ -408,12 +408,15 @@ class ParkingLot(object):
 
     # cars arriving to the final queue/gate/goal:
     # after moving in the parking lot they reach the check-in gates, and then leave the system (get on board)
-    def leave_gate(self, car, gate):
-        yield self.env.process(car.queue_node_transitions(self.env, None, gate, None))
+    def leave_gate(self, vehicle, gate):
+        yield self.env.process(vehicle.queue_node_transitions(self.env, None, gate, None))
         # increasing the number of vehicles that went through a gate
         self.metrics.acknowledge_count_change(gate, self.env.now)
-        print(f"[{self.env.now:.2f}] car {car.id} has left gate {gate.id}")
-        gate.population = gate.population + 1.0
+        print(f"[{self.env.now:.2f}] vehicle {vehicle.id} has left gate {gate.id}")
+        if vehicle.type.name == 'car':
+            gate.population_cars += 1.0
+        elif vehicle.type.name == 'truck':
+            gate.population_trucks += 1.0
         yield self.env.timeout(
             0)  # leaving the gate is free (since we have already used timeout when we entered the gate)
 
@@ -577,8 +580,7 @@ def main():
     # Run the simulation
     env = simpy.Environment()
     metrics = Metrics(env.now)
-    print(metrics.gates)
-    print("*************************************************************************************************")
+    #print(metrics.gates)
     env.process(run_parkinglot(env, metrics))
     # it decides here when to stop the simulation, I think we can either leave this decision to the avg num of cars we expect (so the run_parkinglot())
     # or to the main, speaking in terms of time, meaning for ex when the check-in gates close.
