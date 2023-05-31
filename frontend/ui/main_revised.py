@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtCore import QRect
 
-from frontend.ui_revised.gui import Ui_PreGateParkingSimulation
+from frontend.ui.gui import Ui_PreGateParkingSimulation
 from matrix import *
 from frontend.visualization.visualization import *
 from frontend.validation.GUIgraphCheck import *
