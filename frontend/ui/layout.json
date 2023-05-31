@@ -3,7 +3,7 @@
         "id": 0,
         "type": "Road",
         "capacity": 9.0,
-        "allowed_veh": [
+        "type-allowed": [
             "cars",
             "trucks"
         ],
@@ -27,7 +27,7 @@
         "id": 1,
         "type": "Check-in",
         "capacity": 20.0,
-        "allowed_veh": [
+        "type-allowed": [
             "cars",
             "trucks"
         ],

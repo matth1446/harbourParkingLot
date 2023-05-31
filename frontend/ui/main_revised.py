@@ -133,7 +133,7 @@ p, li { white-space: pre-wrap; }
                 "perc_online_check_in": inp_perc_online_checkin
             },
             "layout": self.parking_layout,
-            "timestamp": datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
+            "timestamp": datetime.now().strftime("%d%m%Y_%H%M%S")
         }
         collection_input.insert_one(entry)
         client.close()
@@ -153,19 +153,18 @@ p, li { white-space: pre-wrap; }
 
         last_entry = collection_input.find_one({}, sort=[('_id', pymongo.DESCENDING)])
         entry_id = last_entry["_id"]
-        last_result = collection_output.find_one({},sort=[('_id', pymongo.DESCENDING)])
+        last_result = collection_output.find_one({}, sort=[('_id', pymongo.DESCENDING)])
 
         if collection_output.find_one({"input_id": entry_id}) is not None:
 
-
-            #from output
-            avg_car = (last_result["outputs"]["avg_waiting_time_car"])/60 #in minutes
-            avg_truck = (last_result["outputs"]["avg_waiting_time_truck"])/60 #in minutes
+            # from output
+            avg_car = (last_result["outputs"]["avg_waiting_time_car"]) / 60  # in minutes
+            avg_truck = (last_result["outputs"]["avg_waiting_time_truck"]) / 60  # in minutes
             cars = last_result["outputs"]["total_number_cars"]
             trucks = last_result["outputs"]["total_number_trucks"]
             list_of_waiting_times_cars = last_result["outputs"]["list_of_waiting_times_cars"]
             list_of_waiting_times_trucks = last_result["outputs"]["list_of_waiting_times_trucks"]
-            #from input
+            # from input
             out_gate_open_val = last_entry["parameters"]["gate_open_time"]
             out_gate_close_val = last_entry["parameters"]["gate_closing_time"]
             out_num_cars_val = last_entry["parameters"]["no_of_cars"]
@@ -178,14 +177,13 @@ p, li { white-space: pre-wrap; }
             out_area_length_val = last_entry["parameters"]["total_area_length"]
             out_perc_online_val = last_entry["parameters"]["perc_online_check_in"]
 
-
-            #Vizualization 2
+            # Vizualization 2
             gates = 4
 
             open_time = datetime.strptime(out_gate_open_val, "%H:%M")
             close_time = datetime.strptime(out_gate_close_val, "%H:%M")
 
-            gates_open = (close_time - open_time).seconds/3600 #to get from seconds to hours
+            gates_open = (close_time - open_time).seconds / 3600  # to get from seconds to hours
 
             # # how much is for the parking?
             # # 5% for the pre-gate-parking
@@ -197,17 +195,15 @@ p, li { white-space: pre-wrap; }
             # # Expenses = price for each employee per gate (excl. sel-check-in) and hours + gates cost per hour
             expenses = (gates * (gates_open * out_empl_cost_val)) + (gates * (gates_open * out_gate_cost_val))
 
-
-            #Vizualization 4
+            # Vizualization 4
             # CO² Emission of Vehicles
             # Car: 19,1 g CO² per min
             # Truck: 45,56 g CO² per min
             emission_car = 19.1
             emission_truck = 45.56
 
-            emission_car_all = (np.sum(list_of_waiting_times_cars))*emission_car
+            emission_car_all = (np.sum(list_of_waiting_times_cars)) * emission_car
             emission_truck_all = (np.sum(list_of_waiting_times_trucks)) * emission_truck
-
 
             print(entry_id)
             # Set status to OK
@@ -302,54 +298,6 @@ p, li { white-space: pre-wrap; }
 
         client.close()
 
-    def update_multiplier_text(self):
-        slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
-        slider_val = slider_capacity_multiplier.property("value") / 100.0
-
-        label_capacity_multiplier = self.ui.lab_horSlider_capacity_multi
-        label_capacity_multiplier.setText(f'x {slider_val}')
-
-    def reset_area_layout(self):
-        # before resetting the layout create a string
-        self.convert_matrix_to_string()
-
-        for row in range(self.ui.gridLayout_roads.rowCount()):
-            for col in range(self.ui.gridLayout_roads.columnCount()):
-                btn = self.ui.gridLayout_roads.itemAtPosition(row, col).widget()
-                btn.setProperty("color", "None")
-                btn.setStyleSheet("background-color: None")
-        # clear current selection
-        self.current_area_selected.clear()
-        # clear current layout
-        self.parking_layout.clear()
-        # change status text
-        self.ui.textBrowser_status.setHtml(self.status_text_NOK)
-
-    def get_vehicles_data(self):
-        allowed_vehicles = []
-        allowed_cars = self.ui.checkBox_allowed_car.isChecked()
-        allowed_trucks = self.ui.checkBox_allowed_truck.isChecked()
-        allowed_trailers = self.ui.checkBox_allowed_disabled.isChecked()
-        allowed_disabled = self.ui.checkBox_allowed_disabled.isChecked()
-        allowed_online = self.ui.checkBox_allowed_online.isChecked()
-
-        if allowed_cars:
-            allowed_vehicles.append("cars")
-
-        if allowed_trucks:
-            allowed_vehicles.append("trucks")
-
-        if allowed_trailers:
-            allowed_vehicles.append("trailers")
-
-        if allowed_disabled:
-            allowed_vehicles.append("disabled")
-
-        if allowed_online:
-            allowed_vehicles.append("online")
-
-        return allowed_vehicles
-
     def add_area_to_layout(self):
         """
         each type of area has a different color
@@ -438,7 +386,7 @@ p, li { white-space: pre-wrap; }
                     "id": area_id,
                     "type": area_type,
                     "capacity": capacity * capacity_multiplier,
-                    "allowed_veh": allowed_vehicles,
+                    "type-allowed": allowed_vehicles,
                     "start_pos": {
                         "x": start_coords[0],
                         "y": start_coords[1]
@@ -529,7 +477,7 @@ p, li { white-space: pre-wrap; }
                     "id": area_id,
                     "type": area_type,
                     "capacity": capacity,
-                    "allowed_veh": allowed_vehicles,
+                    "type-allowed": allowed_vehicles,
                     "start_pos": {
                         "x": coord[0],
                         "y": coord[1]
@@ -595,6 +543,54 @@ p, li { white-space: pre-wrap; }
             self.ui.but_simulate.setEnabled(True)
             # change status text
             self.ui.textBrowser_status.setHtml(self.status_text_OK)
+
+    def update_multiplier_text(self):
+        slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
+        slider_val = slider_capacity_multiplier.property("value") / 100.0
+
+        label_capacity_multiplier = self.ui.lab_horSlider_capacity_multi
+        label_capacity_multiplier.setText(f'x {slider_val}')
+
+    def reset_area_layout(self):
+        # before resetting the layout create a string
+        self.convert_matrix_to_string()
+
+        for row in range(self.ui.gridLayout_roads.rowCount()):
+            for col in range(self.ui.gridLayout_roads.columnCount()):
+                btn = self.ui.gridLayout_roads.itemAtPosition(row, col).widget()
+                btn.setProperty("color", "None")
+                btn.setStyleSheet("background-color: None")
+        # clear current selection
+        self.current_area_selected.clear()
+        # clear current layout
+        self.parking_layout.clear()
+        # change status text
+        self.ui.textBrowser_status.setHtml(self.status_text_NOK)
+
+    def get_vehicles_data(self):
+        allowed_vehicles = []
+        allowed_cars = self.ui.checkBox_allowed_car.isChecked()
+        allowed_trucks = self.ui.checkBox_allowed_truck.isChecked()
+        allowed_trailers = self.ui.checkBox_allowed_disabled.isChecked()
+        allowed_disabled = self.ui.checkBox_allowed_disabled.isChecked()
+        allowed_online = self.ui.checkBox_allowed_online.isChecked()
+
+        if allowed_cars:
+            allowed_vehicles.append("car")
+
+        if allowed_trucks:
+            allowed_vehicles.append("truck")
+
+        if allowed_trailers:
+            allowed_vehicles.append("trailer")
+
+        if allowed_disabled:
+            allowed_vehicles.append("disabled")
+
+        if allowed_online:
+            allowed_vehicles.append("online")
+
+        return allowed_vehicles
 
     def handle_click_event_grid(self):
         button = self.sender()
