@@ -1,1 +1,1 @@
-G,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,E,N,N,N,N,N,N,N,N,N,
+G,N,N,N,N,G,N,N,N,G,R,R,R,R,R,R,R,R,R,R,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,R,N,N,N,N,N,N,N,N,N,E,N,N,N,N,N,N,N,N,N,

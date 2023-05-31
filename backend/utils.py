@@ -164,7 +164,7 @@ class Metrics:
         dict_inputs = get_last_entry_from_db()
         print(dict_inputs)
         self.gate_open_time = dict_inputs['gate_open_time']
-        minutes_to_subtract = 90
+        minutes_to_subtract = 120
         self.entrance_opening_time = datetime.strptime(self.gate_open_time,format)- timedelta(minutes=minutes_to_subtract)
         self.entrance_opening_time = self.entrance_opening_time.strftime("%H:%M")
         print('Entrance opening time : '+str(self.entrance_opening_time))
