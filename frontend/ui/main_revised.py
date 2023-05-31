@@ -2,7 +2,7 @@ import pymongo
 from pymongo import MongoClient
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import QRect
+from PyQt5.QtCore import QRect, QTimer
 
 from frontend.ui.gui import Ui_PreGateParkingSimulation
 from matrix import *
@@ -89,7 +89,7 @@ p, li { white-space: pre-wrap; }
 
         # Add functionality for plotting a chart to the output panel
         button_retrieve_results = self.ui.but_retrieve_res
-        button_retrieve_results.clicked.connect(self.retrieve_simulation_results)
+        button_retrieve_results.clicked.connect(self.delayed_simulation_results)
 
         # Add functionality for starting the simulation
         button_simulate = self.ui.but_simulate
@@ -142,6 +142,9 @@ p, li { white-space: pre-wrap; }
         # gather input fields data
         self.write_inputs_to_db()
 
+    def delayed_simulation_results(self):
+        QTimer.singleShot(3000, self.retrieve_simulation_results)
+
     def retrieve_simulation_results(self):
         # check if there is data available for the last simulation
         # write input data and layout information into the database
@@ -155,7 +158,8 @@ p, li { white-space: pre-wrap; }
         entry_id = last_entry["_id"]
         last_result = collection_output.find_one({}, sort=[('_id', pymongo.DESCENDING)])
 
-        if collection_output.find_one({"input_id": entry_id}) is not None:
+        # if collection_output.find_one({"input_id": entry_id}) is not None:
+        if last_result is not None:
 
             # from output
             avg_car = (last_result["outputs"]["avg_waiting_time_car"]) / 60  # in minutes
@@ -258,7 +262,7 @@ p, li { white-space: pre-wrap; }
             lab_sim_id = self.ui.lab_out_simulation_id
 
             lab_sim_text.setText("Simulation id: ")
-            lab_sim_id.setText("0")
+            lab_sim_id.setText(str(entry_id))
 
             # generate charts for the simulation
             create_handled_vehicles_chart('./img/chart_0_0.png')
@@ -341,11 +345,6 @@ p, li { white-space: pre-wrap; }
             elif area_type == "Entry":
                 btn.setProperty("color", "violet")
                 btn.setStyleSheet("background-color: violet")
-            elif area_type == "Parking":
-                # if area = parking; also check for the capacity
-                # btn.setProperty("color", "yellow")
-                # btn.setStyleSheet("background-color: yellow")
-                print()
             elif area_type == "Check-in":
                 btn.setProperty("color", "green")
                 btn.setStyleSheet("background-color: green")
@@ -386,7 +385,7 @@ p, li { white-space: pre-wrap; }
                     "id": area_id,
                     "type": area_type,
                     "capacity": capacity * capacity_multiplier,
-                    "type-allowed": allowed_vehicles,
+                    "allowed_veh": allowed_vehicles,
                     "start_pos": {
                         "x": start_coords[0],
                         "y": start_coords[1]
@@ -477,7 +476,7 @@ p, li { white-space: pre-wrap; }
                     "id": area_id,
                     "type": area_type,
                     "capacity": capacity,
-                    "type-allowed": allowed_vehicles,
+                    "allowed_veh": allowed_vehicles,
                     "start_pos": {
                         "x": coord[0],
                         "y": coord[1]
@@ -507,13 +506,6 @@ p, li { white-space: pre-wrap; }
                     if is_coordinate_in_range(coord, range_start, range_end):
                         print(f'{coord} overlapping with road')
                         update_entry_key_for_road(self.parking_layout, area['id'])
-
-        # print(f'====================\n'
-        #       f'Area type: {area_type}\n'
-        #       f'Allowed: {allowed_vehicles}\n'
-        #       f'Parking: {capacity}\n'
-        #       f'Multiplier: {capacity_multiplier}\n'
-        #       f'Total: {int(capacity * capacity_multiplier)}')
 
         print("Added area to layout!")
         print(self.parking_layout)
