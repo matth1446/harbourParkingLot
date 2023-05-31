@@ -49,8 +49,8 @@ def buildConnections(graph):
 
 if __name__ == "__main__" :
     got = ""
-    if exists("./input.json"):
-        f = open("./input.json","r")
+    if exists("input.json"):
+        f = open("input.json", "r")
         got = f.read()
     else:
         nbLine = int(input("How many lines do you want to enter?"))

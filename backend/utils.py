@@ -2,7 +2,6 @@ import pymongo
 import simpy
 from pymongo import MongoClient
 
-import time
 from datetime import datetime, timedelta
 
 import utils
