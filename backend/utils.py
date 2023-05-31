@@ -115,8 +115,7 @@ def insert_output_into_db(self):
     # create entry for output
     entry = {"input_id": id_inputs, "outputs":
         {
-            "avg_number_vehicles_per_gate": self.avg_vehicles_per_gate,
-            "avg_vehicles_waiting": self.avg_vehicles_waiting,
+            "avg_number_vehicles_per_gate": str(self.avg_vehicles_per_gate),
 
             "total_number_cars": self.total_number_cars,
             "total_number_trucks": self.total_number_trucks,
@@ -124,8 +123,8 @@ def insert_output_into_db(self):
             "avg_waiting_time_car": self.avg_waiting_time_car,
             "avg_waiting_time_truck": self.avg_waiting_time_truck,
 
-            "list_of_waiting_times_cars": list(self.total_wait_times_cars.values()),
-            "list_of_waiting_times_trucks": list(self.total_wait_times_trucks.values()),
+            "list_of_waiting_times_cars": str(self.total_wait_times_cars),
+            "list_of_waiting_times_trucks": str(self.total_wait_times_trucks),
 
             "list_of_n_cars_per_gate_that_did_not_pass": str(self.number_of_cars_arrived_per_gate),
             "list_of_n_trucks_per_gate_that_did_not_pass": str(self.number_of_trucks_arrived_per_gate)
@@ -206,8 +205,7 @@ class Metrics:
         # outputs
         self.total_number_cars = 0.0
         self.total_number_trucks = 0.0
-        self.avg_vehicles_per_gate = []
-        self.avg_vehicles_waiting = []
+        self.avg_vehicles_per_gate = {}
         self.avg_waiting_time_car = 0.0
         self.avg_waiting_time_truck = 0.0
         pass
@@ -222,24 +220,19 @@ class Metrics:
         print(f"zero_intervals = {self.zero_intervals}")
         print(f"full_intervals = {self.full_intervals}")
 
-        number_of_cars = 0.0
-        number_of_trucks = 0.0
         for gate in self.gates:
-            print("number of vehicules that went through gate n°" + str(gate.id) + f" : {gate.population}")
-            # idk why the gates are not numbered with an increasing order, if we fix that it's okay because their id matches their position in the list
-            self.avg_vehicles_per_gate.append(gate.population)
+            self.avg_vehicles_per_gate[gate.id] = gate.population
             if gate.type == ["car"]:
-                self.number_of_cars_arrived_per_gate[gate.id]=self.number_of_cars_arrived_per_gate[gate.id]-gate.population
-                self.total_number_cars = self.total_number_cars + gate.population - self.number_of_cars_arrived_per_gate[gate.id]
+                self.total_number_cars += self.number_of_cars_arrived_per_gate[gate.id]
+                print("number of cars that went through gate n°" + str(gate.id) + f" : {gate.population}")
+                print("number of cars that did not go through gate n° " + str(gate.id) + ": " + str(self.number_of_cars_arrived_per_gate[gate.id] - gate.population))
             elif gate.type == ["truck"]:
-                self.number_of_trucks_arrived_per_gate[gate.id]=self.number_of_trucks_arrived_per_gate[gate.id]-gate.population
-                self.total_number_trucks = self.total_number_trucks + gate.population - self.number_of_trucks_arrived_per_gate[gate.id]
-
-        print(f"total cars = {self.total_number_cars}")
+                self.total_number_trucks += self.number_of_trucks_arrived_per_gate[gate.id]
+                print("number of trucks that went through gate n° " + str(gate.id) + f" : {gate.population}")
+                print("number of trucks that did not go through gate n°: " + str(gate.id) + ": " + str(self.number_of_trucks_arrived_per_gate[gate.id] - gate.population))
         print(f"total_trucks = {self.total_number_trucks}")
+        print(f"total cars = {self.total_number_cars}")
 
-        print("number_of_trucks_arrived_per_gate: " + str(self.number_of_trucks_arrived_per_gate))
-        print("number_of_cars_arrived_per_gate: " + str(list(self.number_of_cars_arrived_per_gate.values())))
         # extracting the avg_waiting_time
         for val in self.total_wait_times_trucks.values():
             self.avg_waiting_time_truck += val
