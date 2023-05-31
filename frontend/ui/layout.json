@@ -4,8 +4,7 @@
         "type": "Road",
         "capacity": 9.0,
         "allowed_veh": [
-            "car",
-            "truck"
+            "car"
         ],
         "start_pos": {
             "x": 9,
@@ -19,10 +18,6 @@
             {
                 "id": 1,
                 "pos": 0
-            },
-            {
-                "id": 2,
-                "pos": 0
             }
         ],
         "entry": true
@@ -32,8 +27,7 @@
         "type": "Check-in",
         "capacity": 20.0,
         "allowed_veh": [
-            "car",
-            "truck"
+            "car"
         ],
         "start_pos": {
             "x": 1,
@@ -46,10 +40,6 @@
         "connectsTo": [
             {
                 "id": 0,
-                "pos": 0
-            },
-            {
-                "id": 2,
                 "pos": 0
             }
         ],
@@ -58,118 +48,44 @@
     {
         "id": 2,
         "type": "Road",
-        "capacity": 6.0,
+        "capacity": 9.0,
         "allowed_veh": [
-            "car",
             "truck"
         ],
         "start_pos": {
-            "x": 1,
-            "y": 0
+            "x": 9,
+            "y": 2
         },
         "end_pos": {
             "x": 1,
-            "y": 5
+            "y": 2
         },
         "connectsTo": [
             {
-                "id": 0,
-                "pos": 0
-            },
-            {
-                "id": 1,
-                "pos": 0
-            },
-            {
                 "id": 3,
-                "pos": 0
-            },
-            {
-                "id": 4,
                 "pos": 0
             }
         ],
-        "entry": false
+        "entry": true
     },
     {
         "id": 3,
         "type": "Check-in",
         "capacity": 20.0,
         "allowed_veh": [
-            "car",
             "truck"
         ],
         "start_pos": {
             "x": 1,
-            "y": 5
+            "y": 2
         },
         "end_pos": {
             "x": 1,
-            "y": 5
+            "y": 2
         },
         "connectsTo": [
             {
                 "id": 2,
-                "pos": 0
-            },
-            {
-                "id": 4,
-                "pos": 0
-            }
-        ],
-        "entry": false
-    },
-    {
-        "id": 4,
-        "type": "Road",
-        "capacity": 5.0,
-        "allowed_veh": [
-            "car",
-            "truck"
-        ],
-        "start_pos": {
-            "x": 1,
-            "y": 5
-        },
-        "end_pos": {
-            "x": 1,
-            "y": 9
-        },
-        "connectsTo": [
-            {
-                "id": 2,
-                "pos": 0
-            },
-            {
-                "id": 3,
-                "pos": 0
-            },
-            {
-                "id": 5,
-                "pos": 0
-            }
-        ],
-        "entry": false
-    },
-    {
-        "id": 5,
-        "type": "Check-in",
-        "capacity": 20.0,
-        "allowed_veh": [
-            "car",
-            "truck"
-        ],
-        "start_pos": {
-            "x": 1,
-            "y": 9
-        },
-        "end_pos": {
-            "x": 1,
-            "y": 9
-        },
-        "connectsTo": [
-            {
-                "id": 4,
                 "pos": 0
             }
         ],

@@ -14,7 +14,6 @@ from datetime import datetime
 
 from backend.simulation import main
 
-
 class MainWindow(QMainWindow):
     # track coordinates of currently selected tiles
     current_area_selected = []
@@ -66,7 +65,7 @@ p, li { white-space: pre-wrap; }
         # Create an instance of the generated UI class
         self.ui = Ui_PreGateParkingSimulation()
         self.ui.setupUi(self)
-        # self.setGeometry(100, 100, 800, 900)
+        self.setGeometry(25, 50, 1227, 1110)
 
         # Add functionality to grid buttons
         for row in range(self.ui.gridLayout_roads.rowCount()):
