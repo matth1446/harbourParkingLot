@@ -452,6 +452,9 @@
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="lab_num_trailers">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>No. of trailers</string>
          </property>
@@ -459,6 +462,9 @@
        </item>
        <item row="5" column="1">
         <widget class="QDoubleSpinBox" name="doubleSpinBox_num_trailers">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="suffix">
           <string/>
          </property>
@@ -2558,7 +2564,7 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="0">
         <widget class="QLabel" name="lab_out1">
          <property name="text">
-          <string>out1</string>
+          <string>Vehicles serviced</string>
          </property>
         </widget>
        </item>
@@ -2572,7 +2578,7 @@ p, li { white-space: pre-wrap; }
        <item row="2" column="0">
         <widget class="QLabel" name="lab_out2">
          <property name="text">
-          <string>out2</string>
+          <string>Vehicles waiting</string>
          </property>
         </widget>
        </item>
@@ -2586,7 +2592,7 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="0">
         <widget class="QLabel" name="lab_out3">
          <property name="text">
-          <string>out3</string>
+          <string>Estimated profit</string>
          </property>
         </widget>
        </item>
@@ -2600,7 +2606,7 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="0">
         <widget class="QLabel" name="lab_out4">
          <property name="text">
-          <string>out4</string>
+          <string>Total CO²</string>
          </property>
         </widget>
        </item>
@@ -2614,7 +2620,7 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="0">
         <widget class="QLabel" name="lab_out5">
          <property name="text">
-          <string>out5</string>
+          <string>Available area</string>
          </property>
         </widget>
        </item>
@@ -2628,7 +2634,7 @@ p, li { white-space: pre-wrap; }
        <item row="6" column="0">
         <widget class="QLabel" name="lab_out6">
          <property name="text">
-          <string>out6</string>
+          <string>Est. area needed</string>
          </property>
         </widget>
        </item>
@@ -2740,6 +2746,9 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="5" column="0">
         <widget class="QLabel" name="lab_num_trailers_out">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="text">
           <string>No. of trailers</string>
          </property>
@@ -2747,6 +2756,9 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="5" column="1">
         <widget class="QLineEdit" name="lineEdit_num_trailers_out">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="readOnly">
           <bool>true</bool>
          </property>
@@ -2918,7 +2930,7 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>280</x>
         <y>10</y>
-        <width>16</width>
+        <width>231</width>
         <height>16</height>
        </rect>
       </property>
@@ -3093,10 +3105,16 @@ p, li { white-space: pre-wrap; }
        </font>
       </property>
       <property name="autoFillBackground">
-       <bool>true</bool>
+       <bool>false</bool>
       </property>
       <property name="frameShape">
        <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Plain</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
       </property>
       <property name="text">
        <string>Simulation results</string>

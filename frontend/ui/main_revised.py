@@ -2,7 +2,7 @@ import pymongo
 from pymongo import MongoClient
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
-from PyQt5.QtCore import QRect
+from PyQt5.QtCore import QRect, QTimer
 
 from frontend.ui.gui import Ui_PreGateParkingSimulation
 from matrix import *
@@ -90,7 +90,7 @@ p, li { white-space: pre-wrap; }
 
         # Add functionality for plotting a chart to the output panel
         button_retrieve_results = self.ui.but_retrieve_res
-        button_retrieve_results.clicked.connect(self.retrieve_simulation_results)
+        button_retrieve_results.clicked.connect(self.delayed_simulation_results)
 
         # Add functionality for starting the simulation
         button_simulate = self.ui.but_simulate
@@ -145,6 +145,8 @@ p, li { white-space: pre-wrap; }
 
         # start the actual simulation
         main()
+    def delayed_simulation_results(self):
+        QTimer.singleShot(3000, self.retrieve_simulation_results)
 
     def retrieve_simulation_results(self):
         # check if there is data available for the last simulation
@@ -157,19 +159,24 @@ p, li { white-space: pre-wrap; }
 
         last_entry = collection_input.find_one({}, sort=[('_id', pymongo.DESCENDING)])
         entry_id = last_entry["_id"]
-        last_result = collection_output.find_one({},sort=[('_id', pymongo.DESCENDING)])
+        last_result = collection_output.find_one({}, sort=[('_id', pymongo.DESCENDING)])
 
-        if collection_output.find_one({"input_id": entry_id}) is not None:
+        # if collection_output.find_one({"input_id": entry_id}) is not None:
+        if last_result is not None:
 
-
-            #from output
-            avg_car = (last_result["outputs"]["avg_waiting_time_car"])/60 #in minutes
-            avg_truck = (last_result["outputs"]["avg_waiting_time_truck"])/60 #in minutes
+            # from output
+            avg_car = (last_result["outputs"]["avg_waiting_time_car"]) / 60  # in minutes
+            avg_truck = (last_result["outputs"]["avg_waiting_time_truck"]) / 60  # in minutes
             cars = last_result["outputs"]["total_number_cars"]
             trucks = last_result["outputs"]["total_number_trucks"]
-            list_of_waiting_times_cars = last_result["outputs"]["list_of_waiting_times_cars"]
-            list_of_waiting_times_trucks = last_result["outputs"]["list_of_waiting_times_trucks"]
-            #from input
+            list_of_waiting_times_cars = eval(last_result["outputs"]["list_of_waiting_times_cars"])
+            list_of_waiting_times_trucks = eval(last_result["outputs"]["list_of_waiting_times_trucks"])
+            vehicles_per_gate = eval(last_result["outputs"]["avg_number_vehicles_per_gate"]) # converted to dictionary
+            did_not_pass_cars = eval(last_result["outputs"]["list_of_n_cars_per_gate_that_did_not_pass"]) # converted to dictionary
+            did_not_pass_trucks = eval(last_result["outputs"]["list_of_n_trucks_per_gate_that_did_not_pass"]) # converted to dictionary
+
+
+            # from input
             out_gate_open_val = last_entry["parameters"]["gate_open_time"]
             out_gate_close_val = last_entry["parameters"]["gate_closing_time"]
             out_num_cars_val = last_entry["parameters"]["no_of_cars"]
@@ -183,35 +190,59 @@ p, li { white-space: pre-wrap; }
             out_perc_online_val = last_entry["parameters"]["perc_online_check_in"]
 
 
-            #Vizualization 2
-            gates = 4
+            #Vizualization 1
+            keys_array = list(vehicles_per_gate.keys())
+            did_pass = []
+            did_not_pass = []
+
+            for key in keys_array:
+                did_pass.append(vehicles_per_gate.get(key))
+
+                if did_not_pass_cars.get(key) is not None:
+                    car = did_not_pass_cars.get(key)
+                else:
+                    car = 0
+
+                if did_not_pass_trucks.get(key) is not None:
+                    truck = did_not_pass_trucks.get(key)
+                else:
+                    truck = 0
+
+                did_not_pass.append(car + truck)
+
+
+
+
+            # Vizualization 2
+            #Budget calculation
+            gates = len(vehicles_per_gate)
+
+            #maintenance cost 1 EUR per m2
+            cost_per_m2 = 1
+            area_cost = out_area_width_val*out_area_length_val*cost_per_m2
+
+            cars_not = sum(did_not_pass_cars.values())
+            trucks_not = sum(did_not_pass_trucks.values())
 
             open_time = datetime.strptime(out_gate_open_val, "%H:%M")
             close_time = datetime.strptime(out_gate_close_val, "%H:%M")
 
-            gates_open = (close_time - open_time).seconds/3600 #to get from seconds to hours
+            gates_open = (close_time - open_time).seconds / 3600  # to get from seconds to hours
 
-            # # how much is for the parking?
-            # # 5% for the pre-gate-parking
-            percentage_for_parking = 0.05
-            ticket_parking = out_ticket_cost_val * percentage_for_parking
-
-            income = (cars * ticket_parking) + (trucks * (ticket_parking * 1.5))
+            income = ((cars-cars_not) * out_ticket_cost_val) + ((trucks-trucks_not) * (out_ticket_cost_val * 1.5))
 
             # # Expenses = price for each employee per gate (excl. sel-check-in) and hours + gates cost per hour
-            expenses = (gates * (gates_open * out_empl_cost_val)) + (gates * (gates_open * out_gate_cost_val))
+            expenses = (gates * (gates_open * out_empl_cost_val)) + (gates * (gates_open * out_gate_cost_val)) + area_cost
 
-
-            #Vizualization 4
+            # Vizualization 4
             # CO² Emission of Vehicles
             # Car: 19,1 g CO² per min
             # Truck: 45,56 g CO² per min
             emission_car = 19.1
             emission_truck = 45.56
 
-            emission_car_all = (np.sum(list_of_waiting_times_cars))*emission_car
-            emission_truck_all = (np.sum(list_of_waiting_times_trucks)) * emission_truck
-
+            emission_car_all = (sum(list_of_waiting_times_cars.values())) * emission_car
+            emission_truck_all = (sum(list_of_waiting_times_trucks.values())) * emission_truck
 
             print(entry_id)
             # Set status to OK
@@ -236,12 +267,14 @@ p, li { white-space: pre-wrap; }
             out_area_length = self.ui.lineEdit_area_length_out
             out_perc_online = self.ui.lineEdit_perc_online_checkin_out
 
-            out_lab_1.setText("A")
-            out_lab_2.setText("A")
-            out_lab_3.setText("A")
-            out_lab_4.setText("A")
-            out_lab_5.setText("A")
-            out_lab_6.setText("A")
+            out_lab_1.setText(str(sum(vehicles_per_gate.values())))
+            out_lab_2.setText(str(cars_not+trucks_not))
+            out_lab_3.setText("{:.1f}".format(income-expenses))
+            out_lab_4.setText("{:.1f}".format(emission_car_all+emission_truck_all))
+            out_lab_5.setText("{:.1f}".format(out_area_width_val*out_area_length_val))
+            space_car = 1.8 * 4.4
+            space_truck = 16.5 * 2.55
+            out_lab_6.setText("{:.1f}".format((cars*space_car)+(trucks*space_truck)))
 
             out_gate_open.setText(str(out_gate_open_val))
             out_gate_close.setText(str(out_gate_close_val))
@@ -266,10 +299,10 @@ p, li { white-space: pre-wrap; }
             lab_sim_id = self.ui.lab_out_simulation_id
 
             lab_sim_text.setText("Simulation id: ")
-            lab_sim_id.setText("0")
+            lab_sim_id.setText(str(entry_id))
 
             # generate charts for the simulation
-            create_handled_vehicles_chart('./img/chart_0_0.png')
+            create_handled_vehicles_chart('./img/chart_0_0.png', keys_array, did_pass, did_not_pass)
             create_income_expenses_chart('./img/chart_0_1.png', income, expenses)
             create_avg_waiting_chart('./img/chart_1_0.png', avg_car, avg_truck)
             create_co2_emission_chart('./img/chart_1_1.png', emission_car_all, emission_truck_all)
@@ -397,11 +430,6 @@ p, li { white-space: pre-wrap; }
             elif area_type == "Entry":
                 btn.setProperty("color", "violet")
                 btn.setStyleSheet("background-color: violet")
-            elif area_type == "Parking":
-                # if area = parking; also check for the capacity
-                # btn.setProperty("color", "yellow")
-                # btn.setStyleSheet("background-color: yellow")
-                print()
             elif area_type == "Check-in":
                 btn.setProperty("color", "green")
                 btn.setStyleSheet("background-color: green")
@@ -564,13 +592,6 @@ p, li { white-space: pre-wrap; }
                         print(f'{coord} overlapping with road')
                         update_entry_key_for_road(self.parking_layout, area['id'])
 
-        # print(f'====================\n'
-        #       f'Area type: {area_type}\n'
-        #       f'Allowed: {allowed_vehicles}\n'
-        #       f'Parking: {capacity}\n'
-        #       f'Multiplier: {capacity_multiplier}\n'
-        #       f'Total: {int(capacity * capacity_multiplier)}')
-
         print("Added area to layout!")
         print(self.parking_layout)
 
@@ -599,6 +620,54 @@ p, li { white-space: pre-wrap; }
             self.ui.but_simulate.setEnabled(True)
             # change status text
             self.ui.textBrowser_status.setHtml(self.status_text_OK)
+
+    def update_multiplier_text(self):
+        slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
+        slider_val = slider_capacity_multiplier.property("value") / 100.0
+
+        label_capacity_multiplier = self.ui.lab_horSlider_capacity_multi
+        label_capacity_multiplier.setText(f'x {slider_val}')
+
+    def reset_area_layout(self):
+        # before resetting the layout create a string
+        self.convert_matrix_to_string()
+
+        for row in range(self.ui.gridLayout_roads.rowCount()):
+            for col in range(self.ui.gridLayout_roads.columnCount()):
+                btn = self.ui.gridLayout_roads.itemAtPosition(row, col).widget()
+                btn.setProperty("color", "None")
+                btn.setStyleSheet("background-color: None")
+        # clear current selection
+        self.current_area_selected.clear()
+        # clear current layout
+        self.parking_layout.clear()
+        # change status text
+        self.ui.textBrowser_status.setHtml(self.status_text_NOK)
+
+    def get_vehicles_data(self):
+        allowed_vehicles = []
+        allowed_cars = self.ui.checkBox_allowed_car.isChecked()
+        allowed_trucks = self.ui.checkBox_allowed_truck.isChecked()
+        allowed_trailers = self.ui.checkBox_allowed_disabled.isChecked()
+        allowed_disabled = self.ui.checkBox_allowed_disabled.isChecked()
+        allowed_online = self.ui.checkBox_allowed_online.isChecked()
+
+        if allowed_cars:
+            allowed_vehicles.append("car")
+
+        if allowed_trucks:
+            allowed_vehicles.append("truck")
+
+        if allowed_trailers:
+            allowed_vehicles.append("trailer")
+
+        if allowed_disabled:
+            allowed_vehicles.append("disabled")
+
+        if allowed_online:
+            allowed_vehicles.append("online")
+
+        return allowed_vehicles
 
     def handle_click_event_grid(self):
         button = self.sender()
