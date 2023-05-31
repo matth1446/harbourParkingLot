@@ -495,7 +495,7 @@ def run_parkinglot(env, metrics):
     # I think here the input parameters should be something derived from the graph
     config = Config(env.now, metrics.gate_closing_time, metrics.checkin_opening_in_minutes, 1)
     parkinglot = ParkingLot(env, metrics, config)
-    graph = buildFromJson("input.json")
+    graph = buildFromDb()
     graph.link_resources(parkinglot, env)
     for node in graph.nodes:
         metrics.set_initial_values(node, 0)

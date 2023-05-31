@@ -1,7 +1,9 @@
 #from collections import deque
 from os.path import exists
 import json
-from utils import QueueInterface, Gate, Road, ParkingSpot, Graph
+from TilesModel import Gate, Road, ParkingSpot
+from utils import Graph
+from pymongo import MongoClient, DESCENDING
 
 def validateExtract(dict):
     for obj in dict:
@@ -33,6 +35,39 @@ def buildFromJson(jsonInput):
         return Graph(res, getVehiculesType(r), buildConnections(res))
     else : return None
 
+def buildFromTable(input):
+    res = {}
+    vehicle = set()
+    for obj in input:
+        if obj["type"].lower() == "parking":
+            res[obj["id"]] = ParkingSpot(obj["allowed_veh"],
+                                  [(obj["connectsTo"][j]["id"], obj["connectsTo"][j]["pos"]) for j in range(len(obj["connectsTo"]))],
+                                         obj["capacity"])
+            vehicle = vehicle.union(set(obj["allowed_veh"]))
+        elif obj["type"].lower() == "road":
+            res[obj["id"]] = Road(obj["allowed_veh"], obj["capacity"], obj["entry"],
+                                  [(obj["connectsTo"][j]["id"], obj["connectsTo"][j]["pos"]) for j in range(len(obj["connectsTo"]))])
+            vehicle = vehicle.union(set(obj["allowed_veh"]))
+        elif obj["type"].lower() == "check-in":
+            res[obj["id"]] = Gate(obj["allowed_veh"])
+            vehicle = vehicle.union(set(obj["allowed_veh"]))
+        else :
+            print("unread object : " + str(obj))
+
+    nodes = [res[index] for index in res]
+    if validateExtract(res):
+        return Graph(res, vehicle, buildConnections(nodes))
+    else:
+        return None
+
+def buildFromDb():
+    db = MongoClient("mongodb+srv://db_user:db_user@dss.icklgr1.mongodb.net/").database_dss.input
+    last_entry = db.find_one({},sort=[('_id', DESCENDING)])
+    print(last_entry["layout"])
+    return buildFromTable(last_entry["layout"])
+
+
+
 def getVehiculesType(jsonInput):
     content = json.loads(jsonInput)
     res = set()
@@ -42,7 +77,7 @@ def getVehiculesType(jsonInput):
 
 def buildConnections(graph):
     res = [[] for _i in range(len(graph))]
-    for index in graph:
+    for index in range(len(graph)):
         if type(graph[index]) != Gate:
             res[index] = [(id_node,graph[id_node].type) for (id_node,p) in graph[index].goesTo]
     return res
