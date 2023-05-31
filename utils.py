@@ -202,8 +202,8 @@ def insert_output_into_db(self):
             "list_of_waiting_times_cars": list(self.total_wait_times_cars.values()),
             "list_of_waiting_times_trucks": list(self.total_wait_times_trucks.values()),
 
-            "list_of_n_cars_per_gate_that_did_not_pass": str(list(self.number_of_cars_arrived_per_gate.values())),
-            "list_of_n_trucks_per_gate_that_did_not_pass": str(list(self.number_of_trucks_arrived_per_gate.values()))
+            "list_of_n_cars_per_gate_that_did_not_pass": str(self.number_of_cars_arrived_per_gate),
+            "list_of_n_trucks_per_gate_that_did_not_pass": str(self.number_of_trucks_arrived_per_gate)
         }
     }
     var = collection_output.insert_one(entry).inserted_id
