@@ -411,9 +411,9 @@ class ParkingLot(object):
     def leave_gate(self, car, gate):
         yield self.env.process(car.queue_node_transitions(self.env, None, gate, None))
         # increasing the number of vehicles that went through a gate
-        gate.population = gate.population + 1.0
         self.metrics.acknowledge_count_change(gate, self.env.now)
         print(f"[{self.env.now:.2f}] car {car.id} has left gate {gate.id}")
+        gate.population = gate.population + 1.0
         yield self.env.timeout(
             0)  # leaving the gate is free (since we have already used timeout when we entered the gate)
 
