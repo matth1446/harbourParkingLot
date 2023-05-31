@@ -166,8 +166,13 @@ p, li { white-space: pre-wrap; }
             avg_truck = (last_result["outputs"]["avg_waiting_time_truck"]) / 60  # in minutes
             cars = last_result["outputs"]["total_number_cars"]
             trucks = last_result["outputs"]["total_number_trucks"]
-            list_of_waiting_times_cars = last_result["outputs"]["list_of_waiting_times_cars"]
-            list_of_waiting_times_trucks = last_result["outputs"]["list_of_waiting_times_trucks"]
+            list_of_waiting_times_cars = eval(last_result["outputs"]["list_of_waiting_times_cars"])
+            list_of_waiting_times_trucks = eval(last_result["outputs"]["list_of_waiting_times_trucks"])
+            vehicles_per_gate = eval(last_result["outputs"]["avg_number_vehicles_per_gate"]) # converted to dictionary
+            did_not_pass_cars = eval(last_result["outputs"]["list_of_n_cars_per_gate_that_did_not_pass"]) # converted to dictionary
+            did_not_pass_trucks = eval(last_result["outputs"]["list_of_n_trucks_per_gate_that_did_not_pass"]) # converted to dictionary
+
+
             # from input
             out_gate_open_val = last_entry["parameters"]["gate_open_time"]
             out_gate_close_val = last_entry["parameters"]["gate_closing_time"]
@@ -181,20 +186,39 @@ p, li { white-space: pre-wrap; }
             out_area_length_val = last_entry["parameters"]["total_area_length"]
             out_perc_online_val = last_entry["parameters"]["perc_online_check_in"]
 
+
+            #Vizualization 1
+            keys_array = list(vehicles_per_gate.keys())
+            did_pass = []
+            did_not_pass = []
+
+            for key in keys_array:
+                did_pass.append(vehicles_per_gate.get(key))
+
+                if did_not_pass_cars.get(key) is not None:
+                    car = did_not_pass_cars.get(key)
+                else:
+                    car = 0
+
+                if did_not_pass_trucks.get(key) is not None:
+                    truck = did_not_pass_trucks.get(key)
+                else:
+                    truck = 0
+
+                did_not_pass.append(car + truck)
+
+
+
+
             # Vizualization 2
-            gates = 4
+            gates = len(vehicles_per_gate)
 
             open_time = datetime.strptime(out_gate_open_val, "%H:%M")
             close_time = datetime.strptime(out_gate_close_val, "%H:%M")
 
             gates_open = (close_time - open_time).seconds / 3600  # to get from seconds to hours
 
-            # # how much is for the parking?
-            # # 5% for the pre-gate-parking
-            percentage_for_parking = 0.05
-            ticket_parking = out_ticket_cost_val * percentage_for_parking
-
-            income = (cars * ticket_parking) + (trucks * (ticket_parking * 1.5))
+            income = (cars * out_ticket_cost_val) + (trucks * (out_ticket_cost_val * 1.5))
 
             # # Expenses = price for each employee per gate (excl. sel-check-in) and hours + gates cost per hour
             expenses = (gates * (gates_open * out_empl_cost_val)) + (gates * (gates_open * out_gate_cost_val))
@@ -206,8 +230,8 @@ p, li { white-space: pre-wrap; }
             emission_car = 19.1
             emission_truck = 45.56
 
-            emission_car_all = (np.sum(list_of_waiting_times_cars)) * emission_car
-            emission_truck_all = (np.sum(list_of_waiting_times_trucks)) * emission_truck
+            emission_car_all = (sum(list_of_waiting_times_cars.values())) * emission_car
+            emission_truck_all = (sum(list_of_waiting_times_trucks.values())) * emission_truck
 
             print(entry_id)
             # Set status to OK
@@ -265,7 +289,7 @@ p, li { white-space: pre-wrap; }
             lab_sim_id.setText(str(entry_id))
 
             # generate charts for the simulation
-            create_handled_vehicles_chart('./img/chart_0_0.png')
+            create_handled_vehicles_chart('./img/chart_0_0.png', keys_array, did_pass, did_not_pass)
             create_income_expenses_chart('./img/chart_0_1.png', income, expenses)
             create_avg_waiting_chart('./img/chart_1_0.png', avg_car, avg_truck)
             create_co2_emission_chart('./img/chart_1_1.png', emission_car_all, emission_truck_all)
