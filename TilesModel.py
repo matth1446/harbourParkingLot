@@ -43,7 +43,8 @@ class Gate(QueueInterface):
     def __init__(self, type):
         super().__init__(size_of_type(type))
         self.type = type
-        self.population = 0.0
+        self.population_cars = 0.0
+        self.population_trucks = 0.0
 
     def __str__(self):
         return super().__str__() + " (Gate)"
