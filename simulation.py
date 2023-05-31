@@ -535,15 +535,15 @@ def run_parkinglot(env, metrics):
     p_car = expected_num_of_cars / (expected_num_of_trucks + expected_num_of_cars)
     p_truck = 1 - p_car
     min_arrival = 0.0
-    mean_arrival_time = (expected_num_of_cars+expected_num_of_trucks)/total_elapsed_minutes
-    std_arrival_time = 0.05
+    mean_interarrival_time = (expected_num_of_cars+expected_num_of_trucks)/total_elapsed_minutes
+    print('mean_arrival_time : '+str(mean_interarrival_time))
 
 
     # we can use the avg_num_of_cars we expect
     while env.now < car_arrival_stop_time:
         vehicle_type = np.random.choice(['car', 'truck'], p=[p_car, p_truck])
         print(f"New vehicle: " + vehicle_type)
-        arrival_time = max(0, np.random.normal(mean_arrival_time, std_arrival_time))
+        arrival_time = max(0, np.random.exponential(1/mean_interarrival_time))
         yield env.timeout(arrival_time)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
 
         car_id += 1
