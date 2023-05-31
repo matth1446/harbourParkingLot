@@ -4,8 +4,8 @@
         "type": "Road",
         "capacity": 9.0,
         "allowed_veh": [
-            "cars",
-            "trucks"
+            "car",
+            "truck"
         ],
         "start_pos": {
             "x": 9,
@@ -28,8 +28,8 @@
         "type": "Check-in",
         "capacity": 20.0,
         "allowed_veh": [
-            "cars",
-            "trucks"
+            "car",
+            "truck"
         ],
         "start_pos": {
             "x": 1,

@@ -12,6 +12,8 @@ import utils
 import datetime
 from datetime import datetime
 
+from backend.simulation import main
+
 
 class MainWindow(QMainWindow):
     # track coordinates of currently selected tiles
@@ -133,7 +135,7 @@ p, li { white-space: pre-wrap; }
                 "perc_online_check_in": inp_perc_online_checkin
             },
             "layout": self.parking_layout,
-            "timestamp": datetime.datetime.now().strftime("%d%m%Y_%H%M%S")
+            "timestamp": datetime.now().strftime("%d%m%Y_%H%M%S")
         }
         collection_input.insert_one(entry)
         client.close()
@@ -141,6 +143,9 @@ p, li { white-space: pre-wrap; }
     def start_simulation(self):
         # gather input fields data
         self.write_inputs_to_db()
+
+        # start the actual simulation
+        main()
 
     def retrieve_simulation_results(self):
         # check if there is data available for the last simulation
@@ -334,13 +339,13 @@ p, li { white-space: pre-wrap; }
         allowed_online = self.ui.checkBox_allowed_online.isChecked()
 
         if allowed_cars:
-            allowed_vehicles.append("cars")
+            allowed_vehicles.append("car")
 
         if allowed_trucks:
-            allowed_vehicles.append("trucks")
+            allowed_vehicles.append("truck")
 
         if allowed_trailers:
-            allowed_vehicles.append("trailers")
+            allowed_vehicles.append("trailer")
 
         if allowed_disabled:
             allowed_vehicles.append("disabled")

@@ -23,8 +23,8 @@ import simpy
 import random
 import statistics
 from functools import reduce
-from utils import *
-from JsonReader import *
+from backend.utils import *
+from backend.JsonReader import *
 import numpy as np
 import pymongo
 from pymongo import MongoClient
@@ -83,7 +83,7 @@ class VehicleToken:
         time_1, speed_1, pos_1, _ = trajectory_segment_1
         time_2, speed_2, pos_2, end_time_2 = trajectory_segment_2
 
-        #if not compare_floats(time_1, time_2, gte=True):
+        # if not compare_floats(time_1, time_2, gte=True):
         #    raise ValueError("trajectory segments must be ordered by start time for intersection")
 
         if not compare_floats(time_1, end_time_2, lte=True):
@@ -118,10 +118,10 @@ class VehicleToken:
                 break
 
         if move_start_index == -1:
-            return 0 #raise ValueError(f"the followed trajectory starts after the activation time ({self.vehicle_id})")
+            return 0  # raise ValueError(f"the followed trajectory starts after the activation time ({self.vehicle_id})")
 
         if move_start_index is None and not compare_floats(followed_trajectory[-1][3], self.activation_time, gte=True):
-            return None#raise ValueError("the followed trajectory ends before the activation time")
+            return None  # raise ValueError("the followed trajectory ends before the activation time")
         elif move_start_index is None:
             move_start_index = len(followed_trajectory) - 1
 
@@ -429,7 +429,7 @@ class ParkingLot(object):
         self.metrics.acknowledge_count_change(gate, self.env.now)
 
         gate_wait_time = self.config.gate_service_time
-        #parking_wait_time = 0 if parking_wait_time < 0 else parking_wait_time
+        # parking_wait_time = 0 if parking_wait_time < 0 else parking_wait_time
         token.activate(self.env.now, wait_time=gate_wait_time)
         self.metrics.add_outside_queue_wait_time(car, previous_road.id, token.outside_queue_wait_time)
 
@@ -500,7 +500,7 @@ def run_parkinglot(env, metrics):
     for node in graph.nodes:
         metrics.set_initial_values(node, 0)
     car_id = 0
-    #truck_id
+    # truck_id
     # car = Vehicle(car_id, VehicleType(1 + car_id % 2, 1), graph, 1, 0, 3)
 
     # Computing of the simulation duration
@@ -514,7 +514,7 @@ def run_parkinglot(env, metrics):
     elapsed_hours = elapsed_time.seconds // 3600
     elapsed_minutes = (elapsed_time.seconds // 60) % 60
 
-    total_elapsed_minutes = elapsed_minutes + elapsed_hours*60
+    total_elapsed_minutes = elapsed_minutes + elapsed_hours * 60
 
     # Stampa il tempo trascorso
     sim_duration = total_elapsed_minutes
@@ -532,16 +532,16 @@ def run_parkinglot(env, metrics):
     p_car = expected_num_of_cars / (expected_num_of_trucks + expected_num_of_cars)
     p_truck = 1 - p_car
     min_arrival = 0.0
-    mean_arrival_time = (expected_num_of_cars+expected_num_of_trucks)/total_elapsed_minutes
+    mean_arrival_time = (expected_num_of_cars + expected_num_of_trucks) / total_elapsed_minutes
     std_arrival_time = 0.05
-
 
     # we can use the avg_num_of_cars we expect
     while env.now < car_arrival_stop_time:
         vehicle_type = np.random.choice(['car', 'truck'], p=[p_car, p_truck])
         print(f"New vehicle: " + vehicle_type)
         arrival_time = max(0, np.random.normal(mean_arrival_time, std_arrival_time))
-        yield env.timeout(arrival_time)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
+        yield env.timeout(
+            arrival_time)  # Wait a bit before generating a new person / we can do the exp distribution for the arrivals
 
         car_id += 1
         type_name = vehicle_type
@@ -562,10 +562,10 @@ def run_parkinglot(env, metrics):
         else:
             metrics.number_of_trucks_arrived_per_gate[gate_id] += 1
 
-        vehicle = Vehicle(car_id, VehicleType(type_name, type_speed, type_size), graph, entry_id, gate_id, parking_spot_id)
+        vehicle = Vehicle(car_id, VehicleType(type_name, type_speed, type_size), graph, entry_id, gate_id,
+                          parking_spot_id)
         env.process(car_through_the_pl(env, vehicle, parkinglot))
     print('FINAL env.now = ' + str(env.now))
-
 
 
 def main():
@@ -596,20 +596,19 @@ def main():
     total_elapsed_minutes = elapsed_minutes + elapsed_hours * 60
 
     stop_time = total_elapsed_minutes
-    print('STOP TIME : '+str(stop_time))
+    print('STOP TIME : ' + str(stop_time))
     env.run(until=stop_time)
     print('MAIN env.now = ' + str(env.now))
     metrics.finalize_count_changes(env.now)
     # this is the output
     metrics.print_all()
 
-
     # View the results
-    #mins, secs = get_average_wait_time(wait_times)
-    #print(
+    # mins, secs = get_average_wait_time(wait_times)
+    # print(
     #    "Running simulation...",
     #    f"\nThe average wait time is {mins} minutes and {secs} seconds.",
-    #)
+    # )
 
     # Of course we can add all the details we need for our ..*calculations^.^
 
