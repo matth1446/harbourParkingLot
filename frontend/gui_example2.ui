@@ -806,8 +806,8 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>10</x>
         <y>200</y>
-        <width>431</width>
-        <height>391</height>
+        <width>432</width>
+        <height>392</height>
        </rect>
       </property>
       <layout class="QGridLayout" name="gridLayout_roads">
@@ -817,10 +817,22 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="1">
         <widget class="QPushButton" name="but_4_1">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -830,10 +842,22 @@ p, li { white-space: pre-wrap; }
        <item row="8" column="3">
         <widget class="QPushButton" name="but_8_3">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -843,10 +867,22 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="4">
         <widget class="QPushButton" name="but_0_4">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -856,10 +892,22 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="6">
         <widget class="QPushButton" name="but_5_6">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -869,10 +917,22 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="4">
         <widget class="QPushButton" name="but_3_4">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -882,10 +942,22 @@ p, li { white-space: pre-wrap; }
        <item row="7" column="0">
         <widget class="QPushButton" name="but_7_0">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -895,10 +967,22 @@ p, li { white-space: pre-wrap; }
        <item row="6" column="1">
         <widget class="QPushButton" name="but_6_1">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -908,10 +992,22 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="9">
         <widget class="QPushButton" name="but_4_9">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -921,10 +1017,22 @@ p, li { white-space: pre-wrap; }
        <item row="2" column="2">
         <widget class="QPushButton" name="but_2_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -934,10 +1042,22 @@ p, li { white-space: pre-wrap; }
        <item row="8" column="2">
         <widget class="QPushButton" name="but_8_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -947,10 +1067,22 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="8">
         <widget class="QPushButton" name="but_1_8">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -960,10 +1092,22 @@ p, li { white-space: pre-wrap; }
        <item row="7" column="7">
         <widget class="QPushButton" name="but_7_7">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -973,10 +1117,22 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="4">
         <widget class="QPushButton" name="but_5_4">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -986,10 +1142,22 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="9">
         <widget class="QPushButton" name="but_1_9">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -999,10 +1167,22 @@ p, li { white-space: pre-wrap; }
        <item row="2" column="7">
         <widget class="QPushButton" name="but_2_7">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1012,10 +1192,22 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="5">
         <widget class="QPushButton" name="but_3_5">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1025,10 +1217,22 @@ p, li { white-space: pre-wrap; }
        <item row="8" column="0">
         <widget class="QPushButton" name="but_8_0">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1038,10 +1242,22 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="7">
         <widget class="QPushButton" name="but_0_7">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1051,10 +1267,22 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="4">
         <widget class="QPushButton" name="but_1_4">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1064,10 +1292,22 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="0">
         <widget class="QPushButton" name="but_5_0">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1077,10 +1317,22 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="7">
         <widget class="QPushButton" name="but_5_7">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1090,10 +1342,22 @@ p, li { white-space: pre-wrap; }
        <item row="9" column="3">
         <widget class="QPushButton" name="but_9_3">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1103,10 +1367,22 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="3">
         <widget class="QPushButton" name="but_1_3">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1116,10 +1392,22 @@ p, li { white-space: pre-wrap; }
        <item row="6" column="7">
         <widget class="QPushButton" name="but_6_7">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1129,10 +1417,22 @@ p, li { white-space: pre-wrap; }
        <item row="2" column="5">
         <widget class="QPushButton" name="but_2_5">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1142,10 +1442,22 @@ p, li { white-space: pre-wrap; }
        <item row="9" column="5">
         <widget class="QPushButton" name="but_9_5">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1155,10 +1467,22 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="2">
         <widget class="QPushButton" name="but_5_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1168,10 +1492,22 @@ p, li { white-space: pre-wrap; }
        <item row="8" column="7">
         <widget class="QPushButton" name="but_8_7">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1181,10 +1517,22 @@ p, li { white-space: pre-wrap; }
        <item row="2" column="4">
         <widget class="QPushButton" name="but_2_4">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1194,10 +1542,22 @@ p, li { white-space: pre-wrap; }
        <item row="8" column="5">
         <widget class="QPushButton" name="but_8_5">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1207,10 +1567,22 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="6">
         <widget class="QPushButton" name="but_3_6">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1220,10 +1592,22 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="1">
         <widget class="QPushButton" name="but_5_1">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1233,10 +1617,22 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="3">
         <widget class="QPushButton" name="but_3_3">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1246,10 +1642,22 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="2">
         <widget class="QPushButton" name="but_3_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1259,10 +1667,22 @@ p, li { white-space: pre-wrap; }
        <item row="6" column="9">
         <widget class="QPushButton" name="but_6_9">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1272,10 +1692,22 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="3">
         <widget class="QPushButton" name="but_4_3">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1285,10 +1717,22 @@ p, li { white-space: pre-wrap; }
        <item row="9" column="0">
         <widget class="QPushButton" name="but_9_0">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1298,10 +1742,22 @@ p, li { white-space: pre-wrap; }
        <item row="2" column="1">
         <widget class="QPushButton" name="but_2_1">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1311,10 +1767,22 @@ p, li { white-space: pre-wrap; }
        <item row="9" column="8">
         <widget class="QPushButton" name="but_9_8">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1324,10 +1792,22 @@ p, li { white-space: pre-wrap; }
        <item row="2" column="3">
         <widget class="QPushButton" name="but_2_3">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1337,10 +1817,22 @@ p, li { white-space: pre-wrap; }
        <item row="9" column="7">
         <widget class="QPushButton" name="but_9_7">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1350,10 +1842,22 @@ p, li { white-space: pre-wrap; }
        <item row="8" column="6">
         <widget class="QPushButton" name="but_8_6">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1363,10 +1867,22 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="6">
         <widget class="QPushButton" name="but_4_6">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1376,10 +1892,22 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="9">
         <widget class="QPushButton" name="but_3_9">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1389,10 +1917,22 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="0">
         <widget class="QPushButton" name="but_4_0">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1402,10 +1942,22 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="8">
         <widget class="QPushButton" name="but_3_8">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1415,10 +1967,22 @@ p, li { white-space: pre-wrap; }
        <item row="7" column="2">
         <widget class="QPushButton" name="but_7_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1428,10 +1992,22 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="9">
         <widget class="QPushButton" name="but_5_9">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1441,10 +2017,22 @@ p, li { white-space: pre-wrap; }
        <item row="8" column="1">
         <widget class="QPushButton" name="but_8_1">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1454,10 +2042,22 @@ p, li { white-space: pre-wrap; }
        <item row="7" column="3">
         <widget class="QPushButton" name="but_7_3">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1467,10 +2067,22 @@ p, li { white-space: pre-wrap; }
        <item row="9" column="6">
         <widget class="QPushButton" name="but_9_6">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1480,10 +2092,22 @@ p, li { white-space: pre-wrap; }
        <item row="2" column="0">
         <widget class="QPushButton" name="but_2_0">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1493,10 +2117,22 @@ p, li { white-space: pre-wrap; }
        <item row="7" column="1">
         <widget class="QPushButton" name="but_7_1">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1506,10 +2142,22 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="5">
         <widget class="QPushButton" name="but_4_5">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1519,10 +2167,22 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="8">
         <widget class="QPushButton" name="but_5_8">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1532,10 +2192,22 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="9">
         <widget class="QPushButton" name="but_0_9">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1545,10 +2217,22 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="7">
         <widget class="QPushButton" name="but_3_7">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1558,10 +2242,22 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="3">
         <widget class="QPushButton" name="but_5_3">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1571,10 +2267,22 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="6">
         <widget class="QPushButton" name="but_1_6">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1584,10 +2292,22 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="0">
         <widget class="QPushButton" name="but_1_0">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1597,10 +2317,22 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="1">
         <widget class="QPushButton" name="but_3_1">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1610,10 +2342,22 @@ p, li { white-space: pre-wrap; }
        <item row="6" column="8">
         <widget class="QPushButton" name="but_6_8">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1623,10 +2367,22 @@ p, li { white-space: pre-wrap; }
        <item row="2" column="6">
         <widget class="QPushButton" name="but_2_6">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1636,10 +2392,22 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="5">
         <widget class="QPushButton" name="but_0_5">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1649,10 +2417,22 @@ p, li { white-space: pre-wrap; }
        <item row="8" column="4">
         <widget class="QPushButton" name="but_8_4">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1662,10 +2442,22 @@ p, li { white-space: pre-wrap; }
        <item row="7" column="9">
         <widget class="QPushButton" name="but_7_9">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1675,10 +2467,22 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="2">
         <widget class="QPushButton" name="but_1_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1688,10 +2492,22 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="7">
         <widget class="QPushButton" name="but_4_7">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1701,10 +2517,22 @@ p, li { white-space: pre-wrap; }
        <item row="3" column="0">
         <widget class="QPushButton" name="but_3_0">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1714,10 +2542,22 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="2">
         <widget class="QPushButton" name="but_4_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1727,10 +2567,22 @@ p, li { white-space: pre-wrap; }
        <item row="6" column="3">
         <widget class="QPushButton" name="but_6_3">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1740,10 +2592,22 @@ p, li { white-space: pre-wrap; }
        <item row="7" column="5">
         <widget class="QPushButton" name="but_7_5">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1753,10 +2617,22 @@ p, li { white-space: pre-wrap; }
        <item row="9" column="4">
         <widget class="QPushButton" name="but_9_4">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1766,10 +2642,22 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="1">
         <widget class="QPushButton" name="but_1_1">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1779,10 +2667,22 @@ p, li { white-space: pre-wrap; }
        <item row="8" column="8">
         <widget class="QPushButton" name="but_8_8">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1792,10 +2692,22 @@ p, li { white-space: pre-wrap; }
        <item row="2" column="8">
         <widget class="QPushButton" name="but_2_8">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1805,10 +2717,22 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="0">
         <widget class="QPushButton" name="but_0_0">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1827,10 +2751,22 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="1">
         <widget class="QPushButton" name="but_0_1">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1840,10 +2776,22 @@ p, li { white-space: pre-wrap; }
        <item row="7" column="6">
         <widget class="QPushButton" name="but_7_6">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1853,10 +2801,22 @@ p, li { white-space: pre-wrap; }
        <item row="6" column="2">
         <widget class="QPushButton" name="but_6_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1866,10 +2826,22 @@ p, li { white-space: pre-wrap; }
        <item row="8" column="9">
         <widget class="QPushButton" name="but_8_9">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1879,10 +2851,22 @@ p, li { white-space: pre-wrap; }
        <item row="9" column="2">
         <widget class="QPushButton" name="but_9_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1892,10 +2876,22 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="8">
         <widget class="QPushButton" name="but_0_8">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1905,10 +2901,22 @@ p, li { white-space: pre-wrap; }
        <item row="7" column="8">
         <widget class="QPushButton" name="but_7_8">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1918,10 +2926,22 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="8">
         <widget class="QPushButton" name="but_4_8">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1931,10 +2951,22 @@ p, li { white-space: pre-wrap; }
        <item row="6" column="5">
         <widget class="QPushButton" name="but_6_5">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1944,10 +2976,22 @@ p, li { white-space: pre-wrap; }
        <item row="2" column="9">
         <widget class="QPushButton" name="but_2_9">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1957,10 +3001,22 @@ p, li { white-space: pre-wrap; }
        <item row="9" column="1">
         <widget class="QPushButton" name="but_9_1">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1970,10 +3026,22 @@ p, li { white-space: pre-wrap; }
        <item row="4" column="4">
         <widget class="QPushButton" name="but_4_4">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1983,10 +3051,22 @@ p, li { white-space: pre-wrap; }
        <item row="7" column="4">
         <widget class="QPushButton" name="but_7_4">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -1996,10 +3076,22 @@ p, li { white-space: pre-wrap; }
        <item row="6" column="0">
         <widget class="QPushButton" name="but_6_0">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -2009,10 +3101,22 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="2">
         <widget class="QPushButton" name="but_0_2">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -2022,10 +3126,22 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="5">
         <widget class="QPushButton" name="but_1_5">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -2035,10 +3151,22 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="6">
         <widget class="QPushButton" name="but_0_6">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -2048,10 +3176,22 @@ p, li { white-space: pre-wrap; }
        <item row="9" column="9">
         <widget class="QPushButton" name="but_9_9">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -2061,10 +3201,22 @@ p, li { white-space: pre-wrap; }
        <item row="0" column="3">
         <widget class="QPushButton" name="but_0_3">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -2074,10 +3226,22 @@ p, li { white-space: pre-wrap; }
        <item row="6" column="4">
         <widget class="QPushButton" name="but_6_4">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -2087,10 +3251,22 @@ p, li { white-space: pre-wrap; }
        <item row="5" column="5">
         <widget class="QPushButton" name="but_5_5">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -2100,10 +3276,22 @@ p, li { white-space: pre-wrap; }
        <item row="1" column="7">
         <widget class="QPushButton" name="but_1_7">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>
@@ -2113,10 +3301,22 @@ p, li { white-space: pre-wrap; }
        <item row="6" column="6">
         <widget class="QPushButton" name="but_6_6">
          <property name="sizePolicy">
-          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+          <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
+         </property>
+         <property name="minimumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>43</width>
+           <height>39</height>
+          </size>
          </property>
          <property name="text">
           <string/>

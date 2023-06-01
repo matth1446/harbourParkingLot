@@ -411,11 +411,11 @@ p, li { white-space: pre-wrap; }
         # first get necessary info for json and save them in variables
         # get current area type for coloring
         area_type = self.ui.comboBox_area_type.currentText()
-        print(area_type)
+        # print(area_type)
 
         # get allowed vehicle types
         allowed_vehicles = self.get_vehicles_data()
-        print(allowed_vehicles)
+        # print("Allowed: " + str(allowed_vehicles))
 
         # get capacity and capacity multiplier
         capacity = self.ui.doubleSpinBox_capacity.property("value")
@@ -510,7 +510,7 @@ p, li { white-space: pre-wrap; }
                     # if start_coord is an overlap, get id from other area
                     if is_coordinate_in_range(start_coord, range_start, range_end):
                         coord = start_coord
-                        print(f'{start_coord} overlapping with road')
+                        # print(f'{start_coord} overlapping with road')
                         # color the tile that has an overlap with the road red
                         btn_overlap = self.ui.gridLayout_roads.itemAtPosition(start_coord[0], start_coord[1]).widget()
                         btn_overlap.setProperty("color", "red")
@@ -535,7 +535,7 @@ p, li { white-space: pre-wrap; }
                     # if end_coord is an overlap, get id from other area
                     elif is_coordinate_in_range(end_coord, range_start, range_end):
                         coord = end_coord
-                        print(f'{end_coord} overlapping with road')
+                        # print(f'{end_coord} overlapping with road')
                         btn_overlap = self.ui.gridLayout_roads.itemAtPosition(end_coord[0], end_coord[1]).widget()
                         btn_overlap.setProperty("color", "red")
                         btn_overlap.setStyleSheet("background-color: red")
@@ -589,17 +589,17 @@ p, li { white-space: pre-wrap; }
 
                     # if it is an overlap, change the entry key of the road to true
                     if is_coordinate_in_range(coord, range_start, range_end):
-                        print(f'{coord} overlapping with road')
+                        # print(f'{coord} overlapping with road')
                         update_entry_key_for_road(self.parking_layout, area['id'])
 
         print("Added area to layout!")
-        print(self.parking_layout)
+        # print(self.parking_layout)
 
         # create screenshot of current layout
         screenshot = self.grab(QRect(10, 220, 435, 395))
         # Save the screenshot as an image file
         screenshot.save("./img/current_gridlayout.jpg", "JPG")
-        print("Screenshot saved!")
+        # print("Screenshot saved!")
 
         # write layout to json file
         utils.write_layout_to_json(self.layout_json_save_path, self.parking_layout)
@@ -691,8 +691,8 @@ p, li { white-space: pre-wrap; }
             )
         )
 
-        print(self.current_area_selected)
-        print(self.current_area_selected_color)
+        # print(self.current_area_selected)
+        # print(self.current_area_selected_color)
 
     def convert_matrix_to_string(self):
         layout_string = ""
