@@ -14,6 +14,7 @@ from datetime import datetime
 
 from backend.simulation import main
 
+
 class MainWindow(QMainWindow):
     # track coordinates of currently selected tiles
     current_area_selected = []
@@ -145,6 +146,7 @@ p, li { white-space: pre-wrap; }
 
         # start the actual simulation
         main()
+
     def delayed_simulation_results(self):
         QTimer.singleShot(3000, self.retrieve_simulation_results)
 
@@ -171,10 +173,11 @@ p, li { white-space: pre-wrap; }
             trucks = last_result["outputs"]["total_number_trucks"]
             list_of_waiting_times_cars = eval(last_result["outputs"]["list_of_waiting_times_cars"])
             list_of_waiting_times_trucks = eval(last_result["outputs"]["list_of_waiting_times_trucks"])
-            vehicles_per_gate = eval(last_result["outputs"]["avg_number_vehicles_per_gate"]) # converted to dictionary
-            did_not_pass_cars = eval(last_result["outputs"]["list_of_n_cars_per_gate_that_did_not_pass"]) # converted to dictionary
-            did_not_pass_trucks = eval(last_result["outputs"]["list_of_n_trucks_per_gate_that_did_not_pass"]) # converted to dictionary
-
+            vehicles_per_gate = eval(last_result["outputs"]["avg_number_vehicles_per_gate"])  # converted to dictionary
+            did_not_pass_cars = eval(
+                last_result["outputs"]["list_of_n_cars_per_gate_that_did_not_pass"])  # converted to dictionary
+            did_not_pass_trucks = eval(
+                last_result["outputs"]["list_of_n_trucks_per_gate_that_did_not_pass"])  # converted to dictionary
 
             # from input
             out_gate_open_val = last_entry["parameters"]["gate_open_time"]
@@ -189,8 +192,7 @@ p, li { white-space: pre-wrap; }
             out_area_length_val = last_entry["parameters"]["total_area_length"]
             out_perc_online_val = last_entry["parameters"]["perc_online_check_in"]
 
-
-            #Vizualization 1
+            # Vizualization 1
             keys_array = list(vehicles_per_gate.keys())
             did_pass = []
             did_not_pass = []
@@ -210,16 +212,13 @@ p, li { white-space: pre-wrap; }
 
                 did_not_pass.append(car + truck)
 
-
-
-
             # Vizualization 2
-            #Budget calculation
+            # Budget calculation
             gates = len(vehicles_per_gate)
 
-            #maintenance cost 1 EUR per m2
+            # maintenance cost 1 EUR per m2
             cost_per_m2 = 1
-            area_cost = out_area_width_val*out_area_length_val*cost_per_m2
+            area_cost = out_area_width_val * out_area_length_val * cost_per_m2
 
             cars_not = sum(did_not_pass_cars.values())
             trucks_not = sum(did_not_pass_trucks.values())
@@ -229,10 +228,11 @@ p, li { white-space: pre-wrap; }
 
             gates_open = (close_time - open_time).seconds / 3600  # to get from seconds to hours
 
-            income = ((cars-cars_not) * out_ticket_cost_val) + ((trucks-trucks_not) * (out_ticket_cost_val * 1.5))
+            income = ((cars - cars_not) * out_ticket_cost_val) + ((trucks - trucks_not) * (out_ticket_cost_val * 1.5))
 
             # # Expenses = price for each employee per gate (excl. sel-check-in) and hours + gates cost per hour
-            expenses = (gates * (gates_open * out_empl_cost_val)) + (gates * (gates_open * out_gate_cost_val)) + area_cost
+            expenses = (gates * (gates_open * out_empl_cost_val)) + (
+                        gates * (gates_open * out_gate_cost_val)) + area_cost
 
             # Vizualization 4
             # CO² Emission of Vehicles
@@ -268,13 +268,13 @@ p, li { white-space: pre-wrap; }
             out_perc_online = self.ui.lineEdit_perc_online_checkin_out
 
             out_lab_1.setText(str(sum(vehicles_per_gate.values())))
-            out_lab_2.setText(str(cars_not+trucks_not))
-            out_lab_3.setText("{:.1f}".format(income-expenses))
-            out_lab_4.setText("{:.1f}".format(emission_car_all+emission_truck_all))
-            out_lab_5.setText("{:.1f}".format(out_area_width_val*out_area_length_val))
+            out_lab_2.setText(str(cars_not + trucks_not))
+            out_lab_3.setText("{:.1f}".format(income - expenses))
+            out_lab_4.setText("{:.1f}".format(emission_car_all + emission_truck_all))
+            out_lab_5.setText("{:.1f}".format(out_area_width_val * out_area_length_val))
             space_car = 1.8 * 4.4
             space_truck = 16.5 * 2.55
-            out_lab_6.setText("{:.1f}".format((cars*space_car)+(trucks*space_truck)))
+            out_lab_6.setText("{:.1f}".format((cars * space_car) + (trucks * space_truck)))
 
             out_gate_open.setText(str(out_gate_open_val))
             out_gate_close.setText(str(out_gate_close_val))
@@ -338,54 +338,6 @@ p, li { white-space: pre-wrap; }
             print(f"No simulation results for: {entry_id}")
 
         client.close()
-
-    def update_multiplier_text(self):
-        slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
-        slider_val = slider_capacity_multiplier.property("value") / 100.0
-
-        label_capacity_multiplier = self.ui.lab_horSlider_capacity_multi
-        label_capacity_multiplier.setText(f'x {slider_val}')
-
-    def reset_area_layout(self):
-        # before resetting the layout create a string
-        self.convert_matrix_to_string()
-
-        for row in range(self.ui.gridLayout_roads.rowCount()):
-            for col in range(self.ui.gridLayout_roads.columnCount()):
-                btn = self.ui.gridLayout_roads.itemAtPosition(row, col).widget()
-                btn.setProperty("color", "None")
-                btn.setStyleSheet("background-color: None")
-        # clear current selection
-        self.current_area_selected.clear()
-        # clear current layout
-        self.parking_layout.clear()
-        # change status text
-        self.ui.textBrowser_status.setHtml(self.status_text_NOK)
-
-    def get_vehicles_data(self):
-        allowed_vehicles = []
-        allowed_cars = self.ui.checkBox_allowed_car.isChecked()
-        allowed_trucks = self.ui.checkBox_allowed_truck.isChecked()
-        allowed_trailers = self.ui.checkBox_allowed_disabled.isChecked()
-        allowed_disabled = self.ui.checkBox_allowed_disabled.isChecked()
-        allowed_online = self.ui.checkBox_allowed_online.isChecked()
-
-        if allowed_cars:
-            allowed_vehicles.append("car")
-
-        if allowed_trucks:
-            allowed_vehicles.append("truck")
-
-        if allowed_trailers:
-            allowed_vehicles.append("trailer")
-
-        if allowed_disabled:
-            allowed_vehicles.append("disabled")
-
-        if allowed_online:
-            allowed_vehicles.append("online")
-
-        return allowed_vehicles
 
     def add_area_to_layout(self):
         """
