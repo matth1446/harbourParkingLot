@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1227</width>
+    <width>1310</width>
     <height>1110</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>1221</width>
+      <width>1301</width>
       <height>1071</height>
      </rect>
     </property>
@@ -2527,8 +2527,8 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>410</y>
-        <width>191</width>
+        <y>430</y>
+        <width>261</width>
         <height>201</height>
        </rect>
       </property>
@@ -2570,6 +2570,12 @@ p, li { white-space: pre-wrap; }
        </item>
        <item row="1" column="1">
         <widget class="QLineEdit" name="lineEdit_out1">
+         <property name="layoutDirection">
+          <enum>Qt::RightToLeft</enum>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+         </property>
          <property name="readOnly">
           <bool>true</bool>
          </property>
@@ -2651,8 +2657,8 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>620</y>
-        <width>191</width>
+        <y>640</y>
+        <width>261</width>
         <height>171</height>
        </rect>
       </property>
@@ -2770,9 +2776,9 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>800</y>
-        <width>191</width>
-        <height>221</height>
+        <y>820</y>
+        <width>261</width>
+        <height>211</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="formLayout_1_1_inputs_budget_out">
@@ -2898,7 +2904,7 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>10</x>
         <y>30</y>
-        <width>181</width>
+        <width>261</width>
         <height>81</height>
        </rect>
       </property>
@@ -2947,7 +2953,7 @@ p, li { white-space: pre-wrap; }
      <widget class="QWidget" name="layoutWidget">
       <property name="geometry">
        <rect>
-        <x>200</x>
+        <x>280</x>
         <y>30</y>
         <width>1008</width>
         <height>1008</height>
@@ -3048,7 +3054,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>240</y>
+        <y>260</y>
         <width>160</width>
         <height>160</height>
        </rect>
@@ -3079,7 +3085,7 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>20</x>
-        <y>220</y>
+        <y>240</y>
         <width>161</width>
         <height>20</height>
        </rect>
@@ -3092,8 +3098,8 @@ p, li { white-space: pre-wrap; }
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>170</y>
-        <width>181</width>
+        <y>190</y>
+        <width>261</width>
         <height>41</height>
        </rect>
       </property>
@@ -3128,8 +3134,8 @@ p, li { white-space: pre-wrap; }
        <rect>
         <x>10</x>
         <y>120</y>
-        <width>181</width>
-        <height>41</height>
+        <width>261</width>
+        <height>50</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -3163,7 +3169,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1227</width>
+     <width>1310</width>
      <height>21</height>
     </rect>
    </property>

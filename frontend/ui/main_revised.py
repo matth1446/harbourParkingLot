@@ -65,7 +65,7 @@ p, li { white-space: pre-wrap; }
         # Create an instance of the generated UI class
         self.ui = Ui_PreGateParkingSimulation()
         self.ui.setupUi(self)
-        self.setGeometry(25, 50, 1227, 1110)
+        # self.setGeometry(25, 50, 1227, 1110)
 
         # Add functionality to grid buttons
         for row in range(self.ui.gridLayout_roads.rowCount()):

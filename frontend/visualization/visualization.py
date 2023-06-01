@@ -47,7 +47,7 @@ def create_handled_vehicles_chart(save_path, keys_array, did_pass, did_not_pass)
     # Setting x-tick labels
     ax.set_xticks(data_x)
     ax.set_xticklabels(np.arange(1, len(keys_array)+1))
-    mpl.tight_layout()
+    # mpl.tight_layout()
     fig.savefig(save_path)
 
     # ax.grid()
