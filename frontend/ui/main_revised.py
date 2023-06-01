@@ -621,6 +621,12 @@ p, li { white-space: pre-wrap; }
             # change status text
             self.ui.textBrowser_status.setHtml(self.status_text_OK)
 
+        else:
+            # deactivate simulate button
+            self.ui.but_simulate.setEnabled(False)
+            # change status text
+            self.ui.textBrowser_status.setHtml(self.status_text_NOK)
+
     def update_multiplier_text(self):
         slider_capacity_multiplier = self.ui.horSlider_capacity_multiplier
         slider_val = slider_capacity_multiplier.property("value") / 100.0
@@ -643,6 +649,8 @@ p, li { white-space: pre-wrap; }
         self.parking_layout.clear()
         # change status text
         self.ui.textBrowser_status.setHtml(self.status_text_NOK)
+        # deactivate simulate button
+        self.ui.but_simulate.setEnabled(False)
 
     def get_vehicles_data(self):
         allowed_vehicles = []
