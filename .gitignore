@@ -1,5 +1,6 @@
 # prject specific data
-frontend/ui/img/*
+frontend/ui/img/chart*.png
+frontend/ui/img/current_gridlayout.jpg
 frontend/ui/layout.json
 frontend/ui/layout_matrix.txt
 
